@@ -1,17 +1,5 @@
 <?php
-function mysqlDatetime($timestamp = null) {
-	if (is_null($timestamp))
-		$timestamp = time();
-	return date('Y-m-d H:i:s', $timestamp);
-}
-
-function phpTimestamp($datetime = null) {
-	if (is_null($datetime))
-		return time();
-	else
-		return strtotime($datetime);
-}
-
+// Connect to the database using the variables in vars.inc.php
 function dbConnect() {
 	global $dbVars;
 
@@ -23,4 +11,3 @@ function dbConnect() {
 		throw new SMNDeliveryError('Failed to connect to database. ("'.$e->getMessage().'")', 21);
 	}
 }
-?>

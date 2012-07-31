@@ -28,4 +28,3 @@ $emailTemplate['post'] = <<<EndOfPost
 
 Please click <a href="#">here</a> to change your notification preferences.
 EndOfPost;
-?>
