@@ -1,7 +1,7 @@
 <?php
-include_once "./src/funcs.inc.php";
-include_once "./Services/Twilio.php";
-include_once "./vars.inc.php";
+include_once "src/funcs.inc.php";
+include_once "Services/Twilio.php";
+include_once "vars.inc.php";
 
 $client = new Services_Twilio($twilioApi['accountSid'], $twilioApi['authToken']); // Initiate new Twilio API object
 $conn = dbConnect();

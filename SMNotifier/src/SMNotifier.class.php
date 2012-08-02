@@ -14,7 +14,7 @@ class SMNotifier {
 			$id = (int)$id;
 		}
 		if (is_int($id)) { // Id must be an int
-			$statement = $this->_conn->prepare('SELECT `phone`, `email`, `prefferedContact` FROM `users` WHERE `id` = :id');
+			$statement = $this->_conn->prepare('SELECT `phone`, `email`, `preferedContact` FROM `users` WHERE `id` = :id');
 			$statement->execute(array('id'=>$id));
 			$row = $statement->fetch(PDO::FETCH_ASSOC);
 			$this->execute($row, $message, $emailSubject); // Pass this off to our logic function
@@ -31,7 +31,7 @@ class SMNotifier {
 	public function notifyMultiple($ids, $message, $emailSubject = null) {
 		if (is_array($ids)) {
 			// Select all the users
-			$statement = $this->_conn->query('SELECT `phone`, `email`, `prefferedContact` FROM `users` WHERE `id` IN ('.$this->_conn->quote(implode(',',$ids)).')');
+			$statement = $this->_conn->query('SELECT `phone`, `email`, `preferedContact` FROM `users` WHERE `id` IN ('.$this->_conn->quote(implode(',',$ids)).')');
 			$results = $statement->fetchAll();
 			foreach ($results as $row) {
 				$this->execute($row, $message, $emailSubject); // For each, pass on to the logic function
@@ -47,10 +47,10 @@ class SMNotifier {
 
 	// Check how the user wants to be notified and select that function
 	private function execute($row, $message, $emailSubject = null) {
-		if ($row['prefferedContact'] == 'phone' || $row['prefferedContact'] == 'both') {
+		if ($row['preferedContact'] == 'phone' || $row['preferedContact'] == 'both') {
 			$this->notifyPhone($row['phone'], $message);
 		}
-		if ($row['prefferedContact'] == 'email' || $row['prefferedContact'] == 'both') {
+		if ($row['preferedContact'] == 'email' || $row['preferedContact'] == 'both') {
 			$this->notifyEmail($row['email'], $message, $emailSubject);
 		}
 	}
