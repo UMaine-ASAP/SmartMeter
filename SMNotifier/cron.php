@@ -1,4 +1,12 @@
 <?php
+/**
+ * SMNotifier crontab to send notifications.
+ *
+ * This background script selects unsent notifications in the database and sends them.
+ *
+ * @author Harry Grillo <harry@redbassett.com>
+ * @package SMNotifier
+ */
 include_once "src/funcs.inc.php";
 include_once "Services/Twilio.php";
 include_once "vars.inc.php";

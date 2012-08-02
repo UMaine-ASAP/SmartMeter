@@ -1,13 +1,36 @@
 <?php
-// The SMNotifier API
+/**
+ * SMNotifier main class.
+ *
+ * SMNotifier class used to trigger notifications.
+ *
+ * @author Harry Grillo <harry@redbassett.com>
+ * @package SMNotifier
+ */
 class SMNotifier {
 	private $_conn; //  This will be the database connection for queries as of...
 
+	/**
+	 * SMNotifier API constructor.
+	 *
+	 * Generates a new SMNotifier object and creates a DB connection for it.
+	 *
+	 * @access public
+	 */
 	public function __construct() {
-		$this->_conn = dbConnect(); // ...now.
+		$this->_conn = dbConnect();
 	}
 
-	// Call this function!  This is how you send the message!  Make sure $id is a user id!
+	/**
+	 * Send a single-user notification.
+	 *
+	 * Sends a notification to a single user by selecting their contact preferences from the user table in the database and then placing the notification in the send queue based on that preference.
+	 *
+	 * @param int $id The id of the user's row in the database.
+	 * @param string $message The message of the notification.  In the case of emails, this will be placed between the email template post and pre settings in vars.inc.php.
+	 * @param string $emaiLSubject If an email is sent, this will be its subject line.
+	 * @access public
+	 */
 	public function notify($id, $message, $emailSubject = null) {
 		// If the id is returned from a previous query as a string, we want to make it an int so it plays nice with PDO
 		if (preg_match('/^\d$/', $id)) {
@@ -27,7 +50,16 @@ class SMNotifier {
 		}
 	}
 
-	// Identical to notify(), but takes an array of ids instead of one id
+	/**
+	 * Sends a multiple-user notification.
+	 *
+	 * Sends a notifiation to multiple users by selecting their contact preferences from the user table in the database and then placing the notification in the send queue based on that preference.
+	 *
+	 * @param array(int) $ids Array of ids of the users' rows in the database.
+	 * @param string $message The message of the notification.  In the case of emails, this will be placed between the email template post and pre settings in vars.inc.php.
+	 * @param string $emaiLSubject If an email is sent, this will be its subject line.
+	 * @access public
+	 */
 	public function notifyMultiple($ids, $message, $emailSubject = null) {
 		if (is_array($ids)) {
 			// Select all the users
@@ -45,7 +77,16 @@ class SMNotifier {
 		}
 	}
 
-	// Check how the user wants to be notified and select that function
+	/**
+	 * Supporting function to figure out which method a user wants to be contacted by.
+	 *
+	 * Takes a user row, calculates what method to contact the user by, and sends the notification information on to the handler function for that method of contact.
+	 *
+	 * @param array $row User row from database.
+	 * @param string $message The notification message.
+	 * @param string $emailSubject The subjectline if this generates and email.
+	 * @access private
+	 */
 	private function execute($row, $message, $emailSubject = null) {
 		if ($row['preferedContact'] == 'phone' || $row['preferedContact'] == 'both') {
 			$this->notifyPhone($row['phone'], $message);
@@ -55,7 +96,16 @@ class SMNotifier {
 		}
 	}
 
-	// Insert a notification for emails
+	/**
+	 * Supporting function to insert email notifications.
+	 *
+	 * Once the notification contact method has been decided, this function is called to insert a new notification from for an email notification.
+	 *
+	 * @param string $email The email address to send to.
+	 * @param string $message The message body of the email.
+	 * @param string $subject The message subject of the email.
+	 * @access private
+	 */
 	private function notifyEmail($email, $message, $subject = null) {
 		$statement = $this->_conn->prepare('INSERT INTO `notifications`
 		                                   (`email`,`emailSubject`,`message`)
@@ -68,7 +118,15 @@ class SMNotifier {
 		                   ));
 	}
 
-	// Insert a notification for phones
+	/**
+	 * Supporting function to insert phone (text) notifications.
+	 *
+	 * Once the notification contact method has been decided, this function is called to insert a new notification from for a phone (text) notification.
+	 *
+	 * @param string $phone The phone number to send to.
+	 * @param string $message The message body of the text
+	 * @access private
+	 */
 	private function notifyPhone($phone, $message) {
 		$statement = $this->_conn->prepare('INSERT INTO `notifications`
 		                                   (`phone`,`message`)
