@@ -20,7 +20,7 @@ class SMNotifier {
 			$this->execute($row, $message, $emailSubject); // Pass this off to our logic function
 		} else {
 			if (is_array($id)) { // Try to provide some helpful hints for multiple user calls
-				throw new SMNDeliveryError('Please enter a valid database user row id.  If you meant to notify multiple users, please use the SMNotifier.notifyMultiple() instead.', 11)
+				throw new SMNDeliveryError('Please enter a valid database user row id.  If you meant to notify multiple users, please use the SMNotifier.notifyMultiple() instead.', 11);
 			} else {
 				throw new SMNDeliveryError('Please enter a valid database user row id.', 11);
 			}
