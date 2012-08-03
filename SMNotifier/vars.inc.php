@@ -1,4 +1,13 @@
 <?php
+/**
+ * SMNotifier variables
+ *
+ * Variables used by various parts of the SMNotifier package.
+ *
+ * @author Harry Grillo <harry@redbassett.com>
+ * @package SMNotifier
+ */
+
 // Enter a default email subject to be displayed when no email subject is specified.
 $defaultEmailSubject = 'A default subject for emails if no subject is provided.';
 
