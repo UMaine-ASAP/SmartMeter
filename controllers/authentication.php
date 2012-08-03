@@ -3,7 +3,7 @@
 class AuthenticationController
 {
 	static function getCurrentUserID(){
-		return false;
+		return "1";
 	}
 }
 

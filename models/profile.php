@@ -1,6 +1,7 @@
 <?PHP
 
 require_once('lib/settings.php');
+require_once('controllers/db.php');
 
 class ProfileModel
 {
@@ -25,8 +26,7 @@ class ProfileModel
 
 		try
 		{
-			$dbh = new PDO('mysql:host=' . $GLOBALS['HOST'] . ';dbname='. $GLOBALS['DATABASE'], $GLOBALS['USERNAME'], $GLOBALS['PASSWORD']);
-			$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$dbh = DBController::getConnection();
 			$statement = $dbh->prepare("INSERT INTO PROFILE (owner_id, name) VALUES (:user_id, :name)");
 			$statement->execute($data);
 
@@ -40,6 +40,45 @@ class ProfileModel
 		}
 		$dbh = null;
 	}
+
+	/**
+	 *	Find all home profiles associated with a user account
+	 *
+	 *	@param 	string 		$user_id 	Id of the user whos profiles we are searching for
+	 *
+	 *
+	 *	@return array|bool 				Array of profile id and name belonging to the user on succes, false otherwise
+	 */
+
+	static function getUserProfile($owner_id)
+	{
+		$data = array("owner_id" => $owner_id);
+		try
+		{
+			$dbh = DBController::getConnection();
+			$statement = $dbh->prepare("SELECT profile_id, name FROM PROFILE WHERE owner_id = :owner_id");
+			$statement->execute($data);
+
+			$row = $statement->fetch(PDO::FETCH_ASSOC);
+
+			if(count($row) == 0)
+			{
+				return null;
+			}
+
+			return $row;
+		}
+		catch(PDOException $ex)
+			{
+				error_log($ex);
+				$dbh = null;
+				return false;
+			}
+
+		$dbh = null;
+
+	}
+
 }
 
 ?>
