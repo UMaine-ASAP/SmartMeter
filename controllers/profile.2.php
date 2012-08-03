@@ -48,13 +48,16 @@ class ProfileController
 	/**
 	 *	Get a User's Profile
 	 *
-	 *	Creates a new Home Profile belonging to the user currently logged in.
+	 *	Gets the Home Profile belonging to a specified user.  Will return false if
+	 *	if the user is not logged in/doesn't own the profile.  Will return null if
+	 *	no profile belongs to that user.
 	 *
-	 *	@param 	string 	$name 		Name of the profile as it appears to the user.
+	 *	@param 	string 		$owner_id 		Owner ID of the profile we are looking for
 	 *
 	 *
-	 *	@return bool 				True on successful creating, false on fail.
+	 *	@return array|bool  				Returns an array of the profile if found, null if one doesn't exists, false otherwise.
 	 */
+
 	static function getUserProfile($owner_id)
 	{
 		$user_id = AuthenticationController::getCurrentUserID();
@@ -66,7 +69,7 @@ class ProfileController
 		else
 		{
 			$return = ProfileModel::getUserProfile($owner_id);
-			return $return['name'];
+			return $return;
 		}
 
 		return false;
