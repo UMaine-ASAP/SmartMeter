@@ -1,4 +1,4 @@
-<?php
+`<?php
 /**
  * SMNotifier crontab to send notifications.
  *
@@ -14,10 +14,10 @@ include_once "vars.inc.php";
 $client = new Services_Twilio($twilioApi['accountSid'], $twilioApi['authToken']); // Initiate new Twilio API object
 $conn = dbConnect();
 
-$sql = 'SELECT `id`, `phone`, `message`, `email`, `emailSubject` FROM `notifications` LIMIT 1000';
+$sql = 'SELECT `id`, `phone`, `message`, `email`, `emailSubject` FROM `NOTIFICATION_Pending` LIMIT 1000';
 $completed = array();
 
-$results = $conn->query($sql); // Select first 100 unsent notifications
+$results = $conn->query($sql); // Select first 1000 unsent notifications
 
 
 foreach ($results as $notification) {
@@ -34,7 +34,7 @@ foreach ($results as $notification) {
 }
 
 // And then move the row to the `sent` table
-$statement = $conn->prepare('INSERT INTO `sent` (`id`, `phone`, `message`, `email`, `emailSubject`) VALUES (SELECT `id`, `phone`, `message`, `email`, `emailSubject` FROM `notifications` WHERE `id` IN ('.implode(',', $completed).'))');
+$statement = $conn->prepare('INSERT INTO `NOTIFICATION_Archive` (`id`, `phone`, `message`, `email`, `emailSubject`) (SELECT `id`, `phone`, `message`, `email`, `emailSubject` FROM `NOTIFICATION_Pending` WHERE `id` IN ('.implode(',', $completed).'))');
 $statement->execute();
-$statement = $conn->prepare('DELETE FROM `notifications` WHERE `id` IN ('.implode(',', $completed).')');
+$statement = $conn->prepare('DELETE FROM `NOTIFICATION_Pending` WHERE `id` IN ('.implode(',', $completed).')');
 $statement->execute();

@@ -18,10 +18,10 @@ $twilioApi['authToken'] = 'Authentication Token';
 $twilioApi['number'] = 'Number';
 
 // Enter your database login information.
-$dbVars['host'] = 'server'; // The IP or hostname of your database server.
-$dbVars['database'] = 'database'; // The database in which the notifications will be stored.
-$dbVars['user'] = 'user'; // The user to access the database with.
-$dbVars['password'] = 'password'; // The password for the above user.
+$dbVars['host'] = 'localhost'; // The IP or hostname of your database server.
+$dbVars['database'] = 'smartmeter'; // The database in which the notifications will be stored.
+$dbVars['user'] = 'smartmeter'; // The user to access the database with.
+$dbVars['password'] = 'firetruck'; // The password for the above user.
 $dbVars['port'] = ''; // The database server port to use (leave blank unless needed).
 $dbVars['type'] = 'mysql'; // The type of database to connect to.
 

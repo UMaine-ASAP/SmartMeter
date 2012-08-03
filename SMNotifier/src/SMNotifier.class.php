@@ -37,10 +37,16 @@ class SMNotifier {
 			$id = (int)$id;
 		}
 		if (is_int($id)) { // Id must be an int
-			$statement = $this->_conn->prepare('SELECT `phone`, `email`, `preferedContact` FROM `users` WHERE `id` = :id');
-			$statement->execute(array('id'=>$id));
-			$row = $statement->fetch(PDO::FETCH_ASSOC);
-			$this->execute($row, $message, $emailSubject); // Pass this off to our logic function
+			$statement = $this->_conn->prepare('SELECT `phone`, `email`, `preferredContact` FROM `AUTH_Users` WHERE `user_id` = :id');
+			if ($statement->execute(array('id'=>$id))) {
+				if ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+					$this->execute($row, $message, $emailSubject); // Pass this off to our logic function
+				} else {
+					throw new SMNDeliveryError('Please enter a valid user ID.', 23);
+				}
+			} else {
+				throw new SMNDeliveryError('Please check your database query.  '.print_r($statement->errorInfo(), true), 22);
+			}
 		} else {
 			if (is_array($id)) { // Try to provide some helpful hints for multiple user calls
 				throw new SMNDeliveryError('Please enter a valid database user row id.  If you meant to notify multiple users, please use the SMNotifier.notifyMultiple() instead.', 11);
@@ -63,7 +69,7 @@ class SMNotifier {
 	public function notifyMultiple($ids, $message, $emailSubject = null) {
 		if (is_array($ids)) {
 			// Select all the users
-			$statement = $this->_conn->query('SELECT `phone`, `email`, `preferedContact` FROM `users` WHERE `id` IN ('.$this->_conn->quote(implode(',',$ids)).')');
+			$statement = $this->_conn->query('SELECT `phone`, `email`, `preferredContact` FROM `AUTH_Users` WHERE `user_id` IN ('.$this->_conn->quote(implode(',',$ids)).')');
 			$results = $statement->fetchAll();
 			foreach ($results as $row) {
 				$this->execute($row, $message, $emailSubject); // For each, pass on to the logic function
@@ -88,10 +94,10 @@ class SMNotifier {
 	 * @access private
 	 */
 	private function execute($row, $message, $emailSubject = null) {
-		if ($row['preferedContact'] == 'phone' || $row['preferedContact'] == 'both') {
+		if ($row['preferredContact'] == 'phone' || $row['preferredContact'] == 'both') {
 			$this->notifyPhone($row['phone'], $message);
 		}
-		if ($row['preferedContact'] == 'email' || $row['preferedContact'] == 'both') {
+		if ($row['preferredContact'] == 'email' || $row['preferredContact'] == 'both') {
 			$this->notifyEmail($row['email'], $message, $emailSubject);
 		}
 	}
@@ -107,7 +113,7 @@ class SMNotifier {
 	 * @access private
 	 */
 	private function notifyEmail($email, $message, $subject = null) {
-		$statement = $this->_conn->prepare('INSERT INTO `notifications`
+		$statement = $this->_conn->prepare('INSERT INTO `NOTIFICATION_Pending`
 		                                   (`email`,`emailSubject`,`message`)
 		                                   VALUES
 		                                   (:email,:emailSubject,:message)');
@@ -128,7 +134,7 @@ class SMNotifier {
 	 * @access private
 	 */
 	private function notifyPhone($phone, $message) {
-		$statement = $this->_conn->prepare('INSERT INTO `notifications`
+		$statement = $this->_conn->prepare('INSERT INTO `NOTIFICATION_Pending`
 		                                   (`phone`,`message`)
 		                                   VALUES
 		                                   (:phone,:message)');
