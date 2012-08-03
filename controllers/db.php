@@ -2,20 +2,36 @@
 
 class DBController
 {
+
+    private $initialized = false;
+
     static function getConnection($param)
     {
-        try
+        if (!$this->initialized)
         {
-            $dbh = new PDO('mysql:host=' . $GLOBALS['HOST'] . ';dbname=' . $GLOBALS['DATABASE'], $GLOBALS['USERNAME'], $GLOBALS['PASSWORD']);
-            $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            return $dbh;
-        } catch (PDOException $ex)
+            try
+            {
+                $dbh = new PDO('mysql:host=' . $GLOBALS['HOST'] . ';dbname=' . $GLOBALS['DATABASE'], $GLOBALS['USERNAME'], $GLOBALS['PASSWORD']);
+                $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $this->dbh = $dbh;
+
+                $this->initialized = true;
+
+                return $dbh;
+            } 
+            catch (PDOException $ex)
+            {
+                error_log($ex);
+                $dbh = null;
+                return false;
+            }
+        } 
+        else
         {
-            error_log($ex);
-            $dbh = null;
-            return false;
+            return $this->dbh;
         }
     }
+
 }
 
 ?>
