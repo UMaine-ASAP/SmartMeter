@@ -5,7 +5,7 @@ class DBController
 
     private $initialized = false;
 
-    static function getConnection($param)
+    static function getConnection()
     {
         if (!$this->initialized)
         {
@@ -31,7 +31,6 @@ class DBController
             return $this->dbh;
         }
     }
-
 }
 
 ?>
