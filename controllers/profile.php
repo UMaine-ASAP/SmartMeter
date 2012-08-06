@@ -122,7 +122,7 @@ class ProfileController
 
 	static function getProfileDevices($owner_id, $devices)
 	{
-		$user_id = AuthenticationController::get CurrentUserID();
+		$user_id = AuthenticationController::getCurrentUserID();
 
 		if(!$user_id || $user_id != $owner_id)
 		{
