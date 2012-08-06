@@ -1,6 +1,7 @@
 <?PHP
 
 require_once('maps/device.php');
+require_once('controllers/db.php');
 
 class DeviceModel
 {
