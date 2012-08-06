@@ -4,6 +4,19 @@ require_once('maps/device.php');
 
 class DeviceModel
 {
+
+	/**
+     * 	Function to build a query to find all specified devices belonging to a home profile. Will
+     * 	determine if devices belongs to a root category or sub category and will return the appropriate
+     * 	ID to query with.
+     *
+     * 	@param 	array 		$device_types 	Names of devices you would like to retrieve data on
+     *	@param 	int 		$profile_id		ID of the profile those devices should be tied to.
+     *
+     *
+     * 	@return array|bool 					Array of data to build a query with, false otherwise.
+     */
+
 	static function getDevicesQuery($device_types, $profile_id)
 	{
 
@@ -58,6 +71,23 @@ class DeviceModel
 		return $queryArray;
 
 	}
+
+
+	/**
+     * 	Function that will return all data pertaining to the devices specified in the device_types array
+     * 	associated with the specified profile id.  Data returned as a multidimensional array in the format below.
+     *
+     *		[x][][]			device_type		the type of device returned (eg. pool)
+     *		[][x][]			device_list		array of all devices associated with the profile
+     *		[][][x]			device_data		key => value array for all data in the database
+     *
+     *
+     * 	@param 	array 		$device_types 	Names of devices you would like to retrieve data on
+     *	@param 	int 		$profile_id		ID of the profile those devices should be tied to.
+     *
+     *
+     * 	@return array|bool 					Array of data to build a query with, false otherwise.
+     */
 
 	static function getDevices($device_types, $profile_id)
 	{
