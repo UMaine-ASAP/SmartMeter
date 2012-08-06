@@ -79,6 +79,44 @@ class ProfileModel
 
 	}
 
+		/**
+	 *	Find all home profiles associated with a user account
+	 *
+	 *	@param 	string 		$user_id 	Id of the user whos profiles we are searching for
+	 *
+	 *
+	 *	@return int 					profile id  on success, false otherwise
+	 */
+
+	static function getUserProfileID($owner_id)
+	{
+		$data = array("owner_id" => $owner_id);
+		try
+		{
+			$dbh = DBController::getConnection();
+			$statement = $dbh->prepare("SELECT profile_id FROM PROFILE WHERE owner_id = :owner_id");
+			$statement->execute($data);
+
+			$row = $statement->fetch(PDO::FETCH_ASSOC);
+
+			if(count($row) == 0)
+			{
+				return null;
+			}
+
+			return $row['profile_id'];
+		}
+		catch(PDOException $ex)
+			{
+				error_log($ex);
+				$dbh = null;
+				return false;
+			}
+
+		$dbh = null;
+
+	}
+
 }
 
 ?>

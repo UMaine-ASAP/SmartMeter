@@ -17,7 +17,7 @@ class DeviceController
 	 *	@return array|bool  					Returns an array of the profile if found, null if one doesn't exists, false otherwise.
 	 */
 
-	static function getUserDevices($device_types, $profile_id)
+	static function getProfileDevices($device_types, $profile_id)
 	{
 			return DeviceModel::getDevices($device_types, $profile_id);
 	}

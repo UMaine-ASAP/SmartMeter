@@ -12,8 +12,6 @@ require_once('devices.php');
  *	The profile controller is responsible for all user interactions with the Home Profile System.
  *	This includes the creation, retreival, and deletion of profiles, a profiles interaction with devices,
  *	
- *
- *	@return int 				The ID of the new home profile on success, false otherwise.
  */
 class ProfileController
 {
@@ -76,8 +74,37 @@ class ProfileController
 		return false;
 	}
 
-	static function getProfileDevice()
+	/**
+	 *	Get devices belonging to a user's profile.
+	 *
+	 *	Data returned as a multidimensional array in the format below.
+     *
+     *		[x][][]			device_type			the type of device returned (eg. pool)
+     *		[][x][]			device_list			array of all devices associated with the profile
+     *		[][][x]			device_data			key => value array for all data in the database
+	 *
+	 *
+	 *	@param 	array 		$device_types 		Array of device names we are searching for.
+	 * 	@param 	int 		$profile_id 		ID of the profile the device should belong to.
+	 *
+	 *
+	 *	@return array|bool  					Returns an array of the profile if found, null if one doesn't exists, false otherwise.
+	 */
+
+
+	static function getProfileDevices($owner_id, $devices)
 	{
+		$user_id = AuthenticationController::get CurrentUserID();
+
+		if(!$user_id || $user_id != $owner_id)
+		{
+			return false;
+		}
+		else
+		{
+			$return = DeviceController::getProfileDevices($devices, self::getUserProfileID($owner_id));
+			return $return;
+		}
 
 	}
 }
