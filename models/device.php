@@ -92,7 +92,14 @@ class DeviceModel
 
 	static function getDevices($device_types, $profile_id)
 	{
+
 		$queryArray = self::getDevicesQuery($device_types, $profile_id);
+
+		if(!is_array($device_types) || !is_array($queryArray))
+		{
+			return false;
+		}
+
 		$result = array();
 
 		foreach($queryArray as $key => $value)

@@ -116,7 +116,8 @@ class ProfileController
 	 * 	@param 	int 		$profile_id 		ID of the profile the device should belong to.
 	 *
 	 *
-	 *	@return array|bool  					Returns an array of the profile if found, null if one doesn't exists, false otherwise.
+	 *	@return array|bool  					Returns an array of the devices if found, all of which will 
+	 *												be null if there is no data associated, false otherwise.
 	 */
 
 
