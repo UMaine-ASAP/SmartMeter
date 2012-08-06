@@ -75,6 +75,34 @@ class ProfileController
 	}
 
 	/**
+	 *	Remove a User's Profile
+	 *
+	 *	Delete an entire user's home profile from the database.  Also will loop though,
+	 * 	remove any custom devices and all other
+	 *
+	 *	@param 	string 		$profile_id 	Profile ID to delete.
+	 *
+	 *
+	 *	@return bool  						Returns true on success, false otherwise.
+	 */
+
+	static function removeProfile($profile_id)
+	{
+
+		if(!$profile_id || $profile_id != ProfileModel::getUserProfileID(AuthenticationController::getCurrentUserID()))
+		{
+			return false;
+		}
+		else
+		{
+			$return = ProfileModel::removeProfile($profile_id);
+			return $return;
+		}
+
+		return false;
+	}
+
+	/**
 	 *	Get devices belonging to a user's profile.
 	 *
 	 *	Data returned as a multidimensional array in the format below.
@@ -102,7 +130,7 @@ class ProfileController
 		}
 		else
 		{
-			$return = DeviceController::getProfileDevices($devices, self::getUserProfileID($owner_id));
+			$return = DeviceController::getProfileDevices($devices, ProfileModel::getUserProfileID($owner_id));
 			return $return;
 		}
 

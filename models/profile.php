@@ -79,7 +79,7 @@ class ProfileModel
 
 	}
 
-		/**
+	/**
 	 *	Find all home profiles associated with a user account
 	 *
 	 *	@param 	string 		$user_id 	Id of the user whos profiles we are searching for
@@ -112,6 +112,40 @@ class ProfileModel
 				$dbh = null;
 				return false;
 			}
+
+		$dbh = null;
+
+	}
+
+	/**
+	 *	Remove the home profile belonging to the user specified
+	 *
+	 *  	TODO: Ensure all keys are setup in the database to support this.
+	 *
+	 *	@param 	string 		$profile_id 	Profile id to be deleted
+	 *	
+	 *
+	 *	@return int 	 					true on success, false otherwise
+	 */
+
+	static function removeProfile($profile_id)
+	{
+		$data = array("profile" => $profile_id);
+		try
+		{
+			$dbh = DBController::getConnection();
+			$statement = $dbh->prepare("DELETE FROM PROFILE WHERE profile_id = :profile_id");
+			$statement->execute($data);
+
+
+			return true;
+		}
+		catch(PDOException $ex)
+		{
+			error_log($ex);
+			$dbh = null;
+			return false;
+		}
 
 		$dbh = null;
 
