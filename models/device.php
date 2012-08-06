@@ -82,6 +82,8 @@ class DeviceModel
      *		[][x][]			device_list		array of all devices associated with the profile
      *		[][][x]			device_data		key => value array for all data in the database
      *
+     *	Uses getDevicesQuery to build a database query array that is used for the function.
+	 *
      *
      * 	@param 	array 		$device_types 	Names of devices you would like to retrieve data on
      *	@param 	int 		$profile_id		ID of the profile those devices should be tied to.

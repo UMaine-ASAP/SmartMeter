@@ -2,6 +2,7 @@
 require_once('lib/settings.php');
 require_once('authentication.php');
 require_once('models/profile.php');
+require_once('models/device.php');
 require_once('devices.php');
 
 
@@ -121,17 +122,17 @@ class ProfileController
 	 */
 
 
-	static function getProfileDevices($owner_id, $devices)
+	static function getProfileDevices($owner_id, $device_types)
 	{
 		$user_id = AuthenticationController::getCurrentUserID();
 
-		if(!$user_id || $user_id != $owner_id)
+		if(!$user_id || $user_id != $owner_id || is_array($device_types))
 		{
 			return false;
 		}
 		else
 		{
-			$return = DeviceController::getProfileDevices($devices, ProfileModel::getUserProfileID($owner_id));
+			$return = DeviceModel::getDevices($devices, ProfileModel::getUserProfileID($owner_id));
 			return $return;
 		}
 
