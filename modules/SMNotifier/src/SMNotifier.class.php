@@ -142,9 +142,9 @@ class SMNotifier
 		                                   (`email`,`emailSubject`,`message`)
 		                                   VALUES
 		                                   (:email,:emailSubject,:message)');
-        $statment->execute(array(
+        $statement->execute(array(
             'email' => $email,
-            'emailSubject' => $emailSubject,
+            'emailSubject' => $subject,
             'message' => $message
         ));
     }
