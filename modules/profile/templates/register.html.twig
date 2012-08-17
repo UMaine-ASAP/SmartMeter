@@ -1,0 +1,19 @@
+{% extends 'layout.html.twig' %}
+{% block content %}
+<div class="main" style="height: 100%;">
+	<h2>Register</h2>
+	<hr>
+		<form method="post" action="register">
+	<label for="username">Username: </label><input type="text" name="username">
+	<label for="password">Password: </label><input type="password" name="password">
+	<label for="confirm_password">Confirm Password: </label><input type="password" name="confirm_password">
+	<label for="email">Email: </label><input type="text" name="email">
+	<label for="name">Name: </label><input style="width: 102px;" type="text" name="first_name">&nbsp;&nbsp;<input style="width: 102px;" type="text" name="last_name">
+
+	<div class="form-actions">
+		<input class="btn btn-large btn-inverse" type="submit" value="Register">
+	</div>
+
+	</form>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'layout.html.twig' %}
+{% block content %}
+<div class="main" style="height: 100%;">
+
+	<div class="page-header">
+		<h1>Home Profile</h1>
+	</div>
+
+
+
+
+	<div style='width: 250px; margin: 0 auto;'>
+
+		{% if flash['header'] %}
+			<div class='alert alert-success'>{{ flash['header'] }}</div>
+		{% elseif flash['error'] %}
+			<div class='alert alert-error'>{{ flash['error'] }}</div>
+		{% endif %}			
+
+	</div>
+</div>
+{% endblock %}
