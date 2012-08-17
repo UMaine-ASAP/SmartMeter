@@ -25,7 +25,7 @@ foreach ($results as $notification) {
 		try { // Attempt to send the message to twilio
 			$client->account->sms_messages->create($twilioApi['number'], $notification['phone'], $notification['message']);
 		} catch (Services_Twilio_RestException $e) { // And get the API error message if it fails
-			echo $e->getMessage();
+			error_log($e->getMessage());
 		}
 	} elseif ($notification['email'] != '') { // If email is set, this is an email
 		mail($notification['email'], $notification['emailSubject'], $emailTemplate['pre'].$notification['message'].$emailTemplate['post']);

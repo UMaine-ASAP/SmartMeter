@@ -12,10 +12,11 @@
 $defaultEmailSubject = 'A default subject for emails if no subject is provided.';
 
 // Enter your Twilio account SID and autherntication token below to send texts.
-$twilioApi['accountSid'] = 'Account SID';
-$twilioApi['authToken'] = 'Authentication Token';
+// HEY FELLOWS THIS IS ROSS'S TWILIO STUFF; DO NOT USE THIS IN PRODUCTION. THANKS! :*
+$twilioApi['accountSid'] = 'ACb2437c9f7866e0ee48afe5f56cff1c2a';
+$twilioApi['authToken'] = 'd16fd99172b2244b3e13be7444430ace';
 // Enter you Twilio sending number.
-$twilioApi['number'] = 'Number';
+$twilioApi['number'] = '+18482072331';
 
 // Enter your database login information.
 $dbVars['host'] = 'localhost'; // The IP or hostname of your database server.
