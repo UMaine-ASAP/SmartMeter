@@ -60,7 +60,7 @@
 <datatype>VARCHAR(50)</datatype>
 <default>NULL</default></row>
 <row name="age" null="1" autoincrement="0">
-<datatype>VARCHAR</datatype>
+<datatype>VARCHAR(100)</datatype>
 <default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>instance_id</part>
@@ -74,16 +74,16 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="name" null="1" autoincrement="0">
-<datatype>VARCHAR</datatype>
+<datatype>VARCHAR(100)</datatype>
 <default>NULL</default></row>
 <row name="build_year" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="model" null="1" autoincrement="0">
-<datatype>VARCHAR</datatype>
+<datatype>VARCHAR(100)</datatype>
 <default>NULL</default></row>
 <row name="consumption" null="1" autoincrement="0">
-<datatype>VARCHAR</datatype>
+<datatype>VARCHAR(100)</datatype>
 <default>NULL</default></row>
 <row name="creator_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
@@ -442,7 +442,7 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="name" null="1" autoincrement="0">
-<datatype>VARCHAR</datatype>
+<datatype>VARCHAR(100)</datatype>
 <default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>category_id</part>
