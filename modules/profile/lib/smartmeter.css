@@ -1,0 +1,13 @@
+.left_bar {
+	height: 100%;
+	background-color: papayawhip;
+	width: 15%;
+	float: left;
+}
+
+.content {
+	height: 100%;
+	background-color: seagreen;
+	width: 85%;
+	float: left;
+}
