@@ -19,6 +19,7 @@ DROP TABLE IF EXISTS `PROFILE`;
 CREATE TABLE `PROFILE` (
   `profile_id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
   `owner_id` INTEGER NULL DEFAULT NULL,
+  `name` VARCHAR(100) NULL DEFAULT NULL,
   PRIMARY KEY (`profile_id`)
 );
 
@@ -50,7 +51,6 @@ CREATE TABLE `PROFILE_Device_archetype` (
   `type` INTEGER NULL DEFAULT NULL,
   `name` VARCHAR(100) NULL DEFAULT NULL,
   `build_year` INTEGER NULL DEFAULT NULL,
-  `brand` VARCHAR(100) NULL DEFAULT NULL,
   `model` VARCHAR(100) NULL DEFAULT NULL,
   `consumption` VARCHAR(100) NULL DEFAULT NULL,
   `creator_id` INTEGER NULL DEFAULT NULL,
@@ -68,11 +68,6 @@ DROP TABLE IF EXISTS `AUTH_Users`;
     
 CREATE TABLE `AUTH_Users` (
   `user_id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `username` VARCHAR(100) NULL DEFAULT NULL,
-  `password` VARCHAR(100) NULL DEFAULT NULL,
-  `first` VARCHAR(100) NULL DEFAULT NULL,
-  `last` VARCHAR(100) NULL DEFAULT NULL,
-  `email` VARCHAR(100) NULL DEFAULT NULL,
   PRIMARY KEY (`user_id`)
 );
 
@@ -334,18 +329,19 @@ CREATE TABLE `PROFILE_Home_instance` (
 );
 
 -- ---
--- Table 'GOALS_Data'
+-- Table 'GOALS_Archetype'
 -- 
 -- ---
 
-DROP TABLE IF EXISTS `GOALS_Data`;
+DROP TABLE IF EXISTS `GOALS_Archetype`;
     
-CREATE TABLE `GOALS_Data` (
-  `goal_id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
+CREATE TABLE `GOALS_Archetype` (
+  `archetype_id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
   `category_id` INTEGER NULL DEFAULT NULL,
   `description` MEDIUMTEXT NULL DEFAULT NULL,
   `unit` INTEGER NULL DEFAULT NULL,
-  PRIMARY KEY (`goal_id`)
+  `creator_id` INTEGER NULL DEFAULT NULL,
+  PRIMARY KEY (`archetype_id`)
 );
 
 -- ---
@@ -371,12 +367,11 @@ DROP TABLE IF EXISTS `GOALS_Instance`;
 CREATE TABLE `GOALS_Instance` (
   `instance_id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
   `profile_id` INTEGER NULL DEFAULT NULL,
-  `goal_id` INTEGER NULL DEFAULT NULL,
+  `goal_archetype_id` INTEGER NULL DEFAULT NULL,
   `start_date` DATETIME NULL DEFAULT NULL,
   `completion_date` DATETIME NULL DEFAULT NULL,
   `completed_value` INTEGER NULL DEFAULT NULL,
   `completed` INTEGER NULL DEFAULT NULL,
-  `creator_id` INTEGER NULL DEFAULT NULL,
   PRIMARY KEY (`instance_id`)
 );
 
@@ -405,10 +400,9 @@ ALTER TABLE `PROFILE_Dryer_instance` ADD FOREIGN KEY (instance_Id) REFERENCES `P
 ALTER TABLE `PROFILE_Pool_instance` ADD FOREIGN KEY (instance_id) REFERENCES `PROFILE_Device_instance` (`instance_id`);
 ALTER TABLE `PROFILE_Hottub_instance` ADD FOREIGN KEY (instance_id) REFERENCES `PROFILE_Device_instance` (`instance_id`);
 ALTER TABLE `PROFILE_Home_instance` ADD FOREIGN KEY (profile_id) REFERENCES `PROFILE` (`profile_id`);
-ALTER TABLE `GOALS_Data` ADD FOREIGN KEY (category_id) REFERENCES `GOALS_Category` (`category_id`);
+ALTER TABLE `GOALS_Archetype` ADD FOREIGN KEY (category_id) REFERENCES `GOALS_Category` (`category_id`);
 ALTER TABLE `GOALS_Instance` ADD FOREIGN KEY (profile_id) REFERENCES `PROFILE` (`profile_id`);
-ALTER TABLE `GOALS_Instance` ADD FOREIGN KEY (goal_id) REFERENCES `GOALS_Data` (`goal_id`);
-ALTER TABLE `GOALS_Instance` ADD FOREIGN KEY (creator_id) REFERENCES `AUTH_Users` (`user_id`);
+ALTER TABLE `GOALS_Instance` ADD FOREIGN KEY (goal_archetype_id) REFERENCES `GOALS_Archetype` (`archetype_id`);
 
 -- ---
 -- Table Properties
@@ -435,7 +429,7 @@ ALTER TABLE `GOALS_Instance` ADD FOREIGN KEY (creator_id) REFERENCES `AUTH_Users
 -- ALTER TABLE `PROFILE_Pool_instance` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `PROFILE_Hottub_instance` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `PROFILE_Home_instance` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `GOALS_Data` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `GOALS_Archetype` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `GOALS_Category` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `GOALS_Instance` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -443,14 +437,14 @@ ALTER TABLE `GOALS_Instance` ADD FOREIGN KEY (creator_id) REFERENCES `AUTH_Users
 -- Test Data
 -- ---
 
--- INSERT INTO `PROFILE` (`profile_id`,`owner_id`) VALUES
--- ('','');
+-- INSERT INTO `PROFILE` (`profile_id`,`owner_id`,`name`) VALUES
+-- ('','','');
 -- INSERT INTO `PROFILE_Device_instance` (`instance_id`,`archetype_id`,`profile_id`,`name`,`age`) VALUES
 -- ('','','','','');
--- INSERT INTO `PROFILE_Device_archetype` (`archetype_id`,`type`,`name`,`build_year`,`brand`,`model`,`consumption`,`creator_id`,`device_type`,`capacity`) VALUES
--- ('','','','','','','','','','');
--- INSERT INTO `AUTH_Users` (`user_id`,`username`,`password`,`first`,`last`,`email`) VALUES
--- ('','','','','','');
+-- INSERT INTO `PROFILE_Device_archetype` (`archetype_id`,`type`,`name`,`build_year`,`model`,`consumption`,`creator_id`,`device_type`,`capacity`) VALUES
+-- ('','','','','','','','','');
+-- INSERT INTO `AUTH_Users` (`user_id`) VALUES
+-- ('');
 -- INSERT INTO `PROFILE_Fridge_instance` (`fridge_instance_id`,`instance_id`,`location`) VALUES
 -- ('','','');
 -- INSERT INTO `PROFILE_Freezer_instance` (`freezer_instance_id`,`instance_id`,`location`) VALUES
@@ -485,10 +479,10 @@ ALTER TABLE `GOALS_Instance` ADD FOREIGN KEY (creator_id) REFERENCES `AUTH_Users
 -- ('','','','','');
 -- INSERT INTO `PROFILE_Home_instance` (`home_instance_id`,`profile_id`,`residents`,`wndow_type`,`window_size`,`window_pane_type`) VALUES
 -- ('','','','','','');
--- INSERT INTO `GOALS_Data` (`goal_id`,`category_id`,`description`,`unit`) VALUES
--- ('','','','');
+-- INSERT INTO `GOALS_Archetype` (`archetype_id`,`category_id`,`description`,`unit`,`creator_id`) VALUES
+-- ('','','','','');
 -- INSERT INTO `GOALS_Category` (`category_id`,`name`) VALUES
 -- ('','');
--- INSERT INTO `GOALS_Instance` (`instance_id`,`profile_id`,`goal_id`,`start_date`,`completion_date`,`completed_value`,`completed`,`creator_id`) VALUES
--- ('','','','','','','','');
+-- INSERT INTO `GOALS_Instance` (`instance_id`,`profile_id`,`goal_archetype_id`,`start_date`,`completion_date`,`completed_value`,`completed`) VALUES
+-- ('','','','','','','');
 

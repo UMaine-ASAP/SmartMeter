@@ -40,6 +40,9 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="AUTH_Users" row="user_id" />
 </row>
+<row name="name" null="1" autoincrement="0">
+<datatype>VARCHAR(100)</datatype>
+<default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>profile_id</part>
 </key>
@@ -419,8 +422,8 @@
 <part>home_instance_id</part>
 </key>
 </table>
-<table x="1396" y="757" name="GOALS_Data">
-<row name="goal_id" null="1" autoincrement="1">
+<table x="1399" y="686" name="GOALS_Archetype">
+<row name="archetype_id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="category_id" null="1" autoincrement="0">
@@ -433,11 +436,14 @@
 <row name="unit" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
+<row name="creator_id" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
 <key type="PRIMARY" name="">
-<part>goal_id</part>
+<part>archetype_id</part>
 </key>
 </table>
-<table x="1616" y="772" name="GOALS_Category">
+<table x="1645" y="731" name="GOALS_Category">
 <row name="category_id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -448,7 +454,7 @@
 <part>category_id</part>
 </key>
 </table>
-<table x="1238" y="551" name="GOALS_Instance">
+<table x="1184" y="563" name="GOALS_Instance">
 <row name="instance_id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -456,9 +462,9 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="PROFILE" row="profile_id" />
 </row>
-<row name="goal_id" null="1" autoincrement="0">
+<row name="goal_archetype_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
-<default>NULL</default><relation table="GOALS_Data" row="goal_id" />
+<default>NULL</default><relation table="GOALS_Archetype" row="archetype_id" />
 </row>
 <row name="start_date" null="1" autoincrement="0">
 <datatype>DATETIME</datatype>
@@ -472,10 +478,6 @@
 <row name="completed" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<row name="creator_id" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default><relation table="AUTH_Users" row="user_id" />
-</row>
 <key type="PRIMARY" name="">
 <part>instance_id</part>
 </key>
