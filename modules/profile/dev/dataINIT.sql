@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 17, 2012 at 06:20 PM
+-- Generation Time: Aug 20, 2012 at 05:14 PM
 -- Server version: 5.5.27
 -- PHP Version: 5.4.5
 
@@ -24,8 +24,19 @@ SET time_zone = "+00:00";
 -- Dumping data for table `AUTH_Users`
 --
 
-INSERT INTO `AUTH_Users` (`user_id`) VALUES
-(-1);
+INSERT INTO `AUTH_Users` (`user_id`, `username`, `password`, `first`, `last`, `email`) VALUES
+(-1, 'system', 'dsioauypoeirupqowieuroiewquroiewqu40938217409832174098321sajdkfhdajklfhas', 'system', NULL, ''),
+(1, 'bcarlson', '$2a$08$0Met1HGFQN3iQG9ziZ6DhuWR9FeEmshuupQjj/kPkpDeStlfPmhqq', 'Ben', 'Carlson', 'carlson.j.ben@gmail.com');
+
+--
+-- Dumping data for table `PROFILE`
+--
+
+INSERT INTO `PROFILE` (`profile_id`, `owner_id`, `name`) VALUES
+(1, -1, 'My Profile'),
+(2, -1, 'Test'),
+(3, -1, 'Testinggg'),
+(8, 1, 'Test');
 
 --
 -- Dumping data for table `PROFILE_Device_archetype`

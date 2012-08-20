@@ -51,6 +51,7 @@ CREATE TABLE `PROFILE_Device_archetype` (
   `type` INTEGER NULL DEFAULT NULL,
   `name` VARCHAR(100) NULL DEFAULT NULL,
   `build_year` INTEGER NULL DEFAULT NULL,
+  `brand` VARCHAR(100) NULL DEFAULT NULL,
   `model` VARCHAR(100) NULL DEFAULT NULL,
   `consumption` VARCHAR(100) NULL DEFAULT NULL,
   `creator_id` INTEGER NULL DEFAULT NULL,
@@ -68,6 +69,11 @@ DROP TABLE IF EXISTS `AUTH_Users`;
     
 CREATE TABLE `AUTH_Users` (
   `user_id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
+  `username` VARCHAR(100) NULL DEFAULT NULL,
+  `password` VARCHAR(100) NULL DEFAULT NULL,
+  `first` VARCHAR(100) NULL DEFAULT NULL,
+  `last` VARCHAR(100) NULL DEFAULT NULL,
+  `email` VARCHAR(100) NULL DEFAULT NULL,
   PRIMARY KEY (`user_id`)
 );
 
@@ -441,10 +447,10 @@ ALTER TABLE `GOALS_Instance` ADD FOREIGN KEY (goal_archetype_id) REFERENCES `GOA
 -- ('','','');
 -- INSERT INTO `PROFILE_Device_instance` (`instance_id`,`archetype_id`,`profile_id`,`name`,`age`) VALUES
 -- ('','','','','');
--- INSERT INTO `PROFILE_Device_archetype` (`archetype_id`,`type`,`name`,`build_year`,`model`,`consumption`,`creator_id`,`device_type`,`capacity`) VALUES
--- ('','','','','','','','','');
--- INSERT INTO `AUTH_Users` (`user_id`) VALUES
--- ('');
+-- INSERT INTO `PROFILE_Device_archetype` (`archetype_id`,`type`,`name`,`build_year`,`brand`,`model`,`consumption`,`creator_id`,`device_type`,`capacity`) VALUES
+-- ('','','','','','','','','','');
+-- INSERT INTO `AUTH_Users` (`user_id`,`username`,`password`,`first`,`last`,`email`) VALUES
+-- ('','','','','','');
 -- INSERT INTO `PROFILE_Fridge_instance` (`fridge_instance_id`,`instance_id`,`location`) VALUES
 -- ('','','');
 -- INSERT INTO `PROFILE_Freezer_instance` (`freezer_instance_id`,`instance_id`,`location`) VALUES
