@@ -8,6 +8,7 @@ require_once('lib/settings.php');
 require_once('controllers/authentication.php');
 require_once('controllers/profile.php');
 require_once('controllers/db.php');
+require_once('controllers/goals.php');
 
 require_once('lib/helpers.php');
 require_once('lib/Slim/Slim.php');
@@ -45,9 +46,14 @@ $app->get('/', function() use ($app) {
 	}
 	else
 	{
-		$profile = ProfileController::getUserProfile(AuthenticationController::GetCurrentUserID());
-		//$goals = GoalsController::getUserGoals(AuthenticationController::GetCurrentUserID());\
-		render('index.html.twig', array('profile'=>$profile));
+		$profile = ProfileController::getCurrentUserProfile();
+		$goals = GoalsController::getCurrentUserGoals();
+
+		print_r($profile);
+
+		$completed_goals = GoalsController::getCompletedCurrentUserGoals();
+
+		render('index.html.twig', array('profile'=>$profile, 'goals' => $goals, 'completed_goals' => $completed_goals));
 	}
 });
 
