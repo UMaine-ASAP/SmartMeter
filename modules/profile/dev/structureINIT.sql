@@ -407,6 +407,7 @@ ALTER TABLE `PROFILE_Pool_instance` ADD FOREIGN KEY (instance_id) REFERENCES `PR
 ALTER TABLE `PROFILE_Hottub_instance` ADD FOREIGN KEY (instance_id) REFERENCES `PROFILE_Device_instance` (`instance_id`);
 ALTER TABLE `PROFILE_Home_instance` ADD FOREIGN KEY (profile_id) REFERENCES `PROFILE` (`profile_id`);
 ALTER TABLE `GOALS_Archetype` ADD FOREIGN KEY (category_id) REFERENCES `GOALS_Category` (`category_id`);
+ALTER TABLE `GOALS_Archetype` ADD FOREIGN KEY (creator_id) REFERENCES `AUTH_Users` (`user_id`);
 ALTER TABLE `GOALS_Instance` ADD FOREIGN KEY (profile_id) REFERENCES `PROFILE` (`profile_id`);
 ALTER TABLE `GOALS_Instance` ADD FOREIGN KEY (goal_archetype_id) REFERENCES `GOALS_Archetype` (`archetype_id`);
 
