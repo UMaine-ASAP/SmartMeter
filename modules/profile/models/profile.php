@@ -23,22 +23,12 @@ class ProfileModel
 		}
 
 		$data = array("user_id" => $user_id, "name" => $name);
+		$statement = "INSERT INTO PROFILE (owner_id, name) VALUES (:user_id, :name)";
 
-		try
-		{
-			$dbh = DBController::getConnection();
-			$statement = $dbh->prepare("INSERT INTO PROFILE (owner_id, name) VALUES (:user_id, :name)");
-			$statement->execute($data);
+		$row = Database::query($statement, $data);
 
-			return $dbh->lastInsertId();
-		}
-		catch(PDOException $ex)
-		{
-			error_log($ex);
-			$dbh = null;
-			return false;
-		}
-		$dbh = null;
+		if($row != ''){return $row['lastInsertId'];}
+		else {return false;}
 	}
 
 	/**
@@ -53,30 +43,11 @@ class ProfileModel
 	static function getUserProfile($owner_id)
 	{
 		$data = array("owner_id" => $owner_id);
-		try
-		{
-			$dbh = DBController::getConnection();
-			$statement = $dbh->prepare("SELECT profile_id, name FROM PROFILE WHERE owner_id = :owner_id");
-			$statement->execute($data);
+		$statement = "SELECT profile_id, name FROM PROFILE WHERE owner_id = :owner_id";
 
-			$row = $statement->fetch(PDO::FETCH_ASSOC);
+		$row = Database::query($statement, $data);
 
-			if(count($row) == 0)
-			{
-				return null;
-			}
-
-			return $row;
-		}
-		catch(PDOException $ex)
-			{
-				error_log($ex);
-				$dbh = null;
-				return false;
-			}
-
-		$dbh = null;
-
+		return $row['result'][0];
 	}
 
 	/**
@@ -91,30 +62,11 @@ class ProfileModel
 	static function getUserProfileID($owner_id)
 	{
 		$data = array("owner_id" => $owner_id);
-		try
-		{
-			$dbh = DBController::getConnection();
-			$statement = $dbh->prepare("SELECT profile_id FROM PROFILE WHERE owner_id = :owner_id");
-			$statement->execute($data);
+		$statement = "SELECT profile_id FROM PROFILE WHERE owner_id = :owner_id";
 
-			$row = $statement->fetch(PDO::FETCH_ASSOC);
+		$row = Database::query($statement, $data);
 
-			if(count($row) == 0)
-			{
-				return null;
-			}
-
-			return $row['profile_id'];
-		}
-		catch(PDOException $ex)
-			{
-				error_log($ex);
-				$dbh = null;
-				return false;
-			}
-
-		$dbh = null;
-
+		return $row['result'][0]['profile_id'];
 	}
 
 	/**
@@ -131,24 +83,11 @@ class ProfileModel
 	static function removeProfile($profile_id)
 	{
 		$data = array("profile" => $profile_id);
-		try
-		{
-			$dbh = DBController::getConnection();
-			$statement = $dbh->prepare("DELETE FROM PROFILE WHERE profile_id = :profile");
-			$statement->execute($data);
+		$statement = "DELETE FROM PROFILE WHERE profile_id = :profile";
 
+		$row = Database::query($statement, $data);
 
-			return true;
-		}
-		catch(PDOException $ex)
-		{
-			error_log($ex);
-			$dbh = null;
-			return false;
-		}
-
-		$dbh = null;
-
+		return true;
 	}
 
 }

@@ -57,21 +57,31 @@ class ProfileController
 	 *	@return array|bool  				Returns an array of the profile if found, null if one doesn't exists, false otherwise.
 	 */
 
-	static function getUserProfile($owner_id)
+	static function getCurrentUserProfile()
 	{
-		$user_id = AuthenticationController::getCurrentUserID();
 
-		if(!$user_id || $user_id != $owner_id)
+		if($return = ProfileModel::getUserProfile(AuthenticationController::getCurrentUserID()))
 		{
-			return false;
+			return $return;
 		}
 		else
 		{
-			$return = ProfileModel::getUserProfile($owner_id);
+			return false;
+		}
+	}
+
+
+	static function getCurrentUserProfileID()
+	{
+
+		if($return = ProfileModel::getUserProfileID(AuthenticationController::getCurrentUserID()))
+		{
 			return $return;
 		}
-
-		return false;
+		else
+		{
+			return false;
+		}
 	}
 
 	/**

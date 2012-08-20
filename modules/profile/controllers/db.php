@@ -59,7 +59,7 @@ class Database {
     
                 $result = $statement->fetchAll();
 
-               return $result;
+               return array('result' => $result, 'lastInsertId' => Database::$dbh->lastInsertId());
         }
         catch(PDOException $ex)
         {
@@ -69,7 +69,6 @@ class Database {
         }
 
     }
-
     function __deconstruct__() {
         print "destroying DB";
         Database::$dbh = null;
