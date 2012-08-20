@@ -2,21 +2,34 @@
 {% block content %}
 <div class="main" style="height: 100%;">
 
+
+
+{% if profile %}
+
 	<div class="page-header">
-		<h1>Home Profile</h1>
+		<h1>{{ profile.name }}</h1>
 	</div>
 
+		{{ profile.profile_id }}
 
 
-
-	<div style='width: 250px; margin: 0 auto;'>
-
-		{% if flash['header'] %}
-			<div class='alert alert-success'>{{ flash['header'] }}</div>
-		{% elseif flash['error'] %}
-			<div class='alert alert-error'>{{ flash['error'] }}</div>
-		{% endif %}			
-
+{% else %}
+	<div style='width: 500px; margin: 0 auto; text-align: center;'>
+		<div class='alert alert-error'>Error: No home profile found!</div>
 	</div>
+
+	<div style="width: 600px; margin: 0 auto;">
+		<h2>Home Profile</h2>
+		<form class="well" method="get" action="{{flash['web_root']}}/profile">
+		<label>Profile Name</label>
+		<input type="text" name="name" class="span3">
+		<br>
+		<button type="submit" name="method" value="create" class="btn">Create Profile</button>
+		</form>
+	</div>
+
+{% endif %}
+
+	
 </div>
 {% endblock %}

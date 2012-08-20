@@ -6,6 +6,7 @@ session_start();
 require_once('lib/settings.php');
 
 require_once('controllers/authentication.php');
+require_once('controllers/profile.php');
 require_once('controllers/db.php');
 
 require_once('lib/helpers.php');
@@ -44,7 +45,9 @@ $app->get('/', function() use ($app) {
 	}
 	else
 	{
-		render('index.html.twig', array());
+		$profile = ProfileController::getUserProfile(AuthenticationController::GetCurrentUserID());
+		//$goals = GoalsController::getUserGoals(AuthenticationController::GetCurrentUserID());\
+		render('index.html.twig', array('profile'=>$profile));
 	}
 });
 
@@ -54,53 +57,51 @@ $authenticate = function() use ($app) {
 	}
 };
 
+//Profile
 
-$app->get('/login', function() use ($app) {
-	render('login.html.twig', array());
-});
-
-$app->post('/login', function() use ($app){
-	if ($_POST['username'] != "" && $_POST['password'] != "" &&
-		AuthenticationController::attemptLogin($_POST['username'], $_POST['password']))
-	{	// Success!
-		return redirect('/');
-	}
-	else
-	{	// Fail :(
-		$app->flash('error', 'Username or password was incorrect.');
-		return redirect('/login');
-	}
-});
-
-
-$app->post('/register', function() use ($app){
-
-	
-	if($_POST['username'] == "" || $_POST['password'] == "")
+$app->get('/profile', function() use ($app){
+	if($_GET['method'] == 'create')
 	{
-		$app->flash('error', 'All fields are required.');
-		return redirect('/login');
-	}
-	else
-	{
-		if($hash = AuthenticationController::createHash($_POST['password']))
+		if($_GET['name'] != '' && ProfileController::startNewProfile($_GET['name']))
 		{
-
-		    $data = array('username' => $_POST['username'], 'password' => $hash, 'email' => $_POST['email'], 'first' => $_POST['first_name'], 'last' => $_POST['last_name']);
-		    $statement = "INSERT INTO AUTH_Users (username, password, first, last, email) VALUES (:username, :password, :first, :last, :email)";
-
-			$result = Database::query($statement, $data);
-			if( $result === false) {
-				return false;
+			$app->flash('header', 'New Profile Successfully Created!');
+			return redirect('/');
+		}
+		else
+		{
+			if($_GET['name'] == '')
+			{
+				$app->flash('error', 'Error: Please enter a profile name.');
+			}
+			else 
+			{
+				$app->flash('error', 'Error Creating Profile!');
 			}
 			return redirect('/');
 		}
 	}
+	elseif($_GET['method'] == 'delete')
+	{
+		$profile = ProfileController::getUserProfile(AuthenticationController::GetCurrentUserID());
+		if(ProfileController::removeProfile($profile['profile_id']))
+		{
+			$app->flash('header', 'Profile Successfully Removed!');
+			return redirect('/');
+		}
+		else
+		{
+			$app->flash('error', 'Error Removing Profile!');
+			return redirect('/');
+		}
+	}
+	else {
+		$app->flash('error', 'Method "' . $_GET['method'] . '" Not Supported!');
+		return redirect('/');
+	}
+	
+});
 
-});
-$app->get('/register', function() use ($app) {
-	render('register.html.twig', array());
-});
+require_once('routes/user.php');
 
 $app->run();
 

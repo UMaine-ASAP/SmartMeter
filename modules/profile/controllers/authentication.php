@@ -106,7 +106,7 @@ class AuthenticationController
         }
         else
         {
-            $statement = $dbh->prepare("SELECT * FROM AUTH_USERS WHERE username=:username");
+            $statement = $dbh->prepare("SELECT * FROM AUTH_Users WHERE username=:username");
             $statement->setFetchMode(PDO::FETCH_OBJ);
             
             $statement->execute(array("username" => $username));

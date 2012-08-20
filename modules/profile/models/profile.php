@@ -134,7 +134,7 @@ class ProfileModel
 		try
 		{
 			$dbh = DBController::getConnection();
-			$statement = $dbh->prepare("DELETE FROM PROFILE WHERE profile_id = :profile_id");
+			$statement = $dbh->prepare("DELETE FROM PROFILE WHERE profile_id = :profile");
 			$statement->execute($data);
 
 

@@ -3,7 +3,6 @@ require_once('lib/settings.php');
 require_once('authentication.php');
 require_once('models/profile.php');
 require_once('models/device.php');
-require_once('devices.php');
 
 
 
