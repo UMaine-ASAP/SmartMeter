@@ -45,9 +45,16 @@ class GoalsController
 
 	static function addGoalInstance($archetype_id, $start_date, $completion_date, $final_value)
 	{
-		if(GoalsModel::addGoalInstance(ProfileController::getCurrentUserProfileID(), $archetype_id, $start_date, $completion_date, $final_value))
+		if(AuthenticationController::getCurrentUserID())
 		{
-			return true;
+			if(GoalsModel::addGoalInstance(ProfileController::getCurrentUserProfileID(), $archetype_id, $start_date, $completion_date, $final_value))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		else
 		{
