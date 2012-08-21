@@ -27,8 +27,10 @@ class ProfileModel
 
 		$row = Database::query($statement, $data);
 
-		if($row != ''){return $row['lastInsertId'];}
-		else {return false;}
+		if($row != '')
+			return $row['lastInsertId'];
+		else
+			return false;
 	}
 
 	/**
@@ -46,8 +48,11 @@ class ProfileModel
 		$statement = "SELECT profile_id, name FROM PROFILE WHERE owner_id = :owner_id";
 
 		$row = Database::query($statement, $data);
-
-		return $row['result'][0];
+		
+		if(isset($row['result'][0]))
+			return $row['result'][0];
+		else
+			return false;
 	}
 
 	/**
@@ -66,7 +71,10 @@ class ProfileModel
 
 		$row = Database::query($statement, $data);
 
-		return $row['result'][0]['profile_id'];
+		if(isset($row['result'][0]['profile_id']))
+			return $row['result'][0]['profile_id'];
+		else
+			return false;
 	}
 
 	/**

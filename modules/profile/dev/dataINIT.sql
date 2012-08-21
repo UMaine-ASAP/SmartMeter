@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 20, 2012 at 05:14 PM
+-- Generation Time: Aug 21, 2012 at 01:57 PM
 -- Server version: 5.5.27
 -- PHP Version: 5.4.5
 
@@ -27,6 +27,28 @@ SET time_zone = "+00:00";
 INSERT INTO `AUTH_Users` (`user_id`, `username`, `password`, `first`, `last`, `email`) VALUES
 (-1, 'system', 'dsioauypoeirupqowieuroiewquroiewqu40938217409832174098321sajdkfhdajklfhas', 'system', NULL, ''),
 (1, 'bcarlson', '$2a$08$0Met1HGFQN3iQG9ziZ6DhuWR9FeEmshuupQjj/kPkpDeStlfPmhqq', 'Ben', 'Carlson', 'carlson.j.ben@gmail.com');
+
+--
+-- Dumping data for table `GOALS_Archetype`
+--
+
+INSERT INTO `GOALS_Archetype` (`archetype_id`, `category_id`, `description`, `unit`, `creator_id`) VALUES
+(1, 1, 'I like descriptions\r\n\r\nSam is a bathroom instance...', 1, -1);
+
+--
+-- Dumping data for table `GOALS_Category`
+--
+
+INSERT INTO `GOALS_Category` (`category_id`, `name`) VALUES
+(1, 'Home'),
+(2, 'Kitchen');
+
+--
+-- Dumping data for table `GOALS_Instance`
+--
+
+INSERT INTO `GOALS_Instance` (`instance_id`, `profile_id`, `goal_archetype_id`, `start_date`, `completion_date`, `completed_value`, `completed`) VALUES
+(1, 8, 1, '2012-08-23 00:00:00', '2012-08-31 00:00:00', 23, 0);
 
 --
 -- Dumping data for table `PROFILE`
