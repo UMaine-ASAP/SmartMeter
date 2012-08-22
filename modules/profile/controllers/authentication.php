@@ -83,21 +83,15 @@ class AuthenticationController
         }
 
         //try to find a user with that username
-        try
-        {
-            $dbh = DBController::getConnection();
-            $data = array("username" => $username);
-            $statement = $dbh->prepare("SELECT COUNT(username) FROM AUTH_Users WHERE username=:username");
-            $statement->execute($data);
-            
-            $result = $statement->fetchColumn(); //get the count of results
-        }
-        catch (PDOException $ex)
-        {
-            error_log($ex);
-            $dbh = null;
-            return false;
-        }
+
+
+        $data = array("username" => $username);
+        $querystring = "SELECT COUNT(username) FROM AUTH_Users WHERE username=:username";
+
+        $row = Database::query($querystring, $data);
+
+        
+        $result = $row['result'][0];
         
         if ($result == 0)
         {
@@ -106,18 +100,19 @@ class AuthenticationController
         }
         else
         {
-            $statement = $dbh->prepare("SELECT * FROM AUTH_Users WHERE username=:username");
-            $statement->setFetchMode(PDO::FETCH_OBJ);
-            
-            $statement->execute(array("username" => $username));
-            $user = $statement->fetch();
+            $querystring = "SELECT * FROM AUTH_Users WHERE username=:username";
+            $data = array("username" => $username);
+
+            $row = Database::query($querystring, $data);
+
+            $user = $row['result'][0];
             
         }
 
         //instantiate a PasswordHash class from phpass
         $hasher = new PasswordHash(8, false);
 
-        if ($hasher->CheckPassword($password, $user->password))
+        if ($hasher->CheckPassword($password, $user['password']))
         {
             //great success!
             self::doLogin($user);
@@ -258,7 +253,7 @@ class AuthenticationController
     private static function doLogin($user)
     {
         $_SESSION = array();
-        $_SESSION['UserID'] = $user->user_id;
+        $_SESSION['UserID'] = $user['user_id'];
         $_SESSION['LastAccess'] = time();
         $_SESSION['RemoteIP'] = $_SERVER['REMOTE_ADDR'];
     }
