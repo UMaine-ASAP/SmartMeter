@@ -132,7 +132,7 @@ class DeviceModel
 		$row = Database::query($querystring, null);
 		if($row['result']['COUNT(*)'] == 0)
 		{
-			$data = ("archetype_id" => $archetype_id, "profile_id" => $profile_id, "name" => $name, "age" => $age);
+			$data = array("archetype_id" => $archetype_id, "profile_id" => $profile_id, "name" => $name, "age" => $age);
 			$querystring = "INSERT INTO PROFILE_Device_instance (archetype_id, profile_id, name, age) VALUES (:archetype_id, :profile_id, :name, :age)";
 
 			$row = Database::query($querystring, $data);
@@ -145,7 +145,7 @@ class DeviceModel
 		}
 		else
 		{
-			$data = ("archetype_id" => $archetype_id, "profile_id" => $profile_id, "name" => $name, "age" => $age);
+			$data = array("archetype_id" => $archetype_id, "profile_id" => $profile_id, "name" => $name, "age" => $age);
 			$querystring = "INSERT INTO PROFILE_Device_instance (archetype_id, profile_id, name, age) VALUES (:archetype_id, :profile_id, :name, :age)";
 
 			$row = Database::query($querystring, $data);
