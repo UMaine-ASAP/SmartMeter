@@ -20,7 +20,21 @@
 		<!-- Navigation bar -->
 		<div class="navbar navbar-fixed-top">
 			<div class="navbar-inner">
-				<div class="container" style="">
+				<div class="btn-group pull-right">
+					<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+						<i class="icon-user"></i>
+						{{ flash['userData']['first'] }} {{ flash['userData']['last'] }}
+						<span class="caret"></span>
+					</a>
+
+					<ul class="dropdown-menu">
+						<!--
+						<li><a href="{{flash['web_root']}}/my-videos">My Profile and Videos</a></li>
+						<li class="divider"></li>
+						-->
+
+						<li><a href="{{flash['web_root']}}/logout">Sign Out</a></li>
+					</ul>
 				</div>
 			</div>
 
@@ -30,22 +44,10 @@
 <div class="container">
 
 <div class="main">
-	<div class="left_bar">
-		{% block left_bar %}
-		{% endblock %}
-	</div>
-
-
-	<div class="content">
-{% if flash['header'] %}
-<div class='alert alert-success'>{{ flash['header'] }}</div>
-{% elseif flash['error'] %}
-<div class='alert alert-error'>{{ flash['error'] }}</div>
-{% endif %}		
+	
 
 		{% block content %}
 		{% endblock %}
-	</div>
 
 
 </div>

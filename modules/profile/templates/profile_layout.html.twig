@@ -1,0 +1,87 @@
+<html>
+<head>
+		<script>
+			var WEB_ROOT = '{{flash['web_root']}}';
+		</script>
+		<script src="{{flash['web_root']}}/lib/js/jquery.js"></script>
+		<link href="{{flash['web_root']}}/lib/bootstrap/css/bootstrap.css" rel="stylesheet">
+		<link href="{{flash['web_root']}}/lib/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+		<link href="{{flash['web_root']}}/lib/smartmeter.css" rel="stylesheet">
+
+		<style type="text/css">
+		</style>
+		{% block header_extra %}{% endblock %}
+</head>
+	<body>
+
+<div id="deviceContainer">
+</div>
+
+<div id="mainContainer">
+<h1> Home Profile </h1>
+
+<p>
+Cupcake ipsum dolor sit amet gummi bears gingerbread halvah jujubes. Liquorice chocolate bar bear claw lemon drops wypas caramels. Lollipop sweet I love. Sugar plum oat cake faworki apple pie. I love bear claw I love cheesecake sweet roll jelly-o chupa chups pudding I love. Pastry halvah I love sweet sweet roll. Tiramisu topping bear claw gingerbread sweet cotton candy ice cream gingerbread. Gummi bears chocolate croissant I love. Sugar plum tootsie roll I love I love pie gummi bears ice cream jelly.
+</p>
+
+<div id="newProfile">
+	Start Profile
+</div>
+
+<div id="tab">
+	<h4>Progress</h4>
+</div>
+
+<div id="progress">
+
+	<div id="monthlyEstimate">
+		<h2>Monthly Estimates</h2>
+		<h3>Estimated Usage: <b>275 - 375 kw/H</b></h3>
+		<h3>Estimated Cost: <b>$65.00 - $97.00</b> </h3>
+		<h3>Energy Efficiency: <b>65%</b></h3>
+		What is this?
+	</div>
+
+	<div id = "monthlyDevice">
+		<h2>Monthly Device</h2>
+	</div>
+</div>
+
+<div id="tab">
+	<h4>Goals</h4>
+</div>
+
+<div id="goals">
+	<h2 style="text-align:center;"> 1 of 5 goals completed for a total of $25/year saved!</h2>
+
+<table border="1" style="background-color:white;border:0;width:80%;border-collapse:collapse;border-color:#666; margin-left:125px; margin-top:25px;">
+	<tr>
+	<td style="padding:3px; width: 75px; height: 75px;">Table cell 1</td>
+	<td style="padding:3px;">Cupcake ipsum dolor sit amet gummi bears gingerbread halvah jujubes. Liquorice chocolate bar bear claw lemon drops wypas caramels.</td>
+	<td style="padding:3px;">Table cell 3</td>
+	</tr>
+	<tr>
+	<td style="padding:3px;">Table cell 3</td>
+	<td style="padding:3px;">Cupcake ipsum dolor sit amet gummi bears gingerbread halvah jujubes. Liquorice chocolate bar bear claw lemon drops wypas caramels.</td>
+	<td style="padding:3px;">Table cell 3</td>
+	</tr>
+</table>
+
+</div>
+
+<div id="tab">
+	<h4>Suggestions</h4>
+</div>
+
+<div id="suggestions">
+
+</div>
+
+</div>
+
+<!--Scripts that are dependent on the DOM-->
+	<!--<script src="{{flash['web_root']}}/js/underscore.js"></script>
+	<script src="{{flash['web_root']}}/js/backbone.js"></script>-->
+	<script src="{{flash['web_root']}}/bootstrap/js/bootstrap.js"></script>
+</body>
+</html>
