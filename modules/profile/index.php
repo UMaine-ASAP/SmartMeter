@@ -49,7 +49,7 @@ $app->get('/', function() use ($app) {
 		$profile = ProfileController::getCurrentUserProfile();
 		$goals = GoalsController::getCurrentUserGoals();
 
-		print_r($profile);
+		//print_r($profile);
 
 		$completed_goals = GoalsController::getCompletedCurrentUserGoals();
 
@@ -105,6 +105,12 @@ $app->get('/profile', function() use ($app){
 		return redirect('/');
 	}
 	
+});
+
+
+//Goals
+$app->post('/goals/complete/:id', function($id) use ($app){
+	return GoalsController::completeInstance($id);
 });
 
 require_once('routes/user.php');
