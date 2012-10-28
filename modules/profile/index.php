@@ -6,6 +6,7 @@ session_start();
 require_once('lib/settings.php');
 
 require_once('controllers/authentication.php');
+require_once('controllers/user.php');
 require_once('controllers/profile.php');
 require_once('controllers/db.php');
 require_once('controllers/goals.php');
@@ -46,14 +47,11 @@ $app->get('/', function() use ($app) {
 	}
 	else
 	{
+		$user = UserController::getCurrentUserDetails();
 		$profile = ProfileController::getCurrentUserProfile();
 		$goals = GoalsController::getCurrentUserGoals();
 
-		//print_r($profile);
-
-		$completed_goals = GoalsController::getCompletedCurrentUserGoals();
-
-		render('index.html.twig', array('profile'=>$profile, 'goals' => $goals, 'completed_goals' => $completed_goals));
+		render('index.html.twig', array('logged_in' => 1, 'user' => $user, 'profile'=>$profile, 'goals' => $goals));
 	}
 });
 

@@ -1,7 +1,7 @@
 <?PHP
 
 $app->get('/login', function() use ($app) {
-	render('login.html.twig', array());
+	render('index.html.twig', array('logged_in' => 0));
 });
 
 $app->post('/login', function() use ($app){
