@@ -25,9 +25,14 @@ Bangor HYDRO!
 				<a href="#">Welcome {{user.first}} {{user.last}}</a>
 			{% else %}
 			<div id="login_zone">
-			<a><input type="text" placeholder="Username" ></input>
-			<input type="password" placeholder="Password"></input></a>
-			<btn class="btn btn-success btn-mini" id="btn_login" style=""><i class="icon-arrow-right icon-white"></i></btn>
+			<a>
+			<form method="post" action="login">
+			<input type="text" placeholder="Username" name="username"></input>
+			<input type="password" placeholder="Password" name="password"></input></a>
+
+			<label for="submit" class="btn btn-success btn-mini" id="btn_login"><i class="icon-arrow-right icon-white"></i></label>
+    		<input id="submit" type="submit" style="display:none;" />
+
 			</div>
 			{%endif%}
 		</li>

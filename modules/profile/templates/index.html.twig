@@ -3,10 +3,75 @@
 {% block header_extra %}
 
 
+		<script src="{{flash['web_root']}}/lib/js/jquery.jqplot.min.js"></script>
+		<script src="{{flash['web_root']}}/lib/js/jqplot.BarRenderer.js"></script>
+		<script src="{{flash['web_root']}}/lib/js/jqplot.CategoryAxisRenderer.js"></script>
+		<script src="{{flash['web_root']}}/lib/js/jqplot.DateAxisRenderer.js"></script>
+		<link href="{{flash['web_root']}}/lib/jquery.jqplot.min.css" rel="stylesheet">
+
+		<script>
+		  function makeContinuousData(npoints, ybase, yvariation) {
+		      var data = [];
+		      if (yvariation == null) {
+		          yvariation = ybase;
+		          ybase = (Math.random() - 0.5) * 2 * yvariation;
+		      }
+		      for (j=0; j<npoints; j++) {
+		          data.push([j, ybase]);
+		          ybase += (Math.random() - 0.5) * 2 * yvariation;
+		      }
+		      return data;
+		  }
+
+		$(document).ready(function(){
+
+		var s1 = [[3,1] , [5, 2], [7, 3], [9, 4], [11,5]];
+		var ticks = ['Heater', 'Computer', 'TV', 'Fridge', 'A/C'];
+
+	    	plot1 = $.jqplot('profile_breakdown_graph', [s1], {
+	            captureRightClick: true,
+	            seriesDefaults:{
+	                renderer:$.jqplot.BarRenderer,
+	                shadowAngle: 135,
+	                rendererOptions: {
+	                    barDirection: 'horizontal',
+	                    highlightMouseDown: true   
+	                },
+	                pointLabels: {show: true, formatString: '%d'}
+	            },
+	            legend: {
+	                show: false,
+	            },
+	            axes: {
+	                yaxis: {
+	                    renderer: $.jqplot.CategoryAxisRenderer,
+	                    ticks: ticks
+	                }
+	            }
+	        });
+	    var line1=[['2012-10-30 8:00AM',4], ['2012-10-30 12:00AM',7], ['2012-10-31 2:00AM',6],['2012-11-1 8:00AM',20],['2012-11-2 8:00AM',12],['2012-11-3 8:00AM',7],['2012-11-4 8:00AM',23]];
+	      	plot2 = $.jqplot('week_graph', [line1], {
+	      		axesDefaults: {
+			      pad: 0
+			    },
+			    axes: {
+			    	xaxis: {
+			    		renderer: $.jqplot.DateAxisRenderer,
+			    		tickOptions:{formatString:'%b %#d'},
+				         min:'October 30, 2012', 
+				         tickInterval:'1 day'
+			    	},
+			    	yaxis: {
+			    		rendererOptions: {}
+			     	}
+			    }
+	      	}); 
+  		  });
+		</script>
 {% endblock %}
 
 {% block content %}
-
+{% if logged_in == 1 %}
 <div class="row-fluid">
 	<div id="weekly_summary" class="home_content_div span12">
 		<div class="content_title">
@@ -44,15 +109,21 @@
 </div>
 
 <div class="row-fluid">
-	<div id="profile_breakdonw" class="home_content_div span5">
+	<div id="profile_breakdown" class="home_content_div span5">
 		<div class="content_title">
 			Profile Breakdown
-		</div>		
+		</div>
+		<div id="profile_breakdown_graph" style="height: 275px;  position: relative;" class="jqplot-target">
+
+		</div>
 	</div>
 
-	<div id="week_graph" class="home_content_div span7">
+	<div id="week_graph_div" class="home_content_div span7">
 		<div class="content_title">
 			Past Week Graph
+		</div>
+		<div id="week_graph" style="height: 275px;">
+
 		</div>
 	</div>
 </div>
@@ -93,7 +164,11 @@
 		<div id="add_goal"><btn class="btn btn-mini btn-success"><i class="icon-plus icon-white"></i>Add More</btn></div>
 	</div>
 </div>
+{% else %}
 
+You are not logged in :(
+
+{%endif%}
 <!--
 <div id="newProfile">
 	Start Profile
