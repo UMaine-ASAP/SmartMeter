@@ -104,8 +104,10 @@ class AuthenticationController
             $data = array("username" => $username);
 
             $row = Database::query($querystring, $data);
-
-            $user = $row['result'][0];
+            if(isset($row['result'][0]))
+                $user = $row['result'][0];
+            else
+                $user = null;
             
         }
 
