@@ -7,6 +7,8 @@
 		<script src="{{flash['web_root']}}/lib/js/jqplot_plugins/jqplot.BarRenderer.js"></script>
 		<script src="{{flash['web_root']}}/lib/js/jqplot_plugins/jqplot.CategoryAxisRenderer.js"></script>
 		<script src="{{flash['web_root']}}/lib/js/jqplot_plugins/jqplot.DateAxisRenderer.js"></script>
+		<script src="{{flash['web_root']}}/lib/js/jqplot_plugins/jqplot.highlighter.min.js"></script>
+		<script src="{{flash['web_root']}}/lib/js/jqplot_plugins/jqplot.cursor.min.js"></script>
 		<link href="{{flash['web_root']}}/lib/jquery.jqplot.min.css" rel="stylesheet">
 
 		<script>
@@ -62,8 +64,18 @@
 				         tickInterval:'1 day'
 			    	},
 			    	yaxis: {
+			    		tickOptions: {
+			    			formatString: '%.1f Kwh'
+			    		},
 			    		rendererOptions: {}
 			     	}
+			    },
+			     highlighter: {
+			        show: true,
+			        sizeAdjust: 7.5
+			    },
+			    	cursor: {
+			        show: false
 			    }
 	      	}); 
   		  });
@@ -113,7 +125,7 @@
 		<div class="content_title">
 			Profile Breakdown
 		</div>
-		<div id="profile_breakdown_graph" style="height: 275px;  position: relative;" class="jqplot-target">
+		<div id="profile_breakdown_graph" style="height: 275px; margin: 5px;  position: relative;" class="jqplot-target">
 
 		</div>
 	</div>
@@ -122,7 +134,7 @@
 		<div class="content_title">
 			Past Week Graph
 		</div>
-		<div id="week_graph" style="height: 275px;">
+		<div id="week_graph" style="height: 275px; margin: 5px;">
 
 		</div>
 	</div>
