@@ -1,6 +1,6 @@
 <?PHP
 
-$HOST = "localhost";
+$HOST = "kenai.asap.um.maine.edu";
 $DATABASE = "smartmeter";
 
 $USERNAME = "smartmeter";
