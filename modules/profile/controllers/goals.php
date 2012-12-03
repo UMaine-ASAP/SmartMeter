@@ -43,6 +43,14 @@ class GoalsController
 		}
 	}
 
+	static function getGoalDetails($id)
+	{
+		if(GoalsModel::getInstanceProfile($id) == ProfileController::getCurrentUserProfileID())
+		{
+			return GoalsModel::getGoalDetails($id);
+		}
+	}
+
 	static function addGoalInstance($archetype_id, $start_date, $completion_date, $final_value)
 	{
 		if(AuthenticationController::getCurrentUserID())

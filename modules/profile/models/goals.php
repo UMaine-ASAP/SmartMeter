@@ -97,13 +97,14 @@ class GoalsModel
 		return $row['result'];
 	}
 
-	static function addCustomArchetype($category, $description, $unit, $creator)
+	static function getGoalDetails($instance_id)
 	{
-		$data = array("category_id" => $category, "description" => $description, "unit" => $unit, "creator" => $creator);
-		$querystring = "INSERT INTO GOALS_Archetype (category_id, description, unit, creator_id) VALUES (:category_id, :description, :unit, :creator)";
+		$data = array("instance_id" => $instance_id);
+		$querystring = "SELECT a.*, b.*, c.name as category_name, d.name as unit_name FROM GOALS_Instance a LEFT JOIN GOALS_Archetype b on a.goal_archetype_id = b.archetype_id LEFT JOIN GOALS_Category c on b.category_id = c.category_id LEFT JOIN GOALS_Units d on b.unit_id = d.unit_id WHERE a.instance_id = :instance_id";
 		$row = Database::query($querystring, $data);
 
-		return $row['lastInsertId'];
+		return $row['result'];
+
 	}
 }
 
