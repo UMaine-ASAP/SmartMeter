@@ -2,10 +2,20 @@
 
 require_once('maps/device.php');
 require_once('controllers/db.php');
+require_once('lib/constants.php');
 
 class DeviceModel
 {
 
+
+	static function getAllDevices($profile_id)
+	{
+
+		$devices = ORM::for_table('PROFILE_Device_instance')->join('PROFILE_Device_archetype', array('PROFILE_Device_instance.archetype_id', '=', 'PROFILE_Device_archetype.archetype_id'))->join('PROFILE_Device_types', array('PROFILE_Device_archetype.device_type', '=', 'PROFILE_Device_types.type_id'))->find_array();
+
+		return $devices;
+
+	}
 
 	/**
      * 	Return all device archetypes that a user has access to.  These provide a starting point

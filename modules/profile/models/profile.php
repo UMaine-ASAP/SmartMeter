@@ -2,6 +2,11 @@
 
 require_once('lib/settings.php');
 require_once('controllers/db.php');
+require_once('lib/idiorm/idiorm.php');
+
+ORM::configure('mysql:host=kenai.asap.um.maine.edu;dbname=smartmeter');
+ORM::configure('username', 'smartmeter');
+ORM::configure('password', 'firetruck');
 
 class ProfileModel
 {
@@ -36,46 +41,38 @@ class ProfileModel
 	/**
 	 *	Find all home profiles associated with a user account
 	 *
-	 *	@param 	string 		$user_id 	Id of the user whos profiles we are searching for
+	 *	@param 	int 		$user_id 	Id of the user whos profiles we are searching for
 	 *
 	 *
-	 *	@return array|bool 				Array of profile id and name belonging to the user on succes, false otherwise
+	 *	@return int 					ID of profile matchings users id
 	 */
 
-	static function getUserProfile($owner_id)
+	static function getProfileID($user_id)
 	{
-		$data = array("owner_id" => $owner_id);
-		$statement = "SELECT profile_id, name FROM PROFILE WHERE owner_id = :owner_id";
 
-		$row = Database::query($statement, $data);
-		
-		if(isset($row['result'][0]))
-			return $row['result'][0];
-		else
-			return false;
+		$profile = ORM::for_table('PROFILE')->select('profile_id')->where('owner_id', $user_id)->find_one();
+
+		return $profile;
 	}
+
 
 	/**
-	 *	Find all home profiles associated with a user account
+	 *	Return profile details given a profile id
 	 *
-	 *	@param 	string 		$user_id 	Id of the user whos profiles we are searching for
+	 *	@param 	int 		$porifle_id	ID of the profile
 	 *
 	 *
-	 *	@return int 					profile id  on success, false otherwise
+	 *	@return array 					Returns array of profile_id, owner_id, and name
 	 */
 
-	static function getUserProfileID($owner_id)
+	static function getProfile($profile_id)
 	{
-		$data = array("owner_id" => $owner_id);
-		$statement = "SELECT profile_id FROM PROFILE WHERE owner_id = :owner_id";
+		$profile = ORM::for_table('PROFILE')->where('profile_id', $profile_id)->find_array();
 
-		$row = Database::query($statement, $data);
-
-		if(isset($row['result'][0]['profile_id']))
-			return $row['result'][0]['profile_id'];
-		else
-			return false;
+		return $profile;
 	}
+
+
 
 	/**
 	 *	Remove the home profile belonging to the user specified

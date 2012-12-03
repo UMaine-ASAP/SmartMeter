@@ -51,18 +51,18 @@ class ProfileController
 	 *	if the user is not logged in/doesn't own the profile.  Will return null if
 	 *	no profile belongs to that user.
 	 *
-	 *	@param 	string 		$owner_id 		Owner ID of the profile we are looking for
+	 *	@param 	int 		$owner_id 		Owner ID of the profile we are looking for
 	 *
 	 *
-	 *	@return array|bool  				Returns an array of the profile if found, null if one doesn't exists, false otherwise.
+	 *	@return array|bool  				Returns an array of the profile if found, false otherwise.
 	 */
 
 	static function getCurrentUserProfile()
 	{
 
-		if($return = ProfileModel::getUserProfile(AuthenticationController::getCurrentUserID()))
+		if($return = ProfileModel::getProfile(self::getCurrentUserProfileID()))
 		{
-			return $return;
+			return $return[0];
 		}
 		else
 		{
@@ -71,10 +71,33 @@ class ProfileController
 	}
 
 
+	/**
+	 *	Get current user's profile id
+	 *
+	 *
+	 *	@param 	int 		$owner_id 		Owner ID of the profile we are looking for
+	 *
+	 *
+	 *	@return int  						Returns id of the profile belinging to the currently logged in user
+	 */
+
+
 	static function getCurrentUserProfileID()
 	{
 
-		if($return = ProfileModel::getUserProfileID(AuthenticationController::getCurrentUserID()))
+		if($return = ProfileModel::getProfileID(AuthenticationController::getCurrentUserID()))
+		{
+			return $return->profile_id;;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	static function getCurrentUserDevices()
+	{
+		if($return = DeviceModel::getAllDevices(self::getCurrentUserProfileID()))
 		{
 			return $return;
 		}
