@@ -64,49 +64,38 @@ $authenticate = function() use ($app) {
 //Profile
 
 $app->get('/profile', function() use ($app){
-	if($_GET['method'] == 'create')
-	{
-		if($_GET['name'] != '' && ProfileController::startNewProfile($_GET['name']))
-		{
-			$app->flash('header', 'New Profile Successfully Created!');
-			return redirect('/');
-		}
-		else
-		{
-			if($_GET['name'] == '')
-			{
-				$app->flash('error', 'Error: Please enter a profile name.');
-			}
-			else 
-			{
-				$app->flash('error', 'Error Creating Profile!');
-			}
-			return redirect('/');
-		}
-	}
-	elseif($_GET['method'] == 'delete')
-	{
-		$profile = ProfileController::getUserProfile(AuthenticationController::GetCurrentUserID());
-		if(ProfileController::removeProfile($profile['profile_id']))
-		{
-			$app->flash('header', 'Profile Successfully Removed!');
-			return redirect('/');
-		}
-		else
-		{
-			$app->flash('error', 'Error Removing Profile!');
-			return redirect('/');
-		}
-	}
+	
+	$user = UserController::getCurrentUserDetails();
+	$profile = ProfileController::getCurrentUserProfile();
+	$devices = ProfileController::getCurrentUserDevices();
+	echo "<pre>";
+	print_r( $devices);
+	echo "</pre>";
+
+	echo constant($devices[0]['type']);
+
+	render('profile.html.twig', array('logged_in' => 1, 'user' => $user, 'profile' => $profile));
+/*
 	else {
 		$app->flash('error', 'Method "' . $_GET['method'] . '" Not Supported!');
 		return redirect('/');
 	}
+*/
 	
 });
 
 
 //Goals
+
+$app->post('/goals/details/:id', function($id) use ($app){
+
+	$details = GoalsController::getGoalDetails($id);
+
+	echo json_encode($details);
+
+});
+
+
 $app->post('/goals/complete/:id', function($id) use ($app){
 	return GoalsController::completeInstance($id);
 });
