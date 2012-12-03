@@ -1,4 +1,4 @@
-{% extends 'profile_layout.html.twig' %}
+{% extends 'layout.html.twig' %}
 
 {% block header_extra %}
 
@@ -10,6 +10,42 @@
 		<script src="{{flash['web_root']}}/lib/js/jqplot_plugins/jqplot.highlighter.min.js"></script>
 		<script src="{{flash['web_root']}}/lib/js/jqplot_plugins/jqplot.cursor.min.js"></script>
 		<link href="{{flash['web_root']}}/lib/jquery.jqplot.min.css" rel="stylesheet">
+
+
+		<script>
+		$(document).ready(function() {
+			var go_back = $("#ios-arrow-left");
+			var old_goals = $("#goals_table").html();
+
+			go_back.hide();
+
+			$(".details").click(function() {
+				go_back.show();
+
+				go_back.click(function() {
+					$("#goals_table").html(old_goals);
+					go_back.hide();
+				});
+
+				$.ajax({
+					url: "{{flash['web_root']}}/goals/details/" + $(this).attr('id'),
+					type: "POST",
+					success: function(data) {
+						var parse = JSON.parse(data)
+						goalDetails(parse, $("#goals_table"));
+					}
+				});
+
+				console.log("ohai");
+				$(this).hide();
+			});
+		});
+
+		function goalDetails(data, container)
+		{
+			container.html(data.category_name);
+		}
+		</script>
 
 		<script>
 		  function makeContinuousData(npoints, ybase, yvariation) {
@@ -90,29 +126,39 @@
 			Weekly Summary
 		</div>
 
+		<div id="cost_warning">
+			*Does not include delivery cost
+		</div>
+
 		<div class="row-fluid">
+			<div id="weekly_cost" class="span3">
+				<p>Total since last bill</p>
+				<span>$160*</span>
+				<p><i class="icon-arrow-down" style="margin-top: 6px;"></i> $10 from last month</p>
+			</div>
+
+
 			<div id="weekly_usage" class="span4">
 				<p>You have used </p>
-				<span>60 KWh</span>
-				<p><i class="icon-arrow-down" style="margin-top: 6px;"></i> 10 KWh from last week</p>
+				<span>60 kWh</span>
+				<p></i> At a rate of $0.16/kWh</p>
 			</div>
 
-			<div id="weekly_cost" class="span4">
-				<p>at a cost of</p>
-				<span>$0.16 /h</span>
-				<p><i class="icon-arrow-down" style="margin-top: 6px;"></i> .004/hour from last week</p>
-			</div>
-
-			<div id="other" class="span4">
-				<div class="weekly_actions">
-					You added 3 things to your profile.
-					<br>
-					See changes
-				</div>
-				<div class="weekly_actions">
-					You met 1 goal.
-					<br>
-					See Goals
+			<div id="other" class="span5">
+				<div id="upcoming_goals">
+					<h3>Upcoming Goals</h3>
+						<div>
+							<p>In the next week:</p>
+							<ul>
+								<li>11/4 - Replace lightbulubs in the living room</li>
+								<li>11/5 - Win the lottery</li>
+							</ul>
+							<p>In the next month:</p>
+							<ul>
+								<li>12/1 - Eat a hotdog</li>
+								<li>12/3 - Ride a narwhal</li>
+							</ul>
+						</div>
 				</div>
 			</div>
 		</div>
@@ -149,19 +195,23 @@
 	</div>
 
 	<div id="goals_box" class="home_content_div span7">
-		<div class="content_title">
-			Goals
+		<div id="goals_top">
+			<div id="ios-arrow-left" title="Cancel and Go Back!"></div>
+			<div class="content_title">
+				Goals
+			</div>
+			<!--<div id="add_goal"><btn class="btn btn-small btn-success"><i class="icon-plus icon-white"></i>Add More</btn></div>-->
 		</div>
-
+		<div id="goals_table">
 		{% if goals|length != 0 %}
-		<table class="table" style="width:95%; border-bottom: 1px solid #DDD; margin: 15px auto;">
 
-			{% for goal in goals if loop.index < 6 %}
+		<table class="table" style="width:100%; border-bottom: 1px solid #DDD; margin: 15px auto;">
+
+			{% for goal in goals %}
 				<tr>
 				<td style="padding:3px;"><h5>{{ goal.title }}</h5><p style="font-size: .75em; padding: 0; margin: 0;"> {{ goal.description }}</p></td>
 				<td style="padding:3px;">
 					<button class="btn btn-mini pull-right goal_action details" style="float: right;" id="{{goal.instance_id}}">Details</button>
-					<button class="btn btn-mini pull-right goal_action complete" style="float: right;" id="{{goal.instance_id}}">Complete</button>
 				</td>
 				</tr>
 			{%endfor%}
@@ -170,10 +220,7 @@
 			<p>You currently have no goals, how sad :(
 
 		{% endif %}
-
-		</table>
-
-		<div id="add_goal"><btn class="btn btn-mini btn-success"><i class="icon-plus icon-white"></i>Add More</btn></div>
+		</div>
 	</div>
 </div>
 {% else %}

@@ -9,52 +9,47 @@
 		<link href="{{flash['web_root']}}/lib/smartmeter.css" rel="stylesheet">
 
 		<style type="text/css">
-			body {
-				padding-top: 40px;
-				padding-bottom: 20px;
-			}
 		</style>
 		{% block header_extra %}{% endblock %}
 </head>
 	<body>
-		<!-- Navigation bar -->
-		<div class="navbar navbar-fixed-top">
-			<div class="navbar-inner">
-				<div class="btn-group pull-right">
-					<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-						<i class="icon-user"></i>
-						{{ flash['userData']['first'] }} {{ flash['userData']['last'] }}
-						<span class="caret"></span>
-					</a>
 
-					<ul class="dropdown-menu">
-						<!--
-						<li><a href="{{flash['web_root']}}/my-videos">My Profile and Videos</a></li>
-						<li class="divider"></li>
-						-->
-
-						<li><a href="{{flash['web_root']}}/logout">Sign Out</a></li>
-					</ul>
-				</div>
-			</div>
-
-			</div>
-		</div>
-
-<div class="container">
-
-<div class="main">
-	
-
-		{% block content %}
-		{% endblock %}
-
-
-</div>
+<div id="titleBar">
+Bangor HYDRO!
 </div>
 
+<div id="navContainer">
+	<ul class="nav nav-tabs nav-stacked">
+		<li style="position: relative;">
+			{% if logged_in == 1%}
+				<a href="#">Welcome {{user.first}} {{user.last}}</a>
+			{% else %}
+			<div id="login_zone">
+			<a>
+			<form method="post" action="login">
+			<input type="text" placeholder="Username" name="username"></input>
+			<input type="password" placeholder="Password" name="password"></input></a>
 
+			<label for="submit" class="btn btn-success btn-mini" id="btn_login"><i class="icon-arrow-right icon-white"></i></label>
+    		<input id="submit" type="submit" style="display:none;" />
 
+			</div>
+			{%endif%}
+		</li>
+		<li><a href="#">Overview</a></li>
+		<li><a href="#">Home Profile</a></li>
+		<li><a href="#">Prediction</a></li>
+		<li><a href="#">Simulation</a></li>
+		<li><a href="#">Set/View Goals</a></li>
+	</ul>
+</div>
+
+<div id="mainContainer">
+
+{% block content %}
+{% endblock %}
+
+</div>
 
 <!--Scripts that are dependent on the DOM-->
 	<!--<script src="{{flash['web_root']}}/js/underscore.js"></script>
