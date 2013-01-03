@@ -107,6 +107,34 @@ class ProfileController
 		}
 	}
 
+	static function getLightData()
+	{
+		if(is_array($return = DeviceModel::getLightData(self::getCurrentUserProfileID())))
+		{
+			return $return;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	static function editLightData($instance_id, $value)
+	{
+		if(self::getCurrentUserProfileID() == DeviceModel::getLightInstanceProfile($instance_id))
+			return DeviceModel::editLightData($instance_id, $value);
+
+		return false;
+	}
+
+	static function addLightData($archetype_id, $value)
+	{
+		if($profile_id = self::getCurrentUserProfileID())
+			return DeviceModel::addLightData($profile_id, $archetype_id, $value);
+
+		return false;
+	}
+
 	/**
 	 *	Remove a User's Profile
 	 *
@@ -134,6 +162,8 @@ class ProfileController
 
 		return false;
 	}
+
+
 
 	/**
 	 *	Get devices belonging to a user's profile.
