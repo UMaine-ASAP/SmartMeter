@@ -11,10 +11,66 @@ class DeviceModel
 	static function getAllDevices($profile_id)
 	{
 
-		$devices = ORM::for_table('PROFILE_Device_instance')->join('PROFILE_Device_archetype', array('PROFILE_Device_instance.archetype_id', '=', 'PROFILE_Device_archetype.archetype_id'))->join('PROFILE_Device_types', array('PROFILE_Device_archetype.device_type', '=', 'PROFILE_Device_types.type_id'))->find_array();
+		$devices = ORM::for_table('PROFILE_Device_instance')
+			->join('PROFILE_Device_archetype', array('PROFILE_Device_instance.archetype_id', '=', 'PROFILE_Device_archetype.archetype_id'))
+			->join('PROFILE_Device_types', array('PROFILE_Device_archetype.device_type', '=', 'PROFILE_Device_types.type_id'))
+			->find_array();
 
 		return $devices;
 
+	}
+
+
+	/**
+	 * Get information about lights in a users profile
+	 * @param  int $profile_id ID of profile we are getting lights for
+	 * @return array
+	 */
+	static function getLightData($profile_id)
+	{
+
+		$lights = ORM::for_table('PROFILE_Lights_archetype')
+			->select('PROFILE_Lights_instance.count')
+			->select('PROFILE_Lights_instance.lights_instance_id', 'id')
+			->select('PROFILE_Lights_archetype.type')
+			->select('PROFILE_Lights_archetype.lights_archetype_id', 'archetype_id')
+			->select('PROFILE_Lights_archetype.consumption')
+			->left_outer_join('PROFILE_Lights_instance', array('PROFILE_Lights_instance.lights_archetype_id', '=', 'PROFILE_Lights_archetype.lights_archetype_id'))
+			->find_array();
+
+		if(!empty($lights))
+			return $lights;
+		return false;
+	}
+
+	static function editLightData($instance_id, $value)
+	{
+		$instance = ORM::for_table('PROFILE_Lights_instance')->where('lights_instance_id', $instance_id)->find_one();
+		$instance->count = $value;
+		$instance->save();
+
+		return $instance->is_dirty('count');
+	}
+
+	static function addLightData($profile_id, $archetype_id, $value)
+	{
+		$instance = ORM::for_table('PROFILE_Lights_instance')->create();
+		$instance->lights_archetype_id = $archetype_id;
+		$instance->count = $value;
+		$instance->profile_id = $profile_id;
+		$instance->save();
+
+		return $instance->is_dirty('profile_id');
+	}
+
+	static function getLightInstanceProfile($instance_id)
+	{
+		$profile = ORM::for_table('PROFILE_Lights_instance')
+			->select('profile_id')
+			->where('lights_instance_id', $instance_id)
+			->find_one();
+
+		return $profile->profile_id;
 	}
 
 	/**

@@ -2,11 +2,6 @@
 
 require_once('lib/settings.php');
 require_once('controllers/db.php');
-require_once('lib/idiorm/idiorm.php');
-
-ORM::configure('mysql:host=kenai.asap.um.maine.edu;dbname=smartmeter');
-ORM::configure('username', 'smartmeter');
-ORM::configure('password', 'firetruck');
 
 class ProfileModel
 {
@@ -45,6 +40,8 @@ class ProfileModel
 	 *
 	 *
 	 *	@return int 					ID of profile matchings users id
+	 *
+	 * 	TODO: Make this not an ORM object...why did I do that?
 	 */
 
 	static function getProfileID($user_id)
