@@ -2,6 +2,7 @@
 
 session_start();
 
+require_once('lib/idiorm/idiorm.php');
 
 require_once('lib/settings.php');
 
@@ -84,6 +85,42 @@ $app->get('/profile', function() use ($app){
 	
 });
 
+$app->get('/lights_demo', function() use ($app) {
+
+	$user = UserController::getCurrentUserDetails();
+	$lights = ProfileController::getLightData();
+	$lights_json = json_encode($lights);
+
+	//$lights = array('test' => 2);
+
+	/*echo "<pre>";
+	print_r($lights);
+	echo "</pre>";*/
+
+	render('lights.html.twig', array('logged_in' => 1, 'user' => $user, 'lights' => $lights));
+
+});
+
+$app->get('/lights_modify', function() use ($app) {
+	if($_GET['method'] == "edit")
+	{
+		echo ProfileController::editLightData($_GET['id'], $_GET['value']);
+	}
+	elseif($_GET['method'] == "add")
+	{
+		return ProfileController::addLightData($_GET['type_id'], $_GET['value']);
+	}
+
+	return false;
+});
+
+
+$app->get('/lights_list', function() use ($app) {
+
+	$lights = ProfileController::getLightData();
+
+	echo json_encode($lights, JSON_NUMERIC_CHECK);
+});
 
 //Goals
 
