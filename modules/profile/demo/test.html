@@ -1,0 +1,105 @@
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="jquery.tipsy.js"></script>
+<link rel="stylesheet" href="tipsy.css"></link>
+  <style>
+  
+  </style>
+</head>
+<body>
+<div id='chart'></div>
+<script src="http://d3js.org/d3.v2.js"></script>
+<script>
+
+// Custom function to stack our data
+// Retruns total count and an array
+// of y and y0 values, not normalized/scaled.
+function customStack(data)
+{
+  total = 0;
+  return_data = [];
+
+  for(i=0; i<data.length; i++)
+  {
+    return_data.push([{y: data[i], y0: total}])
+    total+=data[i];
+  }
+
+  return [total, return_data];
+}
+
+
+
+
+// Set dimensions of svg canvas
+var width = 60, height = 500;
+
+// Dataset
+var data = [2,2,4,3,8,23];
+
+// Stack our values and grab a total
+var stacked = customStack(data);
+
+var total = stacked[0];
+var stacked = stacked[1];
+
+console.log(stacked);
+
+var colors = d3.scale.category10();
+
+// Scaling dataset to fit our dimensons.
+// Normilize data based on total, scale to our height
+var y = d3.scale.linear()
+    .range([0, height])
+    .domain([0, total]);
+
+
+var z = d3.scale.category20c();
+
+// Initialize canvas
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .append("g");
+    
+
+var datagroup = svg.selectAll("g.datagroup")
+            .data(stacked)
+            .enter().append("svg:g")
+            .attr("class", "valgroup")
+            .style("fill", function(d, i) { return colors(i); })
+            .style("stroke", function(d, i) { return d3.rgb(z(i)).darker(); });
+ 
+// Add a rect for each category
+var rect = datagroup.selectAll("rect")
+            .data(function(d){return d;})
+            .enter()
+              .append("svg:rect")
+              .attr("x", 1)
+              .attr("y", function(d) { return y(d.y0); })
+              .attr("height", function(d) {console.log(y(d.y)); return y(d.y); })
+              .attr("width", 60)
+              .on("mouseover", function(){
+                console.log("over");
+                d3.select(this).transition().duration(300).style("fill", "#333");
+              })
+              .on("mouseout", function(){
+                console.log("over");
+                d3.select(this).transition().duration(300).style("fill", function(d, i) { return colors(i); });
+              })
+              ;
+
+$('svg rect').tipsy({
+  gravity: 'w', 
+  html: true,
+  offset: 60,
+  title: function() {
+    var d = this.__data__ //c = colors(d.i);
+    console.log(d);
+    return 'Hi there! My color is penis'; 
+  }
+});
+
+
+</script>
