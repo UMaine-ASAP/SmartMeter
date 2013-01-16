@@ -98,7 +98,7 @@ function updateGraph(data)
 	var total = stacked[0];
 	var stacked = stacked[1];
 
-	console.log(stacked)
+	//console.log(stacked)
 	var colors = d3.scale.category20c();
 
 	// Scaling dataset to fit our dimensons.
@@ -112,14 +112,15 @@ function updateGraph(data)
 
 	var svg = d3.select("#chart");
 
-	var datagroup = svg.selectAll("g.valgroup");
+	var datagroup = svg.selectAll("g.valgroup")
+		.data(stacked);
 
 	var rect = datagroup.selectAll("rect")
-		.data(stacked)
+		.data(function(d){ return d;})
 		.transition()
 			.duration(1000)
-			.attr("y", function(d) { console.log(d[0]); return y(d[0].y0); })
-			.attr("height", function(d) { return y(d[0].y)});
+			.attr("y", function(d) {return y(d.y0); })
+			.attr("height", function(d) { return y(d.y)});
 
 }
 
@@ -212,8 +213,10 @@ $.ajax({
 		$(document).ready(function() {
 			$('.edit').change(function(){
 
-				var id = $(this).attr("id");
-				var value = $(this).val();
+				var field = $(this);
+
+				var id = field.attr("id");
+				var value = field.val();
 
 				if(id != -1)
 					var dataString = 'method=edit&id=' + id +'&value=' + value;
@@ -225,6 +228,8 @@ $.ajax({
 				  method: "POST",
 				  data: dataString,
 				  success: function(data) {
+				  	if(id == -1)
+				  		field.attr("id", data);
 				  	callUpdate();
 				  }
 				});

@@ -108,7 +108,7 @@ $app->get('/lights_modify', function() use ($app) {
 	}
 	elseif($_GET['method'] == "add")
 	{
-		return ProfileController::addLightData($_GET['type_id'], $_GET['value']);
+		echo ProfileController::addLightData($_GET['type_id'], $_GET['value']);
 	}
 
 	return false;

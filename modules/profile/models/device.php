@@ -60,7 +60,7 @@ class DeviceModel
 		$instance->profile_id = $profile_id;
 		$instance->save();
 
-		return $instance->is_dirty('profile_id');
+		return $instance->id();
 	}
 
 	static function getLightInstanceProfile($instance_id)
