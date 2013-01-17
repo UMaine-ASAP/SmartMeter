@@ -35,7 +35,9 @@ class DeviceModel
 			->select('PROFILE_Lights_archetype.type')
 			->select('PROFILE_Lights_archetype.lights_archetype_id', 'archetype_id')
 			->select('PROFILE_Lights_archetype.consumption')
+			->select('PROFILE_Light_equivalence_map.equivalent_power')
 			->left_outer_join('PROFILE_Lights_instance', array('PROFILE_Lights_instance.lights_archetype_id', '=', 'PROFILE_Lights_archetype.lights_archetype_id'))
+			->join('PROFILE_Light_equivalence_map', array('PROFILE_Lights_instance.lights_archetype_id', '=', 'PROFILE_Light_equivalence_map.archetype_id'))
 			->find_array();
 
 		if(!empty($lights))

@@ -15,8 +15,8 @@ function customStack(data)
 
   for(i=0; i<data.length; i++)
   {
-    return_data.push([{id: i, y: (data[i]['count']===null)?0:data[i]['count'], y0: total, data: data[i]}])
-    total+=data[i]['count'];
+    return_data.push([{id: i, y: (data[i]['count']===null)?0:data[i]['equivalent_power']*data[i]['count'], y0: total, data: data[i]}])
+    total+=data[i]['equivalent_power'];
   }
 
   return [total, return_data];

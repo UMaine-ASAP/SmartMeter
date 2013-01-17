@@ -93,9 +93,9 @@ $app->get('/lights_demo', function() use ($app) {
 
 	//$lights = array('test' => 2);
 
-	/*echo "<pre>";
+	echo "<pre>";
 	print_r($lights);
-	echo "</pre>";*/
+	echo "</pre>";
 
 	render('lights.html.twig', array('logged_in' => 1, 'user' => $user, 'lights' => $lights));
 
