@@ -119,6 +119,34 @@ class ProfileController
 		}
 	}
 
+	static function getLightStats()
+	{
+		if(is_array($result = DeviceModel::getLightStats(self::getCurrentUserProfileID())))
+		{
+			$return = array();
+
+			for($i=0; $i<3; $i++)
+			{
+				$return[$i] = array();
+				$return[$i]['wattage'] = 0;
+
+				foreach($result as $light)
+				{
+					if($light['type'] == $i)
+					{
+						$return[$i]['wattage'] += $light['consumption']*$light['count'];
+					}
+				}
+			}
+			return $return;
+		}
+
+		else
+		{
+			return false;
+		}
+	}
+
 	static function editLightData($instance_id, $value)
 	{
 		if(self::getCurrentUserProfileID() == DeviceModel::getLightInstanceProfile($instance_id))

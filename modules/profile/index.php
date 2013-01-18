@@ -89,15 +89,16 @@ $app->get('/lights_demo', function() use ($app) {
 
 	$user = UserController::getCurrentUserDetails();
 	$lights = ProfileController::getLightData();
-	$lights_json = json_encode($lights);
+
+	$lights_stats = ProfileController::getLightStats();
 
 	//$lights = array('test' => 2);
 
 	echo "<pre>";
-	print_r($lights);
+	print_r($lights_stats);
 	echo "</pre>";
 
-	render('lights.html.twig', array('logged_in' => 1, 'user' => $user, 'lights' => $lights));
+	render('lights.html.twig', array('logged_in' => 1, 'user' => $user, 'lights' => $lights, 'lights_stats' => $lights_stats));
 
 });
 

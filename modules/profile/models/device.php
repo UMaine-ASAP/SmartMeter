@@ -38,11 +38,27 @@ class DeviceModel
 			->select('PROFILE_Light_equivalence_map.equivalent_power')
 			->left_outer_join('PROFILE_Lights_instance', array('PROFILE_Lights_instance.lights_archetype_id', '=', 'PROFILE_Lights_archetype.lights_archetype_id'))
 			->join('PROFILE_Light_equivalence_map', array('PROFILE_Lights_instance.lights_archetype_id', '=', 'PROFILE_Light_equivalence_map.archetype_id'))
+			->where('PROFILE_Lights_instance.profile_id', $profile_id)
 			->find_array();
 
 		if(!empty($lights))
 			return $lights;
 		return false;
+	}
+
+	static function getLightStats($profile_id)
+	{
+		$stats = ORM::for_table('PROFILE_Lights_instance')
+			->select('PROFILE_Lights_instance.count')
+			->select('PROFILE_Lights_archetype.type')
+			->select('PROFILE_Lights_archetype.consumption')
+			->join('PROFILE_Lights_archetype', array('PROFILE_Lights_instance.lights_archetype_id', '=', 'PROFILE_Lights_archetype.lights_archetype_id'))
+			->where('PROFILE_Lights_instance.profile_id', $profile_id)
+			->where_not_null('PROFILE_Lights_instance.count')
+			->where_not_equal('PROFILE_Lights_instance.count', 0)
+			->find_array();
+
+		return $stats;
 	}
 
 	static function editLightData($instance_id, $value)

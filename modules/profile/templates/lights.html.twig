@@ -16,7 +16,7 @@ function customStack(data)
   for(i=0; i<data.length; i++)
   {
     return_data.push([{id: i, y: (data[i]['count']===null)?0:data[i]['equivalent_power']*data[i]['count'], y0: total, data: data[i]}])
-    total+=data[i]['equivalent_power'];
+    total+=data[i]['equivalent_power']*data[i]['count'];
   }
 
   return [total, return_data];
@@ -78,6 +78,20 @@ function drawGraph(data)
 	              .on("mouseout", function(){
 	                d3.select(this).transition().duration(300).style("fill", function(d, i) {return colors(d['id']); });
 	              });
+	 console.log(rect);
+
+	var text = datagroup.selectAll("text")
+		.data(function(d){return d;})
+		.enter()
+			.append("svg:text")
+			.text(function(d) {
+				console.log(d);
+				return d.data.consumption;
+			})
+			.style("fill", "black")
+			.attr("y", function(d) { if(y(d.y) !== 0) {return y(d.y0) + y(d.y)/2} else {return -10}})
+			.attr("x", 23);
+
 
 	$('svg rect').tipsy({
 	  gravity: 'w', 
@@ -162,44 +176,28 @@ $.ajax({
 
 		<div class="row" style="width: 80%; margin: 0 auto; padding-top: 20px;">
 		  	<div class="span3">
+
+		  		{% for i in 0..2 %}
+
 				{% if lights is sameas(false) %}
 					You have no lights...
 
-					{% else %}
-					<h4 style="border-bottom: 1px solid black; margin-bottom: 10px;">Incandescent</h4>
+				{% else %}
+					<h4 style="border-bottom: 1px solid black; margin-bottom: 10px;">{% if i == 0 %}Incandescent{% elseif i == 1 %}CFL{% else %}LED{% endif %}</h4>
 					<ul class="light_list">
 					{% for light in lights %}
-						{% if light.type == 0 %}
+						{% if light.type == i %}
 							<li>
 								<input type="text" data-type="{{ light.archetype_id }}" class="edit" id="{%if light.id is sameas(null) %}-1{% else %}{{ light.id }}{% endif %}" value="{% if light.count is sameas(null) %}0{% else %}{{ light.count }}{% endif %}"></input>&nbsp;&nbsp;{{ light.consumption }}W Bulbs
 							</li>
 						{% endif %}
 					{% endfor %}
+					<li>Total Consumption: {{ lights_stats[i].wattage }}W </li>
+					<li>Estimated Monthly Cost: ${{ 0.109 * lights_stats[i].wattage / 1000 * 4 * 30 }}
 					</ul>
-
-					<h4 style="border-bottom: 1px solid black; margin-bottom: 10px;">CFL</h4>
-					<ul class="light_list">
-					{% for light in lights %}
-						{% if light.type == 1 %}
-							<li>
-								<input type="text" data-type="{{ light.archetype_id }}" class="edit" id="{%if light.id is sameas(null) %}-1{% else %}{{ light.id }}{% endif %}" value="{% if light.count is sameas(null) %}0{% else %}{{ light.count }}{% endif %}"></input>&nbsp;&nbsp;{{ light.consumption }}W Bulbs
-							</li>
-						{% endif %}
-					{% endfor %}
-					</ul>
-
-					<h4 style="border-bottom: 1px solid black; margin-bottom: 10px;">LED</h4>
-					<ul class="light_list">
-					{% for light in lights %}
-						{% if light.type == 2 %}
-							<li>
-								<input type="text" data-type="{{ light.archetype_id }}" class="edit" id="{%if light.id is sameas(null) %}-1{% else %}{{ light.id }}{% endif %}" value="{% if light.count is sameas(null) %}0{% else %}{{ light.count }}{% endif %}"></input>&nbsp;&nbsp;{{ light.consumption }}W Bulbs
-							</li>
-						{% endif %}
-					{% endfor %}
-					</ul>
-
 				{% endif %}
+
+				{% endfor %}
 
 		  	</div>
 		  	<div class="span4">
@@ -240,7 +238,7 @@ $.ajax({
 
 		
 
-	{% endif %}
+{% endif %}
 
 
 {% else %}
