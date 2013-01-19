@@ -136,6 +136,22 @@ function updateGraph(data)
 			.attr("y", function(d) {return y(d.y0); })
 			.attr("height", function(d) { return y(d.y)});
 
+    var text = datagroup.selectAll("text")
+            .data(function(d){return d;})
+            .transition()
+            .duration(1000)
+            .text(function(d) {
+                console.log(d);
+                return d.data.consumption;
+            })
+            .style("fill", "black")
+            .attr("y", function(d) { if(y(d.y) !== 0) {return y(d.y0) + y(d.y)/2} else {return -10}})
+            .attr("x", 23);
+}
+
+function updateStats(data)
+{
+    console.log(data);
 }
 
 function callUpdate()
@@ -148,6 +164,16 @@ function callUpdate()
 		updateGraph(data);
 	}
 	});
+
+    $.ajax({
+        url: '{{ flash['web_root'] }}/lights_stats',
+        method: "GET",
+        success: function(data) {
+            data = jQuery.parseJSON(data);
+            updateStats(data);
+        }
+
+    })
 }
 
 
@@ -200,9 +226,21 @@ $.ajax({
 				{% endfor %}
 
 		  	</div>
-		  	<div class="span4">
-		  		<div id='chart' style="height: 600px; margin-left: 50px;"></div>
+		  	<div class="span2" style="padding-left: 30px;">
+		  		<div id='chart' style="height: 600px;"></div>
 		  	</div>
+
+            <div class="span6">
+                <div style="text-align: center">
+                    <h2>The Stats</h2>
+                    <hr>
+                    <ul>
+                        <li>Total Bulbs: {{ lights_stats.bubs }}</li>
+                        <li>Combined Wattage: {{ lights_stats.wattage }}</li>
+                        <li>Estimated Cost: {{ lights_stats.cost }}</li>
+                    </ul>
+                </div>
+            </div>
 		</div>
 		  	
 		 
