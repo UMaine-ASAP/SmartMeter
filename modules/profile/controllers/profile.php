@@ -124,6 +124,8 @@ class ProfileController
 		if(is_array($result = DeviceModel::getLightStats(self::getCurrentUserProfileID())))
 		{
 			$return = array();
+            $return['bulbs'] = 0;
+            $return['wattage'] = 0;
 
 			for($i=0; $i<3; $i++)
 			{
@@ -135,6 +137,9 @@ class ProfileController
 					if($light['type'] == $i)
 					{
 						$return[$i]['wattage'] += $light['consumption']*$light['count'];
+                        $return['bulbs'] += $light['count'];
+                        $return['wattage'] += $light['consumption']*$light['count'];
+
 					}
 				}
 			}

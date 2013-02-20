@@ -115,6 +115,13 @@ $app->get('/lights_modify', function() use ($app) {
 	return false;
 });
 
+$app->get('/lights_stats', function() use ($app) {
+
+    $lights_stats = ProfileController::getLightStats();
+
+    echo json_encode($lights_stats, JSON_NUMERIC_CHECK);
+
+});
 
 $app->get('/lights_list', function() use ($app) {
 

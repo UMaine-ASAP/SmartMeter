@@ -152,6 +152,18 @@ function updateGraph(data)
 function updateStats(data)
 {
     console.log(data);
+    // Update data on individual sections
+    for (var i=0; i<3; i++)
+    {
+        $("#indv_consumption_" + i).html("Total Consumption: " + data[i]['wattage'] + "W")
+        $("#indv_cost_" + i).html("Estimated Monthly Cost: $" + (0.109 * data[i]['wattage'] / 1000 * 4 * 30).toFixed(2));
+        // TODO: Cost values are currently hardcoded, this should be fixed
+    }
+
+    $("#total_bulbs").html("Bulb Count: " + data['bulbs']);
+    $("#total_wattage").html("Combined Wattage: " + data['wattage'] + "W");
+    $("#total_cost").html("Estimated Cost: $" + (0.109 * data['wattage'] / 1000 * 4 * 30).toFixed(2));
+
 }
 
 function callUpdate()
@@ -218,8 +230,8 @@ $.ajax({
 							</li>
 						{% endif %}
 					{% endfor %}
-					<li>Total Consumption: {{ lights_stats[i].wattage }}W </li>
-					<li>Estimated Monthly Cost: ${{ 0.109 * lights_stats[i].wattage / 1000 * 4 * 30 }}
+					<li id="indv_consumption_{{  i }}">Total Consumption: {{ lights_stats[i].wattage }}W </li>
+					<li id="indv_cost_{{ i }}">Estimated Monthly Cost: ${{ (0.109 * lights_stats[i].wattage / 1000 * 4 * 30)|number_format(2) }}
 					</ul>
 				{% endif %}
 
@@ -234,10 +246,10 @@ $.ajax({
                 <div style="text-align: center">
                     <h2>The Stats</h2>
                     <hr>
-                    <ul>
-                        <li>Total Bulbs: {{ lights_stats.bubs }}</li>
-                        <li>Combined Wattage: {{ lights_stats.wattage }}</li>
-                        <li>Estimated Cost: {{ lights_stats.cost }}</li>
+                    <ul style="list-style: none; text-align: left;">
+                        <li id="total_bulbs">Bulb Count: {{ lights_stats.bulbs }}</li>
+                        <li id="total_wattage">Combined Wattage: {{ lights_stats.wattage }}</li>
+                        <li id="total_cost">Estimated Cost: ${{ (0.109 * lights_stats.wattage / 1000 * 4 * 30)|number_format(2) }}W</li>
                     </ul>
                 </div>
             </div>
