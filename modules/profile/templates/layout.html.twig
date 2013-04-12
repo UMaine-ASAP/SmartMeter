@@ -1,0 +1,59 @@
+<html>
+<head>
+		<script>
+			var WEB_ROOT = '{{flash['web_root']}}';
+		</script>
+		<script src="{{flash['web_root']}}/lib/js/jquery.js"></script>
+		<link href="{{flash['web_root']}}/lib/bootstrap/css/bootstrap.css" rel="stylesheet">
+		<link href="{{flash['web_root']}}/lib/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+		<link href="{{flash['web_root']}}/lib/smartmeter.css" rel="stylesheet">
+
+		<style type="text/css">
+		</style>
+		{% block header_extra %}{% endblock %}
+</head>
+	<body>
+
+<div id="titleBar">
+Bangor HYDRO!
+</div>
+
+<div id="navContainer">
+	<ul class="nav nav-tabs nav-stacked">
+		<li style="position: relative;">
+			{% if logged_in == 1%}
+				<a href="#">Welcome {{user.first}} {{user.last}}</a>
+			{% else %}
+			<div id="login_zone">
+			<a>
+			<form method="post" action="login">
+			<input type="text" placeholder="Username" name="username"></input>
+			<input type="password" placeholder="Password" name="password"></input></a>
+
+			<label for="submit" class="btn btn-success btn-mini" id="btn_login"><i class="icon-arrow-right icon-white"></i></label>
+    		<input id="submit" type="submit" style="display:none;" />
+
+			</div>
+			{%endif%}
+		</li>
+		<li><a href="#">Overview</a></li>
+		<li><a href="#">Home Profile</a></li>
+		<li><a href="#">Prediction</a></li>
+		<li><a href="#">Simulation</a></li>
+		<li><a href="#">Set/View Goals</a></li>
+	</ul>
+</div>
+
+<div id="mainContainer">
+
+{% block content %}
+{% endblock %}
+
+</div>
+
+<!--Scripts that are dependent on the DOM-->
+	<!--<script src="{{flash['web_root']}}/js/underscore.js"></script>
+	<script src="{{flash['web_root']}}/js/backbone.js"></script>-->
+	<script src="{{flash['web_root']}}/bootstrap/js/bootstrap.js"></script>
+</body>
+</html>

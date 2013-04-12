@@ -1,6 +1,6 @@
 <?PHP
-require_once("../lib/settings.php");
-require_once("../lib/phpass/PasswordHash.php");
+require_once("lib/settings.php");
+require_once("lib/phpass/PasswordHash.php");
 
 require_once("db.php");
 
@@ -8,14 +8,14 @@ class AuthenticationController
 {
 
     /**
-     * Gets the ID of the User who is currently logged in. Since it calls check_login, it will log the user
+     * Gets the ID of the User who is currently logged in. Since it calls checkLogin, it will log the user
      * out if their session has expired or their IP has changed during their current session.
      *
      * 		@return The logged in user's ID, or false if no user is logged in.
      */
-    static function get_current_user_id()
+    static function getCurrentUserID()
     {
-        if (self::check_login())
+        if (self::checkLogin())
         {
             return intval($_SESSION['UserID']);
         }
@@ -30,7 +30,7 @@ class AuthenticationController
      *
      * 	@return True if a user is currently logged in, false otherwise
      */
-    static function check_login()
+    static function checkLogin()
     {
         if (isset($_SESSION['UserID']))
         {
@@ -38,13 +38,13 @@ class AuthenticationController
 
             if ($latestAccess - $_SESSION['LastAccess'] > $GLOBALS["session_timeout"])
             {
-                self::log_out();
+                self::logOut();
                 return false;
             }
 
             if (strcmp($_SESSION['RemoteIP'], $_SERVER['REMOTE_ADDR']) != 0)
             {
-                self::log_out();
+                self::logOut();
                 return false;
             }
 
@@ -67,12 +67,12 @@ class AuthenticationController
      *
      * 	@return False if the login was unsuccessful, true otherwise.
      */
-    static function attempt_login($username, $password)
+    static function attemptLogin($username, $password)
     {
         //sanity check -- if a user attempts to log in and they/another user is actually logged in, log them out first
-        if (self::is_logged_in())
+        if (self::isLoggedIn())
         {
-            self::log_out();
+            self::logOut();
         }
 
         //passwords greater than 72 characters in length take a long time to hash; by blatantly disallowing them we keep
@@ -83,21 +83,15 @@ class AuthenticationController
         }
 
         //try to find a user with that username
-        try
-        {
-            $dbh = DBController::getConnection();
-            $data = array("username" => $username);
-            $statement = $dbh->prepare("SELECT COUNT(username) FROM AUTH_Users WHERE username=:username");
-            $statement->execute($data);
-            
-            $result = $statement->fetchColumn(); //get the count of results
-        }
-        catch (PDOException $ex)
-        {
-            error_log($ex);
-            $dbh = null;
-            return false;
-        }
+
+
+        $data = array("username" => $username);
+        $querystring = "SELECT COUNT(username) FROM AUTH_Users WHERE username=:username";
+
+        $row = Database::query($querystring, $data);
+
+        
+        $result = $row['result'][0];
         
         if ($result == 0)
         {
@@ -106,21 +100,24 @@ class AuthenticationController
         }
         else
         {
-            $statement = $dbh->prepare("SELECT * FROM AUTH_USERS WHERE username=:username");
-            $statement->setFetchMode(PDO::FETCH_OBJ);
-            
-            $statement->execute(array("username" => $username));
-            $user = $statement->fetch();
+            $querystring = "SELECT * FROM AUTH_Users WHERE username=:username";
+            $data = array("username" => $username);
+
+            $row = Database::query($querystring, $data);
+            if(isset($row['result'][0]))
+                $user = $row['result'][0];
+            else
+                $user = null;
             
         }
 
         //instantiate a PasswordHash class from phpass
         $hasher = new PasswordHash(8, false);
 
-        if ($hasher->CheckPassword($password, $user->password))
+        if ($hasher->CheckPassword($password, $user['password']))
         {
             //great success!
-            self::do_login($user);
+            self::doLogin($user);
             
             $dbh = null;
             return true;
@@ -134,7 +131,7 @@ class AuthenticationController
     /**
      * Completely destroys the current session.
      */
-    static function destroy_session()
+    static function destorySession()
     {
         if (session_id() === '')
         {
@@ -163,7 +160,7 @@ class AuthenticationController
      * 		@param string $password The plaintext password to hash.
      * 	@return The hashed password, or false if hashing failed.
      */
-    static function create_hash($password)
+    static function createHash($password)
     {
         $hasher = new PasswordHash(8, false);
 
@@ -191,10 +188,10 @@ class AuthenticationController
      * 	@return True if the update was successful, false otherwise.
      *
      */
-    static function update_user_password($userID, $password)
+    static function updateUserPassword($userID, $password)
     {
         // Check user has permissions to change password
-        if (!$user = self::get_current_user_id())
+        if (!$user = self::getCurrentUserID())
         {
             return false;
         }
@@ -238,27 +235,27 @@ class AuthenticationController
      * Logs the current user out. Currently, it just destroys their session. In the future, it'll
      * probably have to take more factors into account.
      */
-    static function log_out()
+    static function logOut()
     {
-        self::destroy_session();
+        self::destorySession();
     }
 
     /**
      * Determines if a user is logged in.
      * 	@return True if a user is currently logged in, false otherwise.
      */
-    static function is_logged_in()
+    static function isLoggedIn()
     {
-        return self::check_login();
+        return self::checkLogin();
     }
 
     /**
      * Resets $_SESSION, then sets appropriate variables within it (currently UserID and LastAccess)
      */
-    private static function do_login($user)
+    private static function doLogin($user)
     {
         $_SESSION = array();
-        $_SESSION['UserID'] = $user->user_id;
+        $_SESSION['UserID'] = $user['user_id'];
         $_SESSION['LastAccess'] = time();
         $_SESSION['RemoteIP'] = $_SERVER['REMOTE_ADDR'];
     }

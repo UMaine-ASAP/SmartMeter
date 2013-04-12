@@ -3,7 +3,6 @@ require_once('lib/settings.php');
 require_once('authentication.php');
 require_once('models/profile.php');
 require_once('models/device.php');
-require_once('devices.php');
 
 
 
@@ -52,25 +51,119 @@ class ProfileController
 	 *	if the user is not logged in/doesn't own the profile.  Will return null if
 	 *	no profile belongs to that user.
 	 *
-	 *	@param 	string 		$owner_id 		Owner ID of the profile we are looking for
+	 *	@param 	int 		$owner_id 		Owner ID of the profile we are looking for
 	 *
 	 *
-	 *	@return array|bool  				Returns an array of the profile if found, null if one doesn't exists, false otherwise.
+	 *	@return array|bool  				Returns an array of the profile if found, false otherwise.
 	 */
 
-	static function getUserProfile($owner_id)
+	static function getCurrentUserProfile()
 	{
-		$user_id = AuthenticationController::getCurrentUserID();
 
-		if(!$user_id || $user_id != $owner_id)
+		if($return = ProfileModel::getProfile(self::getCurrentUserProfileID()))
 		{
-			return false;
+			return $return[0];
 		}
 		else
 		{
-			$return = ProfileModel::getUserProfile($owner_id);
+			return false;
+		}
+	}
+
+
+	/**
+	 *	Get current user's profile id
+	 *
+	 *
+	 *	@param 	int 		$owner_id 		Owner ID of the profile we are looking for
+	 *
+	 *
+	 *	@return int  						Returns id of the profile belinging to the currently logged in user
+	 */
+
+
+	static function getCurrentUserProfileID()
+	{
+
+		if($return = ProfileModel::getProfileID(AuthenticationController::getCurrentUserID()))
+		{
+			return $return->profile_id;;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	static function getCurrentUserDevices()
+	{
+		if($return = DeviceModel::getAllDevices(self::getCurrentUserProfileID()))
+		{
 			return $return;
 		}
+		else
+		{
+			return false;
+		}
+	}
+
+	static function getLightData()
+	{
+		if(is_array($return = DeviceModel::getLightData(self::getCurrentUserProfileID())))
+		{
+			return $return;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	static function getLightStats()
+	{
+		if(is_array($result = DeviceModel::getLightStats(self::getCurrentUserProfileID())))
+		{
+			$return = array();
+            $return['bulbs'] = 0;
+            $return['wattage'] = 0;
+
+			for($i=0; $i<3; $i++)
+			{
+				$return[$i] = array();
+				$return[$i]['wattage'] = 0;
+
+				foreach($result as $light)
+				{
+					if($light['type'] == $i)
+					{
+						$return[$i]['wattage'] += $light['consumption']*$light['count'];
+                        $return['bulbs'] += $light['count'];
+                        $return['wattage'] += $light['consumption']*$light['count'];
+
+					}
+				}
+			}
+			return $return;
+		}
+
+		else
+		{
+			return false;
+		}
+	}
+
+	static function editLightData($instance_id, $value)
+	{
+		if(self::getCurrentUserProfileID() == DeviceModel::getLightInstanceProfile($instance_id))
+			return DeviceModel::editLightData($instance_id, $value);
+
+		return false;
+	}
+
+	static function addLightData($archetype_id, $value)
+	{
+		if($profile_id = self::getCurrentUserProfileID())
+			return DeviceModel::addLightData($profile_id, $archetype_id, $value);
 
 		return false;
 	}
@@ -102,6 +195,8 @@ class ProfileController
 
 		return false;
 	}
+
+
 
 	/**
 	 *	Get devices belonging to a user's profile.
