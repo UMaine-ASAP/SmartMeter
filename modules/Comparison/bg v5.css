@@ -1,0 +1,73 @@
+/*
+	Stylesheet for the bar graph comparison tool
+*/
+
+/*import bootstrap*/
+@import url("docs/assets/css/bootstrap.css");
+
+
+.bar
+{
+	background-color: #999999;
+	width: 250px;
+	height: 25px;
+	border-top-right-radius: 8px;
+	border-bottom-right-radius: 8px;
+	background-repeat: repeat-x;
+	border-color: #E6E6E6 #E6E6E6 #B3B3B3;
+	-moz-box-shadow:    2px 5px 2px 2px #ccc;
+  	-webkit-box-shadow: 2px 5px 2px 2px #ccc;
+  	box-shadow:         2px 5px 2px 2px #ccc;
+  	display:inline-block;
+}
+
+
+
+.graph
+{
+	float:left;
+	width:700px;
+	margin-left: 10px;
+	margin-top: 10px;
+	margin-bottom: 30px;
+	background-color: #eeeeee;
+  	-webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    list-style: none;
+
+}
+
+.words
+{
+	margin-bottom: 20px;
+	margin-left: 10px;
+	width: 75px;
+	height: 20px;
+	display:inline-block;
+	position: relative;
+	bottom: 12px;
+}
+
+.data
+{
+	display:inline-block;
+	margin-left: 10px;
+}
+
+.vcenter
+{
+	position:relative;
+	bottom: 7px;
+}
+
+.vcenterlabel
+{
+	position:relative;
+	top: 5px;
+}
+
+.title
+{
+		text-align: center;
+}

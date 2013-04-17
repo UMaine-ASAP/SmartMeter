@@ -1,0 +1,301 @@
+{% extends 'profile_layout.html.twig' %}
+
+{% block header_extra %}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="{{flash['web_root']}}/demo/jquery.tipsy.js"></script>
+<script src="{{flash['web_root']}}/demo/jquery.jeditable.js"></script>
+<link rel="stylesheet" href="{{flash['web_root']}}/demo/tipsy.css"></link>
+<script src="http://d3js.org/d3.v2.js"></script>
+<script>
+
+function customStack(data)
+{
+  total = 0;
+  return_data = [];
+
+  for(i=0; i<data.length; i++)
+  {
+    return_data.push([{id: i, y: (data[i]['count']===null)?0:data[i]['equivalent_power']*data[i]['count'], y0: total, data: data[i]}])
+    total+=data[i]['equivalent_power']*data[i]['count'];
+  }
+
+  return [total, return_data];
+}
+
+function drawGraph(data)
+{
+	// Set dimensions of svg canvas
+	var width = 60, height = 500;
+
+	// Dataset
+	//var data = [2,2,4,3,8,23];
+
+	console.log(data);
+
+	// Stack our values and grab a total
+	var stacked = customStack(data);
+
+	var total = stacked[0];
+	var stacked = stacked[1];
+
+	var colors = d3.scale.category20c();
+
+	// Scaling dataset to fit our dimensons.
+	// Normilize data based on total, scale to our height
+	var y = d3.scale.linear()
+	    .range([0, height])
+	    .domain([0, total]);
+
+
+	var z = d3.scale.category20c();
+
+	// Initialize canvas
+	var svg = d3.select("#chart").append("svg")
+	    .attr("width", width)
+	    .attr("height", height)
+	    .append("g");
+	    
+
+	var datagroup = svg.selectAll("g.datagroup")
+	            .data(stacked)
+	            .enter().append("svg:g")
+	            .attr("class", "valgroup");
+	 
+	// Add a rect for each category
+	var rect = datagroup.selectAll("rect")
+	            .data(function(d){return d;})
+	            .enter()
+	              .append("svg:rect")
+	              .attr("x", 1)
+	              .attr("y", function(d) { return y(d.y0); })
+	              .attr("height", function(d) {return y(d.y); })
+	              .attr("width", 60)
+	              .style("fill", function(d, i) { return colors(d['id']); })
+	              .style("stroke", function(d, i) { return d3.rgb(z(d['id'])).darker(); })
+	              .on("mouseover", function(){
+	                d3.select(this).transition().duration(300).style("fill", function(d, i) { return d3.rgb(colors(d['id'])).darker(); });
+	              })
+	              .on("mouseout", function(){
+	                d3.select(this).transition().duration(300).style("fill", function(d, i) {return colors(d['id']); });
+	              });
+	 console.log(rect);
+
+	var text = datagroup.selectAll("text")
+		.data(function(d){return d;})
+		.enter()
+			.append("svg:text")
+			.text(function(d) {
+				console.log(d);
+				return d.data.consumption;
+			})
+			.style("fill", "black")
+			.attr("y", function(d) { if(y(d.y) !== 0) {return y(d.y0) + y(d.y)/2} else {return -10}})
+			.attr("x", 23);
+
+
+	$('svg rect').tipsy({
+	  gravity: 'w', 
+	  html: true,
+	  offset: 60,
+	  title: function() {
+	    var d = this.__data__ //c = colors(d.i);
+	    return 'Consumption: ' + d['data']['consumption'] + 'W'; 
+	  }
+	});
+}
+
+function updateGraph(data)
+{
+	var height = 500;
+	var stacked = customStack(data);
+
+	var total = stacked[0];
+	var stacked = stacked[1];
+
+	//console.log(stacked)
+	var colors = d3.scale.category20c();
+
+	// Scaling dataset to fit our dimensons.
+	// Normilize data based on total, scale to our height
+	var y = d3.scale.linear()
+	    .range([0, height])
+	    .domain([0, total]);
+
+
+	var z = d3.scale.category20c();
+
+	var svg = d3.select("#chart");
+
+	var datagroup = svg.selectAll("g.valgroup")
+		.data(stacked);
+
+	var rect = datagroup.selectAll("rect")
+		.data(function(d){ return d;})
+		.transition()
+			.duration(1000)
+			.attr("y", function(d) {return y(d.y0); })
+			.attr("height", function(d) { return y(d.y)});
+
+    var text = datagroup.selectAll("text")
+            .data(function(d){return d;})
+            .transition()
+            .duration(1000)
+            .text(function(d) {
+                console.log(d);
+                return d.data.consumption;
+            })
+            .style("fill", "black")
+            .attr("y", function(d) { if(y(d.y) !== 0) {return y(d.y0) + y(d.y)/2} else {return -10}})
+            .attr("x", 23);
+}
+
+function updateStats(data)
+{
+    console.log(data);
+    // Update data on individual sections
+    for (var i=0; i<3; i++)
+    {
+        $("#indv_consumption_" + i).html("Total Consumption: " + data[i]['wattage'] + "W")
+        $("#indv_cost_" + i).html("Estimated Monthly Cost: $" + (0.109 * data[i]['wattage'] / 1000 * 4 * 30).toFixed(2));
+        // TODO: Cost values are currently hardcoded, this should be fixed
+    }
+
+    $("#total_bulbs").html("Bulb Count: " + data['bulbs']);
+    $("#total_wattage").html("Combined Wattage: " + data['wattage'] + "W");
+    $("#total_cost").html("Estimated Cost: $" + (0.109 * data['wattage'] / 1000 * 4 * 30).toFixed(2));
+
+}
+
+function callUpdate()
+{
+	$.ajax({
+	url: '{{flash['web_root']}}/lights_list',
+	method: "GET",
+	success: function(data) {
+		data = jQuery.parseJSON(data);
+		updateGraph(data);
+	}
+	});
+
+    $.ajax({
+        url: '{{ flash['web_root'] }}/lights_stats',
+        method: "GET",
+        success: function(data) {
+            data = jQuery.parseJSON(data);
+            updateStats(data);
+        }
+
+    })
+}
+
+
+$.ajax({
+  url: '{{flash['web_root']}}/lights_list',
+  method: "GET",
+  success: function(data) {
+  	data = jQuery.parseJSON(data);
+  	drawGraph(data);
+  }
+});
+</script>
+
+
+{% endblock %}
+
+{% block content %}
+{% if logged_in == 1 %}
+
+	{% if profile is sameas(false) %}
+	<div id="newProfile">
+		Start Profile
+	</div>
+
+	{% else %}
+
+		<div class="row" style="width: 80%; margin: 0 auto; padding-top: 20px;">
+		  	<div class="span3">
+
+		  		{% for i in 0..2 %}
+
+				{% if lights is sameas(false) %}
+					You have no lights...
+
+				{% else %}
+					<h4 style="border-bottom: 1px solid black; margin-bottom: 10px;">{% if i == 0 %}Incandescent{% elseif i == 1 %}CFL{% else %}LED{% endif %}</h4>
+					<ul class="light_list">
+					{% for light in lights %}
+						{% if light.type == i %}
+							<li>
+								<input type="text" data-type="{{ light.archetype_id }}" class="edit" id="{%if light.id is sameas(null) %}-1{% else %}{{ light.id }}{% endif %}" value="{% if light.count is sameas(null) %}0{% else %}{{ light.count }}{% endif %}"></input>&nbsp;&nbsp;{{ light.consumption }}W Bulbs
+							</li>
+						{% endif %}
+					{% endfor %}
+					<li id="indv_consumption_{{  i }}">Total Consumption: {{ lights_stats[i].wattage }}W </li>
+					<li id="indv_cost_{{ i }}">Estimated Monthly Cost: ${{ (0.109 * lights_stats[i].wattage / 1000 * 4 * 30)|number_format(2) }}
+					</ul>
+				{% endif %}
+
+				{% endfor %}
+
+		  	</div>
+		  	<div class="span2" style="padding-left: 30px;">
+		  		<div id='chart' style="height: 600px;"></div>
+		  	</div>
+
+            <div class="span6">
+                <div style="text-align: center">
+                    <h2>The Stats</h2>
+                    <hr>
+                    <ul style="list-style: none; text-align: left;">
+                        <li id="total_bulbs">Bulb Count: {{ lights_stats.bulbs }}</li>
+                        <li id="total_wattage">Combined Wattage: {{ lights_stats.wattage }}</li>
+                        <li id="total_cost">Estimated Cost: ${{ (0.109 * lights_stats.wattage / 1000 * 4 * 30)|number_format(2) }}W</li>
+                    </ul>
+                </div>
+            </div>
+		</div>
+		  	
+		 
+		<script>
+
+		$(document).ready(function() {
+			$('.edit').change(function(){
+
+				var field = $(this);
+
+				var id = field.attr("id");
+				var value = field.val();
+
+				if(id != -1)
+					var dataString = 'method=edit&id=' + id +'&value=' + value;
+				else
+					var dataString = 'method=add&type_id=' + $(this).data('type') + '&value=' + value;
+
+				$.ajax({
+				  url: '{{flash['web_root']}}/lights_modify',
+				  method: "POST",
+				  data: dataString,
+				  success: function(data) {
+				  	if(id == -1)
+				  		field.attr("id", data);
+				  	callUpdate();
+				  }
+				});
+			});
+		});
+		</script>
+		
+
+		
+
+{% endif %}
+
+
+{% else %}
+
+You are not logged in :(
+
+{%endif%}
+<!--
+
+{% endblock %}

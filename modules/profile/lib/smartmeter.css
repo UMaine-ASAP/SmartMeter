@@ -1,0 +1,209 @@
+html, body {
+	margin: 0;
+	padding: 0;
+}
+
+#titleBar{
+	width: 100%;
+	height: 100px;
+	background-color: papayawhip;
+}
+
+#navContainer #login_zone {
+	padding-left: 5px;
+}
+
+#navContainer #login_zone #btn_login
+{
+	margin-bottom: 5px;
+}
+
+#navContainer {
+	top:0;
+	left:0;
+	height:100%;
+	width:15%;
+	float:left;
+	display:inline;
+	text-align: left;
+
+	padding-top: 15px;
+
+}
+
+.nav li a input
+{
+	height: 30px;
+	margin-bottom: 8px;
+}
+
+#cost_warning {
+	position: absolute;
+	left: 4px;
+	bottom: 0;
+}
+
+#mainContainer {
+	height:100%;
+	width:85%;
+	float:left;
+	display:inline;
+	padding-top: 30px;
+}
+#mainContainer .row-fluid 
+{
+	margin: 0 auto;
+	width: 90%;
+	max-width: 1200px;
+	padding-bottom: 20px;
+}
+
+.home_content_div {
+	height: 300px;
+	border: 1px solid black;
+	position: relative;
+
+}
+
+#weekly_usage, #weekly_cost
+{
+	padding-top: 30px;
+}
+
+#other 
+{
+	height: 220px;
+}
+
+#upcoming_goals ul li
+{
+	list-style: none;
+}
+
+#goals_table
+{
+	overflow-y: auto;
+	overflow-x: hidden;
+	margin: 0 auto;
+	width: 95%;
+	height: 250px;
+	position: relative;
+}
+
+.goal_input 
+{
+	padding: 1px !important;
+	width: 145px;
+}
+
+#goal_right_description 
+{
+	width: 45%;
+	position: absolute;
+	right: 4px;
+	top: 5px;
+}
+
+select
+{
+	height: 22px !important;
+}
+
+#goals_top
+{
+	width: 100%;
+	height: 35px;
+
+	background: red;
+}
+
+#goals_top .content_title
+{
+	width: 80px;
+	margin: 0 auto;
+	padding-top: 8px;
+
+	font-size: 1.8em;
+}
+
+#goals_top #add_goal
+{
+	position: absolute;
+	right: 5px;
+	top: 3px;
+	height: 20px;
+}
+
+
+#weekly_usage span, #weekly_cost span {
+font-family: 'Open Sans',sans-serif;
+font-size: 72px;
+font-weight: 700;
+display: block;
+color: #878787;
+padding-top: 25px;
+padding-bottom: 35px;
+text-align: center;
+}
+
+#weekly_usage p, #weekly_cost p {
+font-family: 'Open Sans',sans-serif;
+font-size: 24px;
+display: block;
+color: #000;
+text-align: center;
+}
+
+#weekly_summary {
+	height: 240px !important;
+}
+
+.weekly_actions
+{
+	font-weight: 600;
+	font-size: 22px;
+}
+
+#add_goal
+{
+	position: absolute;
+	bottom: 5px;
+	right: 10px;
+}
+
+
+#monthlyEstimate {
+	margin:0;
+	margin-left: 40px;
+	width:40%;
+	float:left;
+	display:inline;
+}
+
+#monthlyDevice {
+	margin: 0;
+	width:40%;
+	float:left;
+	display:inline;
+}
+
+
+
+
+
+
+#lights_tab, #lights_tab_content
+{
+    width: 900px;
+    margin: 10px auto;
+
+}
+
+.light_list 
+{
+	list-style: none;
+}
+.light_list li input
+{
+	width: 35px;
+}

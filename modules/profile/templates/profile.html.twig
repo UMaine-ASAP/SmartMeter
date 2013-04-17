@@ -1,0 +1,44 @@
+{% extends 'profile_layout.html.twig' %}
+
+{% block header_extra %}
+
+
+		<script src="{{flash['web_root']}}/lib/js/jquery.jqplot.min.js"></script>
+		<script src="{{flash['web_root']}}/lib/js/jqplot_plugins/jqplot.BarRenderer.js"></script>
+		<script src="{{flash['web_root']}}/lib/js/jqplot_plugins/jqplot.CategoryAxisRenderer.js"></script>
+		<script src="{{flash['web_root']}}/lib/js/jqplot_plugins/jqplot.DateAxisRenderer.js"></script>
+		<script src="{{flash['web_root']}}/lib/js/jqplot_plugins/jqplot.highlighter.min.js"></script>
+		<script src="{{flash['web_root']}}/lib/js/jqplot_plugins/jqplot.cursor.min.js"></script>
+		<link href="{{flash['web_root']}}/lib/jquery.jqplot.min.css" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+{% if logged_in == 1 %}
+
+	{% if profile is sameas(false) %}
+	<div id="newProfile">
+		Start Profile
+	</div>
+
+	{% else %}
+
+		Your current profile: {{ profile.name }}
+		<br>
+		{{ profile.profile_id }}
+
+		Devices Current in System:
+
+		
+
+	{% endif %}
+
+
+{% else %}
+
+You are not logged in :(
+
+{%endif%}
+<!--
+
+{% endblock %}
