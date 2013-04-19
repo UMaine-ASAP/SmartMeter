@@ -5,99 +5,207 @@
 
 <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+<script type="text/javascript" src="bootstrap/js/jquery-ui.min.js"></script>
 
+<script type="text/javascript" src="code.js"></script>
+
+<link href="bootstrap/css/jquery-ui.min.css" rel="stylesheet" type="text/css">
 <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css">
 
-<link href="layout.css" rel="stylesheet" type="text/css"></link>
+<link href="layout.css" rel="stylesheet  " type="text/css"></link>
 
 </head>
 
 <body>
-<div class="container-fluid">
+
+<!-- **** Header **** -->
+<div id="header">
+	<img src="bootstrap/img/header.png" alt=""/>
+</div>
+
+<!-- **** Page **** -->
+
+<div id="Page" class="container-fluid">
 	<div class="row-fluid">
-	    <div class="span12">
+			<div class="container-fluid">
+				<div class="row-fluid">
 
-	    	<div class="container-fluid">
-		        <div class="row-fluid">
-		            	<div class="span1 offset1"> </div>
-		            	<div class="span1"> </div>
-		            	<div class="span1"> </div>
-		            	<div class="span1 offset6"> </div>
-		            	<div class="span1"> </div>
-		        </div>
+					<!-- **** Menu  **** -->
+
+		    		<div id="menu" class="span12">
+			    	
+				        <div class="row-fluid">
+				            <div id="dashboard" class="span1 offset1">
+				            		<a href="dashboard.html" style="text-decoration=none;">
+				            		<div id="active">
+					            			<img src="bootstrap/img/home.png" alt=""/>
+					            			<br>
+					            			Dashboard
+					            	</div>
+					            	</a>
+				            </div> 
+				            	<div id="devices" class="span1"> 
+				            		<a href="dashboard.html">
+				            			<div id="active">
+					            			<img src="bootstrap/img/devices.png" alt=""/>
+					            			<br>
+					            			Devices
+				            			</div>
+				            		</a>
+				            	</div>
+				            <div id="faq" class="span1">
+				            		<a href="dashboard.html">
+				            			<div id="active">
+				            				<img src="bootstrap/img/FAQ.png" alt=""/>
+				            				<br>
+				            				FAQ
+				            			</div>
+				            		</a>
+				            </div>
+				            <div id="settings" class="span1"> 
+				            		<a href="dashboard.html">
+					            		<div id="active">
+					            			<img src="bootstrap/img/settings.png" alt=""/>
+					            			<br>
+					            			Settings
+					            		</div>
+				            		</a>
+				            </div>
+				            <div id="alert" class="span1">
+				            		<a href="dashboard.html">
+				            			<div id="active">
+					            			<img src="bootstrap/img/alert.png" alt=""/>
+					            			<br>
+					            			Alert
+					            		</div>
+				            		</a>
+				            </div> 
+				            
+				        </div>
+			        </div>
+			    </div>
 	        </div>
-
 	        <div class="container-fluid">
-		        <div class="row-fluid">
-		            <div id="navLeft" class="span3">
-		            	<h2 class="header">Dashboard</h2>
+	        	<div class="row-fluid">
+	        		<!-- **** Mainscreen  **** -->
 
-			            <div class="box-header">
-							<h2><i class="icon-cog"></i><span class="break"></span>Settings</h2>
-						</div>
+					<div id="mainscreen" class="span12">
 
-						<div class="box-content">
+						<!-- **** Nav bar left **** -->
 
-							<table class="table table-striped">
-								<tr>
-									<td>Duration</td>
-										<div class="btn-group"> <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"> Action <span class="caret"></span> </a>
-										  <ul class="dropdown-menu">
-										    <li><a href="#">January</a></li>
-										    <li><a href="#">February</a></li>
-										    <li><a href="#">March</a></li>
-										    <li><a href="#">April</a></li>
-										  </ul>
-										</div>
-								</tr>
-								<tr>
-									<td>Month picker</td>
-								</tr>
-								<tr>
-									<td>Day range</td>
-								</tr>
-							</table>
-						</div>	
+			            <div id="navLeft" class="span3">
+			            	<h2 class="header">Dashboard</h2>
+			            	<div id="box-left">
+					            <div class="box-header">
+									<h3><i class="icon-cog"></i><span class="break"></span>Settings</h3>
+								</div>
 
-		            </div>
-		            <div id="mainscreen" class="span9">
-		            	<h2 class="header"> My consumption</h2>
-		            	
-		            	<div class="container-fluid">
-			            	<div class="row-fluid">
-			            		<svg height="500"></svg>
-			            	</div>
-		            	</div>
-		            	<div class="container-fluid">
-			            	<div class="row-fluid">
-			            		<div class="span8">
-			            			<h3> Summary for the range </h3>
-			            		</div>
-			            		<div class="span4">
-			            			<h3> Estimated cost </h3>
-			            		</div>
-			            	</div>
-		            	</div>
-		            	<div class="container-fluid">
-			            	<div class="row-fluid">
-			            		<div class="span4">
-			            			<h3> Total KW/H </h3>
-			            		</div>
-			            		<div class="span4">
-			            			<h3> Trees </h3>
-			            		</div>
-			            		<div class="span4">
-			            			<h3> Gallons</h3>
+								<div class="box-content">
+
+									<table class="table table-striped">
+										<tr>
+											<td>Duration
+												<br>
+												<div id="selectedDuration" class="btn-group" data-role="buttons-radio">
+													<button type="button" class="btn btn-success">Day</button>
+													<button type="button" class="btn btn-success">Month</button>
+													<button type="button" class="btn btn-success">Year</button>
+												</div>
+												
+											</td>								
+										</tr>
+										<tr>
+											<td>Month picker
+											<br>
+												<div id="selectedMonth" class="btn-group"> 
+													<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"> Month <span class="caret"></span> </a>
+												  <ul class="dropdown-menu">
+												    <li><a href="#">January</a></li>
+												    <li><a href="#">February</a></li>
+												    <li><a href="#">March</a></li>
+												    <li><a href="#">April</a></li>
+												    <li><a href="#">May</a></li>
+												    <li><a href="#">June</a></li>
+												    <li><a href="#">July</a></li>
+												    <li><a href="#">August</a></li>
+												    <li><a href="#">September</a></li>
+												    <li><a href="#">October</a></li>
+												    <li><a href="#">November</a></li>
+													<li><a href="#">December</a></li>
+												  </ul>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<input type="checkbox" value="weather" style="vertical-align:super; margin-right:5px;"/> Add weather data 
+											</td>
+										</tr>
+										<tr>
+											<td>Day range
+												<div class="slider sliderRange sliderBlue ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" aria-disabled="false">
+												</div>
+
+												<div class="field_notice">
+													Day Range: 
+													<span class="must sliderRangeLabel">
+													0 - 31</span>
+												</div>
+											</td>
+										</tr>
+										
+									</table>
+									
+									<br>
+									<button class="btn btn-primary" type="submit">Submit</button>
+								</div>	
+							</div>
+			            </div>
+
+			            <!-- **** Content **** -->
+
+			            <div id="content" class="span9">
+			            	<h2 class="header"> My consumption</h2>
+			            		<div class="row-fluid">
+			            			<div class="span12">
+				            			<svg height="400"></svg>
+				            		</div>
+				            	</div>		
+				            	<div class="row-fluid">
+					            		<div class="span8">
+					            			<h3> Summary for the range </h3>
+					            		</div>
+
+					            		<div class="span4">
+					            			<h3> Estimated cost </h3>
+					            			<span id="foo">0</span>
+
+				            			</div>
 			            		</div>
 
-			            	</div>
-		            	</div>
-		            </div>
-		        </div>   
-		    </div>
-		</div>
+			            		<div id="circles" class="row-fluid">
+					            		<div class="test span4">
+					            			<h3> Total KW/H </h3>
+					            		</div>
+					            		<div class="test span4">
+					            			<h3> Trees </h3>
+					            		</div>
+					            		<div class="test span4">
+					            			<h3> Gallons</h3>
+					            		</div>
+				            	</div>
+
+				            	
+			            </div>
+			        </div>   
+			    </div>
+			</div>
 	</div>
+</div>
+
+<div id="footer">
+	<img src="bootstrap/img/footer.png" alt=""/>
 </div>
 
 </body>
