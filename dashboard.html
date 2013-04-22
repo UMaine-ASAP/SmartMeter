@@ -107,7 +107,7 @@
 										<tr>
 											<td>Duration
 												<br>
-												<div id="selectedDuration" class="btn-group" data-role="buttons-radio">
+												<div id="selectedDuration" class="btn-group" data-role="buttons-checkbox">
 													<button type="button" class="btn btn-success">Day</button>
 													<button type="button" class="btn btn-success">Month</button>
 													<button type="button" class="btn btn-success">Year</button>
@@ -166,24 +166,37 @@
 			            <!-- **** Content **** -->
 
 			            <div id="content" class="span9">
+			            	
 			            	<h2 class="header"> My consumption</h2>
 			            		<div class="row-fluid">
 			            			<div class="span12">
 				            			<svg height="400"></svg>
 				            		</div>
-				            	</div>		
+				            	</div>
+				            	<hr />		
 				            	<div class="row-fluid">
 					            		<div class="span8">
+					            			
 					            			<h3> Summary for the range </h3>
+					            				<span id="percentageNormal" class="percentage"></span>
+					            				<div class="myprogress progress active ease-in-out">
+   													<div id="progressBar1" class="bar"></div>
+   												</div>
+   												
+   												<span id="percentagePeak" class="percentage"></span>
+   												<div class="myprogress progress active ease-in-out">
+   													<div id="progressBar2" class="bar"></div>
+   												</div>
+
 					            		</div>
 
 					            		<div class="span4">
 					            			<h3> Estimated cost </h3>
-					            			<span id="foo">0</span>
+					            			<span id="counter">0</span>
 
 				            			</div>
 			            		</div>
-
+			            		<hr />
 			            		<div id="circles" class="row-fluid">
 					            		<div class="test span4">
 					            			<h3> Total KW/H </h3>

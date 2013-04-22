@@ -23,11 +23,14 @@ h2{
 h3{
 	font-family: "Arial", Serif; 
 	font-weight: 300;
-	font-size: 12px;
+	font-size: 14px;
 	color: #666666;
-	
 }
 
+hr{
+	margin:0px;
+
+}
 
 #header {
 	margin-top: 5px;
@@ -392,8 +395,35 @@ table {
 
 /* CONTENT */
 
-.content .circles{
+#content .circles{
 	text-align: center;
+}
+
+#content #counter { font-size: 24px; font-weight: bold; font-family: monospace; }
+
+#content .myprogress{
+	background-image: linear-gradient(to bottom,#FFFFFF,#f2f1f1);
+	height:25px;
+	margin-left: 20px;
+	margin-right: 120px;
+	margin-top: 5px;
+
+	border: 1px solid #c9c9c9;
+}
+
+#content #progressBar1{
+	background-image: linear-gradient(to bottom,#ffa93c,#f5a23a);
+}
+
+#content #progressBar2{
+	background-image: linear-gradient(to bottom,#ea494a,#d94445);
+}
+
+
+#content .percentage{
+	font-weight: bold;
+	font-size: 13px;
+
 }
 
 /*@media (min-width: 1200px) {
@@ -417,7 +447,7 @@ table {
 }
 
 .span8 {
-   background-color:#EE0;
+   background-color:#FFF;
 }
 .span4 {
    background-color:#7EF;
