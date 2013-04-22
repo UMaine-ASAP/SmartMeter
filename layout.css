@@ -183,8 +183,6 @@ hr{
 
 
 
-
-
 /* SLIDER */
 
 .slider {
@@ -399,7 +397,18 @@ table {
 	text-align: center;
 }
 
-#content #counter { font-size: 24px; font-weight: bold; font-family: monospace; }
+#costs{
+
+	margin-bottom: 50px;
+}
+
+#content #estimatedCost { 
+	margin-left: 35px;
+	font-size: 50px;
+	font-weight: bold;
+	font-weight: 300;
+	color:#006699;
+}
 
 #content .myprogress{
 	background-image: linear-gradient(to bottom,#FFFFFF,#f2f1f1);
@@ -426,6 +435,75 @@ table {
 
 }
 
+#circles{
+	text-align: center;
+	height: 170px;
+	margin-bottom: 20px;
+}
+
+/* TODO: See a better solution!!*/
+
+#textCircle1{
+	left:-53px;
+	z-index:1;
+	position: relative;
+	color: #006699;
+	font-size:14px;
+}
+
+#textCircle2{
+	left:-53px;
+	top:2px;
+	z-index:1;
+	position: relative;
+	color: #006600;
+	font-size:15px;
+
+}
+
+#textCircle3{
+	left:-53px;
+	top:2px;
+	z-index:1;
+	position: relative;
+	color: #000;
+	font-size:15px;
+
+}
+
+#image_test1{
+	left:28px;
+	z-index:0;
+	position: relative;
+}
+
+#image_test2{
+	left:21px;
+	z-index:0;
+	position: relative;
+}
+
+#image_test3{
+	left:21px;
+	z-index:0;
+	position: relative;
+}
+
+#icon_test2{
+	top:-2px;
+	left:-47px;
+	z-index:0;
+	position: relative;
+}
+
+#icon_test3{
+	top:1px;
+	left:-47px;
+	z-index:0;
+	position: relative;
+}
+
+
 /*@media (min-width: 1200px) {
   .page {
     width: 1210px; } }
@@ -450,7 +528,7 @@ table {
    background-color:#FFF;
 }
 .span4 {
-   background-color:#7EF;
+   background-color:#FFF;
 }
 
 .span3 {

@@ -1,8 +1,12 @@
 $(document).ready(function(){
 
-    var eCost=25;
+    var eKW=200;
+    var eTree=20;
+    var eGallon=50;
     var sRange1=80;
     var sRange2=20;
+    var eCost=80;
+
 	$( ".sliderRange" ).slider({
 				range: true,
 				min: 0,
@@ -14,7 +18,10 @@ $(document).ready(function(){
 			});
 
 	buttonPush();
-	estimatedCost(eCost);
+    estimatedCost(eCost)
+    estimatedKW(eKW);
+    estimatedTree(eTree)
+    estimatedGallon(eGallon)
     summaryForTheRange1(sRange1);
     summaryForTheRange2(sRange2);
 });
@@ -29,14 +36,16 @@ function buttonPush(){
     })
 }
 
+function estimatedCost(value){
+    var $estimateCost = $('#estimatedCost');
+        $estimateCost.text(value + " $");
+}
 
-// Show a random number during 5s then display the last one 
-
-function estimatedCost(endVal){
-    var $counter = $('#counter'),
+function estimatedKW(endVal){
+    var $counter = $('#textCircle1'),
         startVal = $counter.text(),
         currentVal,
-        suffix = '$',
+        suffix = 'kWh',
         currentVal = startVal;
 
     $counter.css('opacity', '.3');
@@ -49,6 +58,46 @@ function estimatedCost(endVal){
         else{
             currentVal++;
             $counter.text(currentVal+" "+suffix);
+        }
+    }, 20);
+}
+
+function estimatedTree(endVal){
+    var $counter = $('#textCircle2'),
+        startVal = $counter.text(),
+        currentVal,
+        currentVal = startVal;
+
+    $counter.css('opacity', '.3');
+        
+    var i = setInterval(function (){
+        if (currentVal === endVal){
+            clearInterval(i);
+            $counter.css('opacity', '1');
+        }
+        else{
+            currentVal++;
+            $counter.text(currentVal);
+        }
+    }, 30);
+}
+
+function estimatedGallon(endVal){
+    var $counter = $('#textCircle3'),
+        startVal = $counter.text(),
+        currentVal,
+        currentVal = startVal;
+
+    $counter.css('opacity', '.3');
+        
+    var i = setInterval(function (){
+        if (currentVal === endVal){
+            clearInterval(i);
+            $counter.css('opacity', '1');
+        }
+        else{
+            currentVal++;
+            $counter.text(currentVal);
         }
     }, 30);
 }
@@ -70,7 +119,7 @@ function summaryForTheRange1(endValue){
                 current_perc ++;
                 progressBar.css('width', (current_perc)+'%');
             }
-           $percentage.text("Normal (" + (current_perc)+'%):');
+           $percentage.text("Normal consumption (<15 kWh) : " + (current_perc)+'%');
 
         }, 30);
 
@@ -95,7 +144,7 @@ function summaryForTheRange2(endValue){
                 current_perc ++;
                 progressBar.css('width', (current_perc)+'%');
             }
-           $percentage.text("Peacks (" + (current_perc)+'%):');
+           $percentage.text("Peacks : " + (current_perc)+'%');
 
         }, 30);
 
