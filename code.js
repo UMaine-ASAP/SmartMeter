@@ -1,5 +1,9 @@
-$(document).ready(function(){
+var currentDate = new Date();
+var currentDay = currentDate.getDate()
+var currentMonth = currentDate.getMonth() + 1
+var currentYear = currentDate.getFullYear()
 
+$(document).ready(function(){
     var eKW=200;
     var eTree=20;
     var eGallon=50;
@@ -15,26 +19,125 @@ $(document).ready(function(){
 				slide: function( event, ui ) {
 					$( ".sliderRangeLabel" ).html( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
 				}
-			});
+	});
 
-	buttonPush();
-    estimatedCost(eCost)
+    $('.form_datetime').datetimepicker({
+        // We have the datas of the last two years
+        startDate: (currentYear-2) + '-' + currentMonth + '-' + currentDay, 
+        endDate: currentYear + '-' + currentMonth + '-' + currentDay,
+        minView:'year',
+        maxView:'year',
+        startView: 'year',
+        // decade: to see all the years
+        // year: to see all the months
+        // month: to see all the days
+
+        pickerPosition:'bottom-left',
+        format: 'MM',
+        todayBtn:  0,
+        autoclose: 1,
+        todayHighlight: 1,
+        forceParse: 0,
+
+        showMeridian: 1
+    });
+
+    //alert($('.form_datetime').datetimepicker.minView);
+
+    estimatedCost(eCost);
     estimatedKW(eKW);
-    estimatedTree(eTree)
-    estimatedGallon(eGallon)
+    estimatedTree(eTree);
+    estimatedGallon(eGallon);
     summaryForTheRange1(sRange1);
     summaryForTheRange2(sRange2);
+
 });
 
-var state;
-function buttonPush(){
-    $('button').click(function() {
-        with($(this)) {
-            if(hasClass('btn-success')) removeClass('btn-success').addClass('btn-inverse');
-            else removeClass('btn-inverse').addClass('btn-success');
-        }
-    })
+
+
+function buttonPush(cliked_id){
+
+    
+
+    // days
+    if(cliked_id === "button1") {
+        $('#button1.btn-success').removeClass('btn-success').addClass('btn-inverse');
+        $('#button2.btn-inverse').removeClass('btn-inverse').addClass('btn-success');
+        $('#button3.btn-inverse').removeClass('btn-inverse').addClass('btn-success');
+
+       
+        
+        // weird way to update our picker: first remove then re initialize the same tab
+        $('.form_datetime').datetimepicker('remove');
+        $('.form_datetime').datetimepicker({
+            startDate: (currentYear-2) + '-' + currentMonth + '-' + currentDay, 
+            endDate: currentYear + '-' + currentMonth + '-' + currentDay,
+            minView:'month',
+            maxView:'month',
+            startView: 'month',
+            pickerPosition:'bottom-left',
+            format: 'yyyy-MM-dd',
+            autoclose: 1,
+            todayHighlight: 1,
+            forceParse: 0,
+
+            showMeridian: 1
+        });
+    }
+
+    //months
+    if(cliked_id === "button2") {
+        $('#button2.btn-success').removeClass('btn-success').addClass('btn-inverse');
+        $('#button1.btn-inverse').removeClass('btn-inverse').addClass('btn-success');
+        $('#button3.btn-inverse').removeClass('btn-inverse').addClass('btn-success');
+
+        $('.form_datetime').attr('data-date-format', "MM");
+
+        $('.form_datetime').datetimepicker('remove');
+        $('.form_datetime').datetimepicker({
+            startDate: (currentYear-2) + '-' + currentMonth + '-' + currentDay, 
+            endDate: currentYear + '-' + currentMonth + '-' + currentDay,
+            minView:'year',
+            maxView:'year',
+            startView: 'year',
+            format: 'MM',
+            pickerPosition:'bottom-left',
+            autoclose: 1,
+            todayHighlight: 1,
+            forceParse: 0,
+
+            showMeridian: 1
+        });
+
+    }
+
+    //year
+    if(cliked_id === "button3") {
+        $('#button3.btn-success').removeClass('btn-success').addClass('btn-inverse');
+        $('#button2.btn-inverse').removeClass('btn-inverse').addClass('btn-success');
+        $('#button1.btn-inverse').removeClass('btn-inverse').addClass('btn-success');
+
+       
+        $('.form_datetime').datetimepicker('remove');
+        $('.form_datetime').datetimepicker({
+            startDate: (currentYear-2) + '-' + currentMonth + '-' + currentDay, 
+            endDate: currentYear + '-' + currentMonth + '-' + currentDay,
+            minView:'decade',
+            maxView:'decade',
+            startView: 'decade',
+            pickerPosition:'bottom-left',
+            format: 'yyyy',
+            autoclose: 1,
+            todayHighlight: 1,
+            forceParse: 0,
+
+            showMeridian: 1
+        });
+        
+
+    }
 }
+
 
 function estimatedCost(value){
     var $estimateCost = $('#estimatedCost');

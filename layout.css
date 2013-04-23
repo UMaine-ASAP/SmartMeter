@@ -298,6 +298,7 @@ table {
 
 #selectedMonth .btn{
 	font-size: 12px;
+
 }
 
 #box-left{
@@ -393,6 +394,7 @@ table {
 
 /* CONTENT */
 
+
 #content .circles{
 	text-align: center;
 }
@@ -448,7 +450,7 @@ table {
 	z-index:1;
 	position: relative;
 	color: #006699;
-	font-size:14px;
+	font-size:12.4px;
 }
 
 #textCircle2{
