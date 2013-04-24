@@ -1,12 +1,6 @@
 TO DO LIST:
 
 - implementation of the SVG schela with d3.js
-- correct the remaining bug in the nav bar left when resizing the window
-- change dynamically the selectors  on buttons click in the nav bar left
-- review the code concerning the z-index image in the circles images.
-- see the connection with the data base
-- clic on the submit button 
-- implementation of the popup advising to begin a new stimulation
+- correct the remaining button bug in the nav bar left when resizing the window
 
-- mockups of the device interface
 
