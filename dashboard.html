@@ -44,7 +44,7 @@
 				        <div class="row-fluid">
 				            <div id="dashboard" class="span1 offset1">
 				            		<a href="dashboard.html" style="text-decoration=none;">
-				            		<div id="active">
+				            		<div class="active">
 					            			<img src="bootstrap/img/home.png" alt=""/>
 					            			<br>
 					            			Dashboard
@@ -53,7 +53,7 @@
 				            </div> 
 				            	<div id="devices" class="span1"> 
 				            		<a href="dashboard.html">
-				            			<div id="active">
+				            			<div class="active">
 					            			<img src="bootstrap/img/devices.png" alt=""/>
 					            			<br>
 					            			Devices
@@ -62,7 +62,7 @@
 				            	</div>
 				            <div id="faq" class="span1">
 				            		<a href="dashboard.html">
-				            			<div id="active">
+				            			<div class="active">
 				            				<img src="bootstrap/img/FAQ.png" alt=""/>
 				            				<br>
 				            				FAQ
@@ -71,7 +71,7 @@
 				            </div>
 				            <div id="settings" class="span1"> 
 				            		<a href="dashboard.html">
-					            		<div id="active">
+					            		<div class="active">
 					            			<img src="bootstrap/img/settings.png" alt=""/>
 					            			<br>
 					            			Settings
@@ -79,11 +79,12 @@
 				            		</a>
 				            </div>
 				            <div id="alert" class="span1">
-				            		<a href="dashboard.html">
-				            			<div id="active">
+				            		<a href="alert.html">
+				            			<div class="active">
+				            				<span class="label label-important pull-right">03</span>
 					            			<img src="bootstrap/img/alert.png" alt=""/>
 					            			<br>
-					            			Alert
+					            			<span>Alert</span>
 					            		</div>
 				            		</a>
 				            </div> 
@@ -112,20 +113,20 @@
 
 									<table class="table table-striped">
 										<tr>
-											<td>Select a duration scale<br><br>
+											<td>Select a timescale<br><br>
 												<div id="selectedDuration" class="btn-group" data-role="buttons-checkbox">
-													<button id="button1" type="buttonDuration" onClick="buttonPush(this.id)" class="btn btn-success">Day</button>
+													<button id="button1" type="buttonDuration" onClick="buttonPush(this.id)" class="btn btn-normal">Day</button>
 													<button id="button2" type="buttonDuration" onClick="buttonPush(this.id)" class="btn btn-inverse">Month</button>
-													<button id="button3" type="buttonDuration" onClick="buttonPush(this.id)" class="btn btn-success">Year</button>
+													<button id="button3" type="buttonDuration" onClick="buttonPush(this.id)" class="btn btn-normal">Year</button>
 												</div>
 											</td>								
 										</tr>
 										<tr>
 											<td>
-											<span>Select a month</span><br><br>
+											<span id="textTimescale">Select a ... </span><br><br>
 												<div class="control-group">
 										            <div class="controls input-append date form_datetime" data-link-field="dtp_input1">
-										            	<input style="height:30px" size="16" type="text" value="">
+										            	<input id="textSelector" style="height:30px" size="16" type="text" value="">
 										            	<span class="add-on">
 										            		<i class="icon-th"></i>
 										            	</span>
@@ -140,14 +141,15 @@
 											</td>
 										</tr>
 										<tr>
-											<td>Select a day range
+											<td>
+												<span id="textTimescaleRange">Select a ... </span>
 												<div class="slider sliderRange sliderBlue ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" aria-disabled="false">
 												</div>
 
 												<div class="field_notice">
-													Day Range: 
 													<span class="must sliderRangeLabel">
-													0 - 31</span>
+														0 - 0
+													</span>
 												</div>
 											</td>
 										</tr>

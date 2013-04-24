@@ -11,18 +11,19 @@ $(document).ready(function(){
     var sRange2=20;
     var eCost=80;
 
+    $( ".sliderRangeLabel" ).text("0 - 31")
 	$( ".sliderRange" ).slider({
 				range: true,
 				min: 0,
 				max: 31,
 				values: [ 0, 31 ],
 				slide: function( event, ui ) {
-					$( ".sliderRangeLabel" ).html( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+					$( ".sliderRangeLabel" ).html(ui.values[ 0 ] + " - " + ui.values[ 1 ] );
 				}
 	});
 
     $('.form_datetime').datetimepicker({
-        // We have the datas of the last two years
+        // We assume we have the datas of the last two years
         startDate: (currentYear-2) + '-' + currentMonth + '-' + currentDay, 
         endDate: currentYear + '-' + currentMonth + '-' + currentDay,
         minView:'year',
@@ -42,7 +43,8 @@ $(document).ready(function(){
         showMeridian: 1
     });
 
-    //alert($('.form_datetime').datetimepicker.minView);
+    $('#textTimescale').text("Select a month");
+    $('#textTimescaleRange').text("Select a day range");
 
     estimatedCost(eCost);
     estimatedKW(eKW);
@@ -57,16 +59,27 @@ $(document).ready(function(){
 
 function buttonPush(cliked_id){
 
-    
-
     // days
     if(cliked_id === "button1") {
-        $('#button1.btn-success').removeClass('btn-success').addClass('btn-inverse');
-        $('#button2.btn-inverse').removeClass('btn-inverse').addClass('btn-success');
-        $('#button3.btn-inverse').removeClass('btn-inverse').addClass('btn-success');
-
-       
+        $('#button1.btn-normal').removeClass('btn-normal').addClass('btn-inverse');
+        $('#button2.btn-inverse').removeClass('btn-inverse').addClass('btn-normal');
+        $('#button3.btn-inverse').removeClass('btn-inverse').addClass('btn-normal');
         
+        $('#textTimescale').text("Select a day");
+        $('#textTimescaleRange').text("Select a hour range");
+        $('input[id=textSelector]').val(''); //reinitialize the input when another button is clicked
+
+        $( ".sliderRangeLabel" ).text("0 - 24")
+        $( ".sliderRange" ).slider({
+                range: true,
+                min: 0,
+                max: 24,
+                values: [ 0, 24 ],
+                slide: function( event, ui ) {
+                    $( ".sliderRangeLabel" ).html(ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+                }
+        });
+
         // weird way to update our picker: first remove then re initialize the same tab
         $('.form_datetime').datetimepicker('remove');
         $('.form_datetime').datetimepicker({
@@ -80,18 +93,31 @@ function buttonPush(cliked_id){
             autoclose: 1,
             todayHighlight: 1,
             forceParse: 0,
-
             showMeridian: 1
         });
     }
 
     //months
     if(cliked_id === "button2") {
-        $('#button2.btn-success').removeClass('btn-success').addClass('btn-inverse');
-        $('#button1.btn-inverse').removeClass('btn-inverse').addClass('btn-success');
-        $('#button3.btn-inverse').removeClass('btn-inverse').addClass('btn-success');
 
-        $('.form_datetime').attr('data-date-format', "MM");
+        $('#button2.btn-normal').removeClass('btn-normal').addClass('btn-inverse');
+        $('#button1.btn-inverse').removeClass('btn-inverse').addClass('btn-normal');
+        $('#button3.btn-inverse').removeClass('btn-inverse').addClass('btn-normal');
+
+        $('#textTimescale').text("Select a month");
+        $('#textTimescaleRange').text("Select a day range");
+        $('input[id=textSelector]').val('');
+
+        $( ".sliderRangeLabel" ).text("0 - 31")
+        $( ".sliderRange" ).slider({
+                    range: true,
+                    min: 0,
+                    max: 31,
+                    values: [ 0, 31 ],
+                    slide: function( event, ui ) {
+                        $( ".sliderRangeLabel" ).html(ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+                    }
+        });
 
         $('.form_datetime').datetimepicker('remove');
         $('.form_datetime').datetimepicker({
@@ -105,7 +131,6 @@ function buttonPush(cliked_id){
             autoclose: 1,
             todayHighlight: 1,
             forceParse: 0,
-
             showMeridian: 1
         });
 
@@ -113,11 +138,25 @@ function buttonPush(cliked_id){
 
     //year
     if(cliked_id === "button3") {
-        $('#button3.btn-success').removeClass('btn-success').addClass('btn-inverse');
-        $('#button2.btn-inverse').removeClass('btn-inverse').addClass('btn-success');
-        $('#button1.btn-inverse').removeClass('btn-inverse').addClass('btn-success');
+        $('#button3.btn-normal').removeClass('btn-normal').addClass('btn-inverse');
+        $('#button2.btn-inverse').removeClass('btn-inverse').addClass('btn-normal');
+        $('#button1.btn-inverse').removeClass('btn-inverse').addClass('btn-normal');
 
-       
+        $('#textTimescale').text("Select a year");
+        $('#textTimescaleRange').text("Select a month range");
+        $('input[id=textSelector]').val('');
+
+        $( ".sliderRangeLabel" ).text("0 - 12")
+        $( ".sliderRange" ).slider({
+                    range: true,
+                    min: 0,
+                    max: 12,
+                    values: [ 0, 12 ],
+                    slide: function( event, ui ) {
+                        $( ".sliderRangeLabel" ).html(ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+                    }
+        });
+
         $('.form_datetime').datetimepicker('remove');
         $('.form_datetime').datetimepicker({
             startDate: (currentYear-2) + '-' + currentMonth + '-' + currentDay, 
@@ -141,8 +180,11 @@ function buttonPush(cliked_id){
 
 function estimatedCost(value){
     var $estimateCost = $('#estimatedCost');
-        $estimateCost.text(value + " $");
+        $estimateCost.text("$ " + value);
 }
+
+
+
 
 function estimatedKW(endVal){
     var $counter = $('#textCircle1'),

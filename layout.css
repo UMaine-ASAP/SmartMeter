@@ -88,15 +88,22 @@ hr{
 	 color: #FFF;
 }
 
-#active{
+.active{
 	color: #FFF;
 }
 
-#active:hover{
+.active:hover{
 	border-radius: 6px;
 	background-color: #666666;
 
 }
+
+.active span.label.pull-right {
+      position: relative;
+      top: 2px;
+      right: 11px; 
+  }
+
 
 #dashboard {
     border-radius: 6px;
@@ -107,7 +114,7 @@ hr{
 }
 
 
-#dashboard #active img{
+#dashboard .active img{
 	margin: 5px 0 0 5px;
 	width: 28px;
 	height:28px;
@@ -124,7 +131,7 @@ hr{
 }
 
 
-#devices #active img{
+#devices .active img{
 	margin: 5px 0 0 5px;
 	width: 28px;
 	height:28px;
@@ -140,7 +147,7 @@ hr{
 }
 
 
-#faq #active img{
+#faq .active img{
 	margin: 5px 0 0 5px;
 	width: 28px;
 	height:28px;
@@ -158,11 +165,13 @@ hr{
 }
 
 
-#alert #active img{
+#alert .active img{
 	margin: 5px 0 0 5px;
 	width: 28px;
 	height:28px;
 }
+
+
 
 #settings {
     border-radius: 6px;
@@ -174,7 +183,7 @@ hr{
 }
 
 
-#settings #active img{
+#settings .active img{
 	margin: 5px 0px 0px 5px;
 	width: 28px;
 	height:28px;
@@ -515,9 +524,51 @@ table {
 
 */
 
-/* Style related to BOOTSTRAG */
+/* Style for page alerts */
+
+.item {
+  border-bottom: 1px solid #EEE;
+  padding: 10px 0px 30px 60px; 
+}
+.item .stream-icon {
+    display: inline-block;
+    background-color: #CCC;
+    border-radius: 4px;
+    height: 40px;
+    width: 40px;
+    text-align: center;
+    margin-left: -40px;
+    margin-bottom: -40px;
+    position: relative;
+    top: 15px;
+    right: 20px;
+    float: left; 
+}
+.item .stream-icon i {
+    margin-top: 12px; 
+}
+
+.item .stream-warning {
+    background-color: #ffa93c; 
+}
+
+.item h4 {
+    margin-top: 12px;
+    margin-bottom: 6px; 
+}
+
+.item p {
+    color: #777; 
+}
+
+.item p.date {
+    padding: 0;
+    float: right;
+    margin-top: 10px; 
+}
 
 
+/* Style related to BOOTSTRAP */
 
 .span12 {
    background-color:#FFF;
