@@ -12,7 +12,17 @@
 
 <script type="text/javascript" src="code.js"></script>
 
+<!-- 
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">google.load('jquery', '1.7.1');</script>
+  -->
+
+<script type="text/javascript" src="bootstrap/js/jquery.gritter.js"></script>
+
+
 <!-- CSS  -->
+
+<link rel="stylesheet" type="text/css" href="bootstrap/css/jquery.gritter.css" />
 <link href="bootstrap/css/jquery-ui.min.css" rel="stylesheet" type="text/css">
 <link href="bootstrap/css/datetimepicker.css" rel="stylesheet" media="screen">
 
@@ -113,20 +123,22 @@
 
 									<table class="table table-striped">
 										<tr>
-											<td>Select a timescale<br><br>
-												<div id="selectedDuration" class="btn-group" data-role="buttons-checkbox">
-													<button id="button1" type="buttonDuration" onClick="buttonPush(this.id)" class="btn btn-normal">Day</button>
-													<button id="button2" type="buttonDuration" onClick="buttonPush(this.id)" class="btn btn-inverse">Month</button>
-													<button id="button3" type="buttonDuration" onClick="buttonPush(this.id)" class="btn btn-normal">Year</button>
-												</div>
-											</td>								
+											<div style="width:100px, overflow:hidden;">
+												<td>Select a timescale<br><br>
+													<div id="selectedDuration" class="btn-group" data-role="buttons-checkbox">
+														<button id="button1" type="buttonDuration" onClick="buttonPush(this.id)" class="btn btn-normal">Day</button>
+														<button id="button2" type="buttonDuration" onClick="buttonPush(this.id)" class="btn btn-inverse">Month</button>
+														<button id="button3" type="buttonDuration" onClick="buttonPush(this.id)" class="btn btn-normal">Year</button>
+													</div>
+												</td>	
+											</div>								
 										</tr>
 										<tr>
 											<td>
 											<span id="textTimescale">Select a ... </span><br><br>
 												<div class="control-group">
 										            <div class="controls input-append date form_datetime" data-link-field="dtp_input1">
-										            	<input id="textSelector" style="height:30px" size="16" type="text" value="">
+										            	<input id="textSelector" size="16" type="text" value="">
 										            	<span class="add-on">
 										            		<i class="icon-th"></i>
 										            	</span>

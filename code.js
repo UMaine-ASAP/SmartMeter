@@ -11,7 +11,28 @@ $(document).ready(function(){
     var sRange2=20;
     var eCost=80;
 
+    // The pop up for devices part
+    $.extend($.gritter.options, {
+        position: 'bottom-left', 
+        fade_in_speed: 1000, 
+        fade_out_speed: 40,
+    });
+    setTimeout(function(){
+        $.gritter.add({
+            title: 'Remember!',
+            text: 'On the <a href="dashboard.html" style="color:#ccc">device page</a> you can run a simulation to improve your consumption',
+            //stay display on screen    
+            sticky: true,
+            time: '30',
+            class_name: 'my-sticky-class',
+            fade: true,
+        });
+
+    }, 8000)
+    
+
     $( ".sliderRangeLabel" ).text("0 - 31")
+
 	$( ".sliderRange" ).slider({
 				range: true,
 				min: 0,

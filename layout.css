@@ -75,6 +75,11 @@ hr{
 
 /* MENU */
 
+/* to avoid that the td size exceed the width of the containe when the user resize*/
+.table th, .table td {
+	max-width: 100px;
+}
+
 #menu{
 	margin-top: 5px;
 	margin-bottom:5px;
@@ -401,6 +406,19 @@ table {
 			box-shadow: 0 1px 0px rgba(255, 255, 255, .6);
 }
 
+/* Date Picker */
+
+#textSelector{
+	width: 100px;
+	height:30px
+}
+
+/* hack for date picker placement */
+.dropdown-menu{
+	margin-left:90px;
+}
+	
+
 /* CONTENT */
 
 
@@ -430,6 +448,8 @@ table {
 
 	border: 1px solid #c9c9c9;
 }
+
+
 
 #content #progressBar1{
 	background-image: linear-gradient(to bottom,#ffa93c,#f5a23a);
@@ -514,6 +534,19 @@ table {
 	position: relative;
 }
 
+/* Popup */
+
+#gritter-notice-wrapper.bottom-left {
+    left:45px;
+    bottom: 220px;
+    width: 133px;
+}	
+
+.gritter-item p {
+	text-align: left;
+}
+
+
 
 /*@media (min-width: 1200px) {
   .page {
@@ -524,7 +557,7 @@ table {
 
 */
 
-/* Style for page alerts */
+/* Style for alerts page */
 
 .item {
   border-bottom: 1px solid #EEE;
