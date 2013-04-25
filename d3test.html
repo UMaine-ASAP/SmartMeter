@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.barNormal{
+  fill: #ff9933;
+}
+
+.barPeack{
+  fill: #ea494a;
+}
+
+
+.x.axis path {
+  display: none;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+   <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+   <script src="https://raw.github.com/stsvilik/Xml-to-JSON/master/jquery.xml.js"></script>
+<script>
+
+var margin = {top: 20, right: 20, bottom: 30, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var formatPercent = d3.format(".0%");
+
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .1);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+$(document).ready(function()  
+  { 
+    $.get('http://localhost:8888/code/bootstrap/data/greenbutton.xml', function(d){ 
+    var data = $.xmlToJSON(d)
+    data = data.content.IntervalBlock.IntervalReading;
+
+
+    // So, since green button data is kinda ugly, I'm gonna parse it out here now and maybe we can do something better later
+    // First 24 Hours
+    var hour_data = []
+    $.each( data.slice(0, 24), function(ind, val) {
+
+      hour_data[ind] = [];
+      hour_data[ind]['value'] = parseInt(val.value.Text, 10);
+      hour_data[ind]['time'] = new Date(parseInt(val.timePeriod.start.Text, 10)*1000);
+
+
+
+    });
+
+    // All the days in the data set, up to 30.
+    // Aggregates all power data into one variable
+    // Sets time as the first timestamp in the set
+    var day_data = [];
+    var i = 0;
+    $.each(data.slice(0, 720), function(ind, val) {
+      if(ind%24 == 0)
+      {
+        day_data[++i] = [];
+        day_data[i]['value'] = 0;
+        day_data[i]['time'] = new Date(parseInt(val.timePeriod.start.Text, 10) *1000);
+      }
+      day_data[i]['value']+=parseInt(val.value.Text, 10);
+    });
+
+    // Don't think we have any data sets with years... yet.
+    // 
+//!!!!!!!!!!!
+// To switch between hour/day data, change hour_data to day_data in the two lines below, as well as down at the bottom
+    
+    /* For hours: */
+
+    x.domain(hour_data.map(function(d) { return d.time.getHours(); }));
+    y.domain([0, d3.max(hour_data, function(d) { return d.value; })]);
+
+
+
+    /* For days: */
+    
+    /*
+    x.domain(day_data.map(function(d) { 
+      //console.log(d.time.getDay());
+      return d.time.getDay(); }));
+
+    y.domain([0, d3.max(day_data, function(d) { return d.value })]); // Problem is here 
+
+    */
+
+    
+    // We add a threshold to add different colors to bars
+
+    var threshold = 200;
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+      .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 8)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("Killowatt Hours");
+
+    svg.selectAll(".bar")
+        .data(hour_data)          // This is the other place were you'll need to change to day data for the second view
+        .enter().append("rect")
+
+        .attr("x", function(d) {return x(d.time.getHours()); })
+        .attr("width", x.rangeBand())
+        .transition().delay(function (d, i) { return i *30;}) // Cutsy animation
+        .attr("y", function(d) { return y(d.value);  })
+        .attr("height", function(d) {return (height - y(d.value)); })
+        .attr("class", function(d) {
+          if ((height - y(d.value))<threshold){
+            return "barNormal";
+          }
+          else {
+            return "barPeack";
+          }
+        })
+
+  });
+});
+</script>
