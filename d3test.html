@@ -68,6 +68,9 @@ $(document).ready(function()
 
 
     // So, since green button data is kinda ugly, I'm gonna parse it out here now and maybe we can do something better later
+    
+    // IMPORTANT NOTE: There is a problem because with "normal green button the <IntervalBlock xmlns="http://naesb.org/espi"> tags disrupt the parsing so I was forced to remove manually these tags"
+
     // First 24 Hours
     var hour_data = []
     $.each( data.slice(0, 24), function(ind, val) {
@@ -76,52 +79,62 @@ $(document).ready(function()
       hour_data[ind]['value'] = parseInt(val.value.Text, 10);
       hour_data[ind]['time'] = new Date(parseInt(val.timePeriod.start.Text, 10)*1000);
 
-
-
     });
 
     // All the days in the data set, up to 30.
     // Aggregates all power data into one variable
     // Sets time as the first timestamp in the set
     var day_data = [];
-    var i = 0;
+    var i = -1;   /* ISSUE: I was forced to initialized to -1... */
+    var test=0;
+    var consumption_per_day =0;
+
+
+    // we select the 24*30 first hours... ie the first 30 days ie the first month!
+
     $.each(data.slice(0, 720), function(ind, val) {
+
+      // Every 24 hours - Every day we store the "total" consumption_per_day
       if(ind%24 == 0)
-      {
-        day_data[++i] = [];
-        day_data[i]['value'] = 0;
+      { 
+
+        day_data[++i] = [];  /* ISSUE: ... otherwise problem here */
+        day_data[i]['value']= consumption_per_day;
+        consumption_per_day=0
         day_data[i]['time'] = new Date(parseInt(val.timePeriod.start.Text, 10) *1000);
+        console.log(i + "-----" + day_data[i]['time'] + "-------" + day_data[i]['value']);
+
+
       }
-      day_data[i]['value']+=parseInt(val.value.Text, 10);
+      else{
+        // we increment consumption_per_day until we reach the end of the day
+        consumption_per_day= parseInt(val.value.Text, 10) + consumption_per_day;
+      }
+      
+
     });
 
-    // Don't think we have any data sets with years... yet.
-    // 
-//!!!!!!!!!!!
-// To switch between hour/day data, change hour_data to day_data in the two lines below, as well as down at the bottom
-    
+
     /* For hours: */
 
-    x.domain(hour_data.map(function(d) { return d.time.getHours(); }));
+    /*x.domain(hour_data.map(function(d) { //console.log(d.time.getHours());
+      return d.time.getHours(); }));
     y.domain([0, d3.max(hour_data, function(d) { return d.value; })]);
-
+    */
 
 
     /* For days: */
     
-    /*
+    
     x.domain(day_data.map(function(d) { 
-      //console.log(d.time.getDay());
-      return d.time.getDay(); }));
+      console.log(d.time.getUTCDate()); /* ISSUE: you can see that the 0 value is empty */
+      return d.time.getUTCDate(); }));
 
-    y.domain([0, d3.max(day_data, function(d) { return d.value })]); // Problem is here 
-
-    */
+    y.domain([0, d3.max(day_data, function(d) { return d.value })]);
 
     
-    // We add a threshold to add different colors to bars
-
-    var threshold = 200;
+    // We add a threshold to add different colors to the bars
+    var threshold = 70000;
 
     svg.append("g")
         .attr("class", "x axis")
@@ -139,16 +152,17 @@ $(document).ready(function()
         .text("Killowatt Hours");
 
     svg.selectAll(".bar")
-        .data(hour_data)          // This is the other place were you'll need to change to day data for the second view
+
+        .data(day_data)          // This is the other place were you'll need to change to day data for the second view
         .enter().append("rect")
 
-        .attr("x", function(d) {return x(d.time.getHours()); })
+        .attr("x", function(d) {return x(d.time.getUTCDate()); }) //    AND THERE!!!
         .attr("width", x.rangeBand())
         .transition().delay(function (d, i) { return i *30;}) // Cutsy animation
         .attr("y", function(d) { return y(d.value);  })
         .attr("height", function(d) {return (height - y(d.value)); })
         .attr("class", function(d) {
-          if ((height - y(d.value))<threshold){
+          if ((d.value)<threshold){
             return "barNormal";
           }
           else {
