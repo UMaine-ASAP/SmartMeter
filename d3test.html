@@ -68,7 +68,7 @@ $(document).ready(function()
 
 
     // So, since green button data is kinda ugly, I'm gonna parse it out here now and maybe we can do something better later
-    
+
     // IMPORTANT NOTE: There is a problem because with "normal green button the <IntervalBlock xmlns="http://naesb.org/espi"> tags disrupt the parsing so I was forced to remove manually these tags"
 
     // First 24 Hours
@@ -84,10 +84,16 @@ $(document).ready(function()
     // All the days in the data set, up to 30.
     // Aggregates all power data into one variable
     // Sets time as the first timestamp in the set
-    var day_data = [];
-    var i = -1;   /* ISSUE: I was forced to initialized to -1... */
+
+
+    var threshold = 4000;
+
+    var total_data_day = [];
+    var normal_data_consumption= [];
+    var i = -1;   // ISSUE: I was forced to initialized to -1... 
     var test=0;
     var consumption_per_day =0;
+    var consumption_normal_per_day =0;
 
 
     // we select the 24*30 first hours... ie the first 30 days ie the first month!
@@ -98,15 +104,27 @@ $(document).ready(function()
       if(ind%24 == 0)
       { 
 
-        day_data[++i] = [];  /* ISSUE: ... otherwise problem here */
-        day_data[i]['value']= consumption_per_day;
-        consumption_per_day=0
-        day_data[i]['time'] = new Date(parseInt(val.timePeriod.start.Text, 10) *1000);
-        console.log(i + "-----" + day_data[i]['time'] + "-------" + day_data[i]['value']);
 
+        total_data_day[++i] = [];  // ISSUE: ... otherwise problem here
+        total_data_day[i]['value']= consumption_per_day;
+
+        normal_data_consumption[i] = [];  
+        normal_data_consumption[i]['value']= consumption_normal_per_day;
+
+        consumption_per_day=0;
+        consumption_normal_per_day =0;
+        total_data_day[i]['time'] = new Date(parseInt(val.timePeriod.start.Text, 10) *1000);
+        normal_data_consumption[i]['time'] = new Date(parseInt(val.timePeriod.start.Text, 10) *1000);
+
+        console.log("NORMAL" + i + "-----" + normal_data_consumption[i]['value']);
+        console.log("TOTAL" + i + "-----" + total_data_day[i]['time'] + "-------" + total_data_day[i]['value']);
 
       }
       else{
+
+        if (parseInt(val.value.Text, 10)<threshold){
+          consumption_normal_per_day = parseInt(val.value.Text, 10) + consumption_normal_per_day;
+        }
         // we increment consumption_per_day until we reach the end of the day
         consumption_per_day= parseInt(val.value.Text, 10) + consumption_per_day;
       }
@@ -115,27 +133,75 @@ $(document).ready(function()
     });
 
 
-    /* For hours: */
+    // This if for one MONTH : 
 
-    /*x.domain(hour_data.map(function(d) { //console.log(d.time.getHours());
-      return d.time.getHours(); }));
-    y.domain([0, d3.max(hour_data, function(d) { return d.value; })]);
-    */
-
-
-    /* For days: */
-    
-    
-    x.domain(day_data.map(function(d) { 
-      console.log(d.time.getUTCDate()); /* ISSUE: you can see that the 0 value is empty */
+    x.domain(total_data_day.map(function(d) { 
+      console.log(d.time.getUTCDate());
       return d.time.getUTCDate(); }));
 
-    y.domain([0, d3.max(day_data, function(d) { return d.value })]);
+    y.domain([0, d3.max(total_data_day, function(d) { return d.value })]);
+
+    //  in order to superpose two kinds of datas the normal and the peaks ones we calculate the normal consumption (in orange) and the total (in red)
+
+    // the total :
+    
+    svg.selectAll(".bar")
+
+        .data(total_data_day)          
+        .enter().append("rect")
+
+        .attr("x", function(d) {return x(d.time.getUTCDate()); }) 
+        .attr("width", x.rangeBand())
+        .transition().delay(function (d, i) { return i *30;}) // Cutsy animation
+        .attr("y", function(d) { return y(d.value);  })
+        .attr("height", function(d) {return (height - y(d.value)); })
+        .attr("class", function(d) {return "barPeack";})
+
+    // the normal bars :
+    
+    svg.selectAll(".bar")
+
+        .data(normal_data_consumption)          
+        .enter().append("rect")
+
+        .attr("x", function(d) {return x(d.time.getUTCDate()); }) 
+        .attr("width", x.rangeBand())
+        .transition().delay(function (d, i) { return i *30;}) // Cutsy animation
+        .attr("y", function(d) { return y(d.value);  })
+        .attr("height", function(d) {return (height - y(d.value)); })
+        .attr("class", function(d) {return "barNormal";})
+
 
     
-    // We add a threshold to add different colors to the bars
-    var threshold = 70000;
+    
+    // This if for one DAY: 
+/*
+    x.domain(hour_data.map(function(d) { //console.log(d.time.getHours());
+    return d.time.getHours(); }));
+    y.domain([0, d3.max(hour_data, function(d) { return d.value; })]);
 
+
+    svg.selectAll(".bar")
+
+        .data(hour_data)          // This is the other place were you'll need to change to day data for the second view
+        .enter().append("rect")
+
+        .attr("x", function(d) {return x(d.time.getHours()); }) //    AND THERE!!!
+        .attr("width", x.rangeBand())
+        .transition().delay(function (d, i) { return i *30;}) // Cutsy animation
+        .attr("y", function(d) { return y(d.value);  })
+        .attr("height", function(d) {return (height - y(d.value)); })
+        .attr("class", function(d) {
+          if ((d.value)<threshold){
+            return "barNormal";
+          }
+          else {
+            return "barPeack";
+          }
+        })
+*/
+    // COMMON SETTINGS
+        
     svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
@@ -151,24 +217,6 @@ $(document).ready(function()
         .style("text-anchor", "end")
         .text("Killowatt Hours");
 
-    svg.selectAll(".bar")
-
-        .data(day_data)          // This is the other place were you'll need to change to day data for the second view
-        .enter().append("rect")
-
-        .attr("x", function(d) {return x(d.time.getUTCDate()); }) //    AND THERE!!!
-        .attr("width", x.rangeBand())
-        .transition().delay(function (d, i) { return i *30;}) // Cutsy animation
-        .attr("y", function(d) { return y(d.value);  })
-        .attr("height", function(d) {return (height - y(d.value)); })
-        .attr("class", function(d) {
-          if ((d.value)<threshold){
-            return "barNormal";
-          }
-          else {
-            return "barPeack";
-          }
-        })
 
   });
 });

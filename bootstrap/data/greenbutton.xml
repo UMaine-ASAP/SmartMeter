@@ -3,9 +3,8 @@
       <IntervalBlock xmlns="http://naesb.org/espi">
        
 <!-- 
-  "Custom" Dataset for the monh of October 2011 ....
-*********************** 
-I remove the <IntervalBlock xmlns="http://naesb.org/espi"> tags 
+  Dataset for the monh of October 2011 ....
+***********************
  -->
 
 <IntervalReading>
