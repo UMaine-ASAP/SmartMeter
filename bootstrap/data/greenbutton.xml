@@ -7,6 +7,9 @@
 ***********************
  -->
 
+
+
+
 <IntervalReading>
     <cost>7784</cost>
     <timePeriod>
@@ -16,6 +19,7 @@
     </timePeriod>
     <value>2594</value>
 </IntervalReading>
+
 <IntervalReading>
     <cost>2549</cost>
     <timePeriod>
@@ -25,6 +29,7 @@
     </timePeriod>
     <value>849</value>
 </IntervalReading>
+
 <IntervalReading>
     <cost>2491</cost>
     <timePeriod>
@@ -176,7 +181,7 @@
         <start>1317506400</start>
          <!-- 10/1/2011 10:00:00 PM  -->
     </timePeriod>
-    <value>4185</value>
+    <value>7185</value>
 </IntervalReading>
 <IntervalReading>
     <cost>65891</cost>
@@ -187,6 +192,7 @@
     </timePeriod>
     <value>4392</value>
 </IntervalReading>
+
 <IntervalReading>
     <cost>50489</cost>
     <timePeriod>
@@ -196,6 +202,7 @@
     </timePeriod>
     <value>4207</value>
 </IntervalReading>
+
 <IntervalReading>
     <cost>36626</cost>
     <timePeriod>
@@ -6263,6 +6270,9 @@
     </timePeriod>
     <value>4042</value>
 </IntervalReading>
+
+ <!-- ***************************************************************************************** -->
+
 <IntervalReading>
     <cost>56390</cost>
     <timePeriod>
@@ -6480,6 +6490,10 @@
     </timePeriod>
     <value>4133</value>
 </IntervalReading>
+
+<!-- ******************************************************************************************  -->
+
+
 <IntervalReading>
     <cost>110991</cost>
     <timePeriod>
@@ -6693,226 +6707,6 @@
     <timePeriod>
         <duration>3600</duration>
         <start>1320102000</start>
-         <!-- 10/31/2011 11:00:00 PM  -->
-    </timePeriod>
-    <value>4366</value>
-</IntervalReading>
-
-
-
-<IntervalReading>
-    <cost>110991</cost>
-    <timePeriod>
-        <duration>3600</duration>
-        <start>1320105600</start>
-         <!-- 10/31/2011  -->
-    </timePeriod>
-    <value>4624</value>
-</IntervalReading>
-<IntervalReading>
-    <cost>78215</cost>
-    <timePeriod>
-        <duration>3600</duration>
-        <start>1320105600</start>
-         <!-- 10/31/2011 1:00:00 AM  -->
-    </timePeriod>
-    <value>4345</value>
-</IntervalReading>
-<IntervalReading>
-    <cost>50869</cost>
-    <timePeriod>
-        <duration>3600</duration>
-        <start>1320105600</start>
-         <!-- 10/31/2011 2:00:00 AM  -->
-    </timePeriod>
-    <value>4239</value>
-</IntervalReading>
-<IntervalReading>
-    <cost>17521</cost>
-    <timePeriod>
-        <duration>3600</duration>
-        <start>1320105600</start>
-         <!-- 10/31/2011 3:00:00 AM  -->
-    </timePeriod>
-    <value>2920</value>
-</IntervalReading>
-
-<IntervalReading>
-    <cost>2544</cost>
-    <timePeriod>
-        <duration>3600</duration>
-        <start>1320105600</start>
-         <!-- 10/31/2011 4:00:00 AM  -->
-    </timePeriod>
-    <value>848</value>
-</IntervalReading>
-<IntervalReading>
-    <cost>2854</cost>
-    <timePeriod>
-        <duration>3600</duration>
-        <start>1320105600</start>
-         <!-- 10/31/2011 5:00:00 AM  -->
-    </timePeriod>
-    <value>951</value>
-</IntervalReading>
-<IntervalReading>
-    <cost>2727</cost>
-    <timePeriod>
-        <duration>3600</duration>
-        <start>1320105600</start>
-         <!-- 10/31/2011 6:00:00 AM  -->
-    </timePeriod>
-    <value>909</value>
-</IntervalReading>
-<IntervalReading>
-    <cost>2952</cost>
-    <timePeriod>
-        <duration>3600</duration>
-        <start>1320105600</start>
-         <!-- 10/31/2011 7:00:00 AM  -->
-    </timePeriod>
-    <value>984</value>
-</IntervalReading>
-<IntervalReading>
-    <cost>2447</cost>
-    <timePeriod>
-        <duration>3600</duration>
-        <start>1320105600</start>
-         <!-- 10/31/2011 8:00:00 AM  -->
-    </timePeriod>
-    <value>815</value>
-</IntervalReading>
-<IntervalReading>
-    <cost>2745</cost>
-    <timePeriod>
-        <duration>3600</duration>
-        <start>1320105600</start>
-         <!-- 10/31/2011 9:00:00 AM  -->
-    </timePeriod>
-    <value>915</value>
-</IntervalReading>
-<IntervalReading>
-    <cost>8322</cost>
-    <timePeriod>
-        <duration>3600</duration>
-        <start>1320105600</start>
-         <!-- 10/31/2011 10:00:00 AM  -->
-    </timePeriod>
-    <value>2774</value>
-</IntervalReading>
-<IntervalReading>
-    <cost>27167</cost>
-    <timePeriod>
-        <duration>3600</duration>
-        <start>1320105600</start>
-         <!-- 10/31/2011 11:00:00 AM  -->
-    </timePeriod>
-    <value>4527</value>
-</IntervalReading>
-<IntervalReading>
-    <cost>24984</cost>
-    <timePeriod>
-        <duration>3600</duration>
-        <start>1320105600</start>
-         <!-- 10/31/2011 12:00:00 PM  -->
-    </timePeriod>
-    <value>4164</value>
-</IntervalReading>
-<IntervalReading>
-    <cost>25409</cost>
-    <timePeriod>
-        <duration>3600</duration>
-        <start>1320105600</start>
-         <!-- 10/31/2011 1:00:00 PM  -->
-    </timePeriod>
-    <value>4234</value>
-</IntervalReading>
-<IntervalReading>
-    <cost>26023</cost>
-    <timePeriod>
-        <duration>3600</duration>
-        <start>1320105600</start>
-         <!-- 10/31/2011 2:00:00 PM  -->
-    </timePeriod>
-    <value>4337</value>
-</IntervalReading>
-<IntervalReading>
-    <cost>14944</cost>
-    <timePeriod>
-        <duration>3600</duration>
-        <start>1320105600</start>
-         <!-- 10/31/2011 3:00:00 PM  -->
-    </timePeriod>
-    <value>2490</value>
-</IntervalReading>
-<IntervalReading>
-    <cost>17056</cost>
-    <timePeriod>
-        <duration>3600</duration>
-        <start>1320105600</start>
-         <!-- 10/31/2011 4:00:00 PM  -->
-    </timePeriod>
-    <value>2842</value>
-</IntervalReading>
-<IntervalReading>
-    <cost>15861</cost>
-    <timePeriod>
-        <duration>3600</duration>
-        <start>1320105600</start>
-         <!-- 10/31/2011 5:00:00 PM  -->
-    </timePeriod>
-    <value>2643</value>
-</IntervalReading>
-<IntervalReading>
-    <cost>16740</cost>
-    <timePeriod>
-        <duration>3600</duration>
-        <start>1320105600</start>
-         <!-- 10/31/2011 6:00:00 PM  -->
-    </timePeriod>
-    <value>2790</value>
-</IntervalReading>
-<IntervalReading>
-    <cost>32731</cost>
-    <timePeriod>
-        <duration>3600</duration>
-        <start>1320105600</start>
-         <!-- 10/31/2011 7:00:00 PM  -->
-    </timePeriod>
-    <value>2727</value>
-</IntervalReading>
-<IntervalReading>
-    <cost>46033</cost>
-    <timePeriod>
-        <duration>3600</duration>
-        <start>1320105600</start>
-         <!-- 10/31/2011 8:00:00 PM  -->
-    </timePeriod>
-    <value>2557</value>
-</IntervalReading>
-<IntervalReading>
-    <cost>69510</cost>
-    <timePeriod>
-        <duration>3600</duration>
-        <start>1320105600</start>
-         <!-- 10/31/2011 9:00:00 PM  -->
-    </timePeriod>
-    <value>2896</value>
-</IntervalReading>
-<IntervalReading>
-    <cost>115998</cost>
-    <timePeriod>
-        <duration>3600</duration>
-        <start>1320105600</start>
-         <!-- 10/31/2011 10:00:00 PM  -->
-    </timePeriod>
-    <value>3866</value>
-</IntervalReading>
-<IntervalReading>
-    <cost>130998</cost>
-    <timePeriod>
-        <duration>3600</duration>
-        <start>1320105600</start>
          <!-- 10/31/2011 11:00:00 PM  -->
     </timePeriod>
     <value>4366</value>

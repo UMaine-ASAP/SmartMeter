@@ -71,135 +71,21 @@ $(document).ready(function()
 
     // IMPORTANT NOTE: There is a problem because with "normal green button the <IntervalBlock xmlns="http://naesb.org/espi"> tags disrupt the parsing so I was forced to remove manually these tags"
 
-    // First 24 Hours
-    var hour_data = []
-    $.each( data.slice(0, 24), function(ind, val) {
+    var dateOfTheDay =11;
+    var beginningHour=0;
+    var endHour=0;
+    var threshold = 4700;
 
-      hour_data[ind] = [];
-      hour_data[ind]['value'] = parseInt(val.value.Text, 10);
-      hour_data[ind]['time'] = new Date(parseInt(val.timePeriod.start.Text, 10)*1000);
-
-    });
+    dayGraph(threshold, data, dateOfTheDay, beginningHour, endHour);
 
     // All the days in the data set, up to 30.
     // Aggregates all power data into one variable
     // Sets time as the first timestamp in the set
 
-
-    var threshold = 4000;
-
-    var total_data_day = [];
-    var normal_data_consumption= [];
-    var i = -1;   // ISSUE: I was forced to initialized to -1... 
-    var test=0;
-    var consumption_per_day =0;
-    var consumption_normal_per_day =0;
-
-
-    // we select the 24*30 first hours... ie the first 30 days ie the first month!
-
-    $.each(data.slice(0, 720), function(ind, val) {
-
-      // Every 24 hours - Every day we store the "total" consumption_per_day
-      if(ind%24 == 0)
-      { 
-
-
-        total_data_day[++i] = [];  // ISSUE: ... otherwise problem here
-        total_data_day[i]['value']= consumption_per_day;
-
-        normal_data_consumption[i] = [];  
-        normal_data_consumption[i]['value']= consumption_normal_per_day;
-
-        consumption_per_day=0;
-        consumption_normal_per_day =0;
-        total_data_day[i]['time'] = new Date(parseInt(val.timePeriod.start.Text, 10) *1000);
-        normal_data_consumption[i]['time'] = new Date(parseInt(val.timePeriod.start.Text, 10) *1000);
-
-        console.log("NORMAL" + i + "-----" + normal_data_consumption[i]['value']);
-        console.log("TOTAL" + i + "-----" + total_data_day[i]['time'] + "-------" + total_data_day[i]['value']);
-
-      }
-      else{
-
-        if (parseInt(val.value.Text, 10)<threshold){
-          consumption_normal_per_day = parseInt(val.value.Text, 10) + consumption_normal_per_day;
-        }
-        // we increment consumption_per_day until we reach the end of the day
-        consumption_per_day= parseInt(val.value.Text, 10) + consumption_per_day;
-      }
-      
-
-    });
-
-
-    // This if for one MONTH : 
-
-    x.domain(total_data_day.map(function(d) { 
-      console.log(d.time.getUTCDate());
-      return d.time.getUTCDate(); }));
-
-    y.domain([0, d3.max(total_data_day, function(d) { return d.value })]);
-
-    //  in order to superpose two kinds of datas the normal and the peaks ones we calculate the normal consumption (in orange) and the total (in red)
-
-    // the total :
+    //monthGraph(threshold, data);
     
-    svg.selectAll(".bar")
-
-        .data(total_data_day)          
-        .enter().append("rect")
-
-        .attr("x", function(d) {return x(d.time.getUTCDate()); }) 
-        .attr("width", x.rangeBand())
-        .transition().delay(function (d, i) { return i *30;}) // Cutsy animation
-        .attr("y", function(d) { return y(d.value);  })
-        .attr("height", function(d) {return (height - y(d.value)); })
-        .attr("class", function(d) {return "barPeack";})
-
-    // the normal bars :
-    
-    svg.selectAll(".bar")
-
-        .data(normal_data_consumption)          
-        .enter().append("rect")
-
-        .attr("x", function(d) {return x(d.time.getUTCDate()); }) 
-        .attr("width", x.rangeBand())
-        .transition().delay(function (d, i) { return i *30;}) // Cutsy animation
-        .attr("y", function(d) { return y(d.value);  })
-        .attr("height", function(d) {return (height - y(d.value)); })
-        .attr("class", function(d) {return "barNormal";})
 
 
-    
-    
-    // This if for one DAY: 
-/*
-    x.domain(hour_data.map(function(d) { //console.log(d.time.getHours());
-    return d.time.getHours(); }));
-    y.domain([0, d3.max(hour_data, function(d) { return d.value; })]);
-
-
-    svg.selectAll(".bar")
-
-        .data(hour_data)          // This is the other place were you'll need to change to day data for the second view
-        .enter().append("rect")
-
-        .attr("x", function(d) {return x(d.time.getHours()); }) //    AND THERE!!!
-        .attr("width", x.rangeBand())
-        .transition().delay(function (d, i) { return i *30;}) // Cutsy animation
-        .attr("y", function(d) { return y(d.value);  })
-        .attr("height", function(d) {return (height - y(d.value)); })
-        .attr("class", function(d) {
-          if ((d.value)<threshold){
-            return "barNormal";
-          }
-          else {
-            return "barPeack";
-          }
-        })
-*/
     // COMMON SETTINGS
         
     svg.append("g")
@@ -220,4 +106,153 @@ $(document).ready(function()
 
   });
 });
+
+
+
+function dayGraph(threshold, data, dateOfTheDay, begin, end){
+  
+  var beginningHour = dateOfTheDay * 24 -24
+  var endHour = dateOfTheDay * 24
+
+  console.log(beginningHour + "***" + endHour + "**" + dateOfTheDay)
+
+  // First 24 Hours
+    var hour_data = []
+    $.each( data.slice(beginningHour, endHour), function(ind, val) {
+
+      hour_data[ind] = [];
+      hour_data[ind]['value'] = parseInt(val.value.Text, 10);
+      hour_data[ind]['time'] = new Date(parseInt(val.timePeriod.start.Text, 10)*1000);
+
+    });
+
+
+
+    // This if for one DAY: 
+
+    x.domain(hour_data.map(function(d) {
+    return d.time.getHours(); }));
+    y.domain([0, d3.max(hour_data, function(d) { return d.value; })]);
+
+
+    svg.selectAll(".bar")
+
+        .data(hour_data)          // This is the other place were you'll need to change to day data for the second view
+        .enter().append("rect")
+
+        .attr("x", function(d) {console.log(d.time.getDate());
+        return x(d.time.getHours()); }) //    AND THERE!!!
+        .attr("width", x.rangeBand())
+        .transition().delay(function (d, i) { return i *30;}) // Cutsy animation
+        .attr("y", function(d) { return y(d.value);  })
+        .attr("height", function(d) {return (height - y(d.value)); })
+        .attr("class", function(d) {
+          if ((d.value)<threshold){
+            return "barNormal";
+          }
+          else {
+            return "barPeack";
+          }
+        })
+
+
+
+
+}    
+
+function monthGraph(threshold, data){
+
+
+    
+
+    var total_data_day = [];
+    var normal_data_consumption= [];
+    var i = 0;
+    var consumption_total_per_day =0;
+    var consumption_normal_per_day =0;
+    var dateOfTheDay;
+
+    // we select the 24*31 first hours... ie the first 31 days ie the first month!
+
+    $.each(data.slice(0, 768), function(ind, val) {
+
+      if(ind%24 != 0 || ind==0){ 
+
+        if (parseInt(val.value.Text, 10)<threshold){
+          consumption_normal_per_day = parseInt(val.value.Text, 10) + consumption_normal_per_day;
+        }
+
+        consumption_total_per_day= parseInt(val.value.Text, 10) + consumption_total_per_day;
+        dateOfTheDay = new Date(parseInt(val.timePeriod.start.Text, 10) *1000);
+
+        //console.log("*** i: " + i + " **** consumption_normal_per_day: " + consumption_normal_per_day + " **** consumption_total_per_day " + consumption_total_per_day);
+      }
+
+      else{
+        total_data_day[i] = []; 
+        total_data_day[i]['value']= consumption_total_per_day;
+
+        normal_data_consumption[i] = [];  
+        normal_data_consumption[i]['value']= consumption_normal_per_day;
+
+        consumption_total_per_day=0;
+        consumption_normal_per_day =0;
+        total_data_day[i]['time'] = dateOfTheDay;
+        normal_data_consumption[i]['time'] = dateOfTheDay;
+        //console.log("TEST 1 jour " + i + " **** " + normal_data_consumption[i]['value']);
+        i++;
+
+        
+        //console.log("TOTAL" + i + "-----" + normal_data_consumption[i]['time'] + "-------" + normal_data_consumption[i]['value']);
+
+
+      }
+      
+
+    });
+
+
+    // This if for one MONTH : 
+
+
+    x.domain(total_data_day.map(function(d) { 
+      console.log(d.time.getDate());
+      return d.time.getDate(); }));
+
+    y.domain([0, d3.max(total_data_day, function(d) { return d.value })]);
+
+    //  in order to superpose two kinds of datas the normal and the peaks ones we calculate the normal consumption (in orange) and the total (in red)
+
+    // the total :
+    
+    svg.selectAll(".bar")
+
+        .data(total_data_day)          
+        .enter().append("rect")
+
+        .attr("x", function(d) {return x(d.time.getDate()); }) // change the date here!
+        .attr("width", x.rangeBand())
+        .transition().delay(function (d, i) { return i *30;}) // Cutsy animation
+        .attr("y", function(d) { return y(d.value);  })
+        .attr("height", function(d) {return (height - y(d.value)); })
+        .attr("class", function(d) {return "barPeack";})
+
+    // the normal bars :
+    
+    svg.selectAll(".bar")
+
+        .data(normal_data_consumption)          
+        .enter().append("rect")
+
+        .attr("x", function(d) {return x(d.time.getDate()); }) 
+        .attr("width", x.rangeBand())
+        .transition().delay(function (d, i) { return i *30;}) // Cutsy animation
+        .attr("y", function(d) { return y(d.value);  })
+        .attr("height", function(d) {return (height - y(d.value)); })
+        .attr("class", function(d) {return "barNormal";})
+
+
+
+
+}  
 </script>
