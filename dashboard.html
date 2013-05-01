@@ -8,9 +8,13 @@
 <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
 <script type="text/javascript" src="bootstrap/js/jquery-ui.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="https://raw.github.com/stsvilik/Xml-to-JSON/master/jquery.xml.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 
 <script type="text/javascript" src="code.js"></script>
+
+
 
 <!-- 
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
@@ -149,7 +153,7 @@
 										</tr>
 										<tr>
 											<td>
-												<input type="checkbox" value="weather" style="vertical-align:super; margin-right:5px;"/> Add weather data 
+												<input id="checkBoxWeather" type="checkbox" value="false" style="vertical-align:super; margin-right:5px;"/> Add weather data 
 											</td>
 										</tr>
 										<tr>
@@ -169,7 +173,7 @@
 									</table>
 									
 									<br>
-									<button onclick="window.location = 'dashboard.html';"class="btn btn-primary" type="submit">Submit</button>
+									<button onClick= "submitButtonClicked()" class="btn btn-primary" type="submit">Submit</button>
 								</div>	
 							</div>
 			            </div>
@@ -180,8 +184,8 @@
 			            	
 			            	<h2 class="header"> My consumption</h2>
 			            		<div class="row-fluid">
-			            			<div class="span12">
-				            			<svg height="400"></svg>
+			            			<div id="mySVG" class="span12">
+
 				            		</div>
 				            	</div>
 				            	<hr />		

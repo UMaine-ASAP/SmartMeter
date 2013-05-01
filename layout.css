@@ -56,22 +56,6 @@ hr{
 
 
 
-/*#mainscreen{
-	min-width: 700px;
-	margin-bottom:5px;
-}
-#box-left{
-	min-width: 300px;
-
-}
-#navLeft{
-	min-width: 300px;
-
-}*/
-
-
-
-
 
 /* MENU */
 
@@ -406,10 +390,10 @@ table {
 			box-shadow: 0 1px 0px rgba(255, 255, 255, .6);
 }
 
-/* Date Picker */
+/* Date Picker / period of time */
 
 #textSelector{
-	width: 100px;
+	width: 130px;
 	height:30px
 }
 
@@ -547,6 +531,29 @@ table {
 }
 
 
+/* SVG */
+
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.barNormal{
+  fill: #ff9933;
+}
+
+.barPeack{
+  fill: #ea494a;
+}
+
+
+.x.axis path {
+  display: none;
+}
+
 
 /*@media (min-width: 1200px) {
   .page {
@@ -557,7 +564,7 @@ table {
 
 */
 
-/* Style for alerts page */
+/* Style for alerts.html page */
 
 .item {
   border-bottom: 1px solid #EEE;
