@@ -394,7 +394,6 @@ table {
 
 #textSelector{
 	width: 130px;
-	height:30px
 }
 
 /* hack for date picker placement */
@@ -547,6 +546,7 @@ table {
 
 .barPeack{
   fill: #ea494a;
+
 }
 
 

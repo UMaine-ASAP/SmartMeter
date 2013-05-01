@@ -22,7 +22,6 @@ var timescaleChoice,
 
 $(document).ready(function(){
 
-    
     // The pop up for devices part
     $.extend($.gritter.options, {
         position: 'bottom-left', 
@@ -42,20 +41,20 @@ $(document).ready(function(){
 
     }, 8000)
     
-    $( ".sliderRangeLabel" ).text("0 - 30")
+    $( ".sliderRangeLabel" ).text("1 - 30")
 
     $( ".sliderRange" ).slider({
                 range: true,
-                min: 0,
+                min: 1,
                 max: 30,
-                values: [ 0, 30],
+                values: [ 1, 30],
                 slide: function( event, ui ) {
                     $( ".sliderRangeLabel" ).html(ui.values[ 0 ] + " - " + ui.values[ 1 ] );
                     //$( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
                 }
     });
 
-    
+    $('input[id=textSelector]').val('October');
 
 
 
@@ -105,7 +104,7 @@ $(document).ready(function(){
     estimatedGallon(eGallon);
     summaryForTheRange1(sRange1);
     summaryForTheRange2(sRange2);
-
+    
 
 
 });
@@ -171,12 +170,12 @@ function buttonPush(cliked_id){
         $('#textTimescaleRange').text("Select a day range");
         $('input[id=textSelector]').val('');
 
-        $( ".sliderRangeLabel" ).text("0 - 30")
+        $( ".sliderRangeLabel" ).text("1 - 30")
         $( ".sliderRange" ).slider({
                     range: true,
-                    min: 0,
+                    min: 1,
                     max: 30,
-                    values: [ 0, 30 ],
+                    values: [ 1, 30 ],
                     slide: function( event, ui ) {
                         $( ".sliderRangeLabel" ).html(ui.values[ 0 ] + " - " + ui.values[ 1 ] );
                     }
@@ -211,7 +210,7 @@ function buttonPush(cliked_id){
         $('#textTimescaleRange').text("Select a month range");
         $('input[id=textSelector]').val('');
 
-        $( ".sliderRangeLabel" ).text("0 - 12")
+        $( ".sliderRangeLabel" ).text("1 - 12")
         $( ".sliderRange" ).slider({
                     range: true,
                     min: 0,
@@ -253,12 +252,13 @@ function submitButtonClicked(){
     var last2 = parseInt( + selectedPeriod.substr(selectedPeriod.length - 2));
 
     if (last2 != 0){
-        timescaleChoice = timescaleChoice;
+        //timescaleChoice = timescaleChoice;
         addWeatherData=$('#checkBoxWeather').prop("checked");
         beginSelectedRange=  $( ".sliderRange" ).slider( "values", 0 ) ;
         endSelectedRange = $( ".sliderRange" ).slider( "values", 1 ) ;
 
         $("svg").remove();
+        console.log(timescaleChoice + "****" +  last2 + "****" + addWeatherData + "****" + beginSelectedRange + "****" +endSelectedRange)
         buildSVGGraph(timescaleChoice, last2, addWeatherData, beginSelectedRange, endSelectedRange);
     }
     
@@ -266,6 +266,52 @@ function submitButtonClicked(){
         alert("Fill all the fields please")
     }
 
+}
+
+
+function zoomInTheGraph(d, i){
+
+    $("svg").remove();
+    buildSVGGraph("Day", i+1, addWeatherData, 0, 23);
+
+    $('#button1.btn-normal').removeClass('btn-normal').addClass('btn-inverse');
+        $('#button2.btn-inverse').removeClass('btn-inverse').addClass('btn-normal');
+        $('#button3.btn-inverse').removeClass('btn-inverse').addClass('btn-normal');
+        
+        $('#textTimescale').text("Select a day");
+        $('#textTimescaleRange').text("Select a hour range");
+
+        $('input[id=textSelector]').val(''); //reinitialize the input field when another button is clicked
+
+
+        $( ".sliderRangeLabel" ).text("0 - 23")
+        $( ".sliderRange" ).slider({
+                range: true,
+                min: 0,
+                max: 23,
+                values: [ 0, 23 ],
+                slide: function( event, ui ) {
+                    $( ".sliderRangeLabel" ).html(ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+                }
+        });
+
+        // weird way to update our picker: first remove then re initialize the same tab
+        $('.form_datetime').datetimepicker('remove');
+        $('.form_datetime').datetimepicker({
+            startDate: 2011 + '-' + 10 + '-' + 1, 
+            endDate: 2011 + '-' + 10 + '-' + 30, 
+            minView:'month',
+            maxView:'month',
+            startView: 'month',
+            pickerPosition:'bottom-left',
+            format: 'yyyy-MM-dd',
+            autoclose: 1,
+            todayHighlight: 1,
+            forceParse: 0,
+            showMeridian: 1
+        });
+
+        timescaleChoice="Day";
 }
 
 
@@ -387,7 +433,6 @@ function summaryForTheRange2(endValue){
 
 }
 
-//buildSVGGraph(timescaleChoice, selectedPeriod, addWeatherData, selectedRange);
 
 function buildSVGGraph(typeOfGraphToBuild, periodToBuild, weatherToBuild, beginRangeToBuild, endRangeToBuild){
 
@@ -438,29 +483,21 @@ function buildSVGGraph(typeOfGraphToBuild, periodToBuild, weatherToBuild, beginR
         }
 
         if(typeOfGraphToBuild== "Month"){
-            monthGraph(svg, x, y, xAxis, yAxis, width, height, threshold, data);
+            monthGraph(svg, x, y, xAxis, yAxis, width, height, threshold, data, beginRangeToBuild, endRangeToBuild);
         }
 
         if(typeOfGraphToBuild== "Year"){
-           //... Do something
+           alert("This feature has not already been implemented")
         }        
         
-        // TODO on a hover of a certain element ...
-        $('.barPeack').hover(function() {
-          $(this).css( 'cursor', 'pointer' );
-        });
 
-        $('#bar1').click(function() {
-          alert("Hello")
-          //dayGraph,,,,
-
-        });
     });
 
 
 }
 
-function monthGraph(svg, x, y, xAxis, yAxis, width, height, threshold, data){
+
+function monthGraph(svg, x, y, xAxis, yAxis, width, height, threshold, data, begin, end){
 
     var total_data_day = [];
     var normal_data_consumption= [];
@@ -469,9 +506,11 @@ function monthGraph(svg, x, y, xAxis, yAxis, width, height, threshold, data){
     var consumption_normal_per_day =0;
     var dateOfTheDay;
 
+
+
     // we select the 24*30 first hours... ie the first 31 days ie the first month!
 
-    $.each(data.slice(0, 748), function(ind, val) {
+    $.each(data.slice(begin * 24 -24, end *24+24), function(ind, val) {
 
       if(ind%24 != 0 || ind==0){  // for the range 0 to 23 of every day ...
 
@@ -504,8 +543,7 @@ function monthGraph(svg, x, y, xAxis, yAxis, width, height, threshold, data){
 
 
     x.domain(total_data_day.map(function(d) { 
-      console.log(d.time.getDate());
-      return d.time.getDate(); }));
+        return d.time.getDate(); }));
 
     y.domain([0, d3.max(total_data_day, function(d) { return d.value })]);
 
@@ -514,10 +552,14 @@ function monthGraph(svg, x, y, xAxis, yAxis, width, height, threshold, data){
     // the "total" bars:
     
     svg.selectAll(".bar")
-
         .data(total_data_day)          
         .enter().append("rect")
-        .attr("id", function(d) {return ("bar" + d.time.getDate()); })
+
+        .on("mouseover", function(){
+            $('.barPeack').css('cursor', 'pointer');
+
+        })
+        .on("click", zoomInTheGraph)
 
         .attr("x", function(d) {return x(d.time.getDate()); }) // change the date here!
         .attr("width", x.rangeBand())
@@ -526,12 +568,20 @@ function monthGraph(svg, x, y, xAxis, yAxis, width, height, threshold, data){
         .attr("height", function(d) {return (height - y(d.value)); })
         .attr("class", function(d) {return "barPeack";})
 
+        
+
     // the "normal" bars :
     
     svg.selectAll(".bar")
 
+
         .data(normal_data_consumption)          
         .enter().append("rect")
+        .on("mouseover", function(){
+            $('.barNormal').css('cursor', 'pointer');
+
+        })
+        .on("click", zoomInTheGraph)
 
         .attr("x", function(d) {return x(d.time.getDate()); }) 
         .attr("width", x.rangeBand())
@@ -546,8 +596,10 @@ function monthGraph(svg, x, y, xAxis, yAxis, width, height, threshold, data){
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis)
     .append("text") 
-        //.style("text-anchor", "end") TODO...
+        .attr("x", width-20 )
+        .attr("y", -5 )
         .text("days");
+        
 
     svg.append("g")
         .attr("class", "y axis")
@@ -583,12 +635,14 @@ function dayGraph(svg, x, y, xAxis, yAxis, width, height, threshold, data, dateO
     y.domain([0, d3.max(hour_data, function(d) { return d.value; })]);
 
 
+
+
     svg.selectAll(".bar")
 
         .data(hour_data)          
         .enter().append("rect")
 
-        .attr("x", function(d) {console.log(d.time.getDate());
+        .attr("x", function(d) {
         return x(d.time.getHours()); })
         .attr("width", x.rangeBand())
         .transition().delay(function (d, i) { return i *30;}) // Cutsy animation
@@ -603,14 +657,37 @@ function dayGraph(svg, x, y, xAxis, yAxis, width, height, threshold, data, dateO
           }
         })
 
+    // Phantom power    
+
+    svg.append("svg:line")
+        .style("stroke-dasharray", ("3, 3")) 
+        .attr("x1", 15)
+        .attr("y1", height-95)
+        .attr("x2", width-15)
+        .attr("y2", height-95)
+        .attr("stroke-width", 2)
+        .attr("stroke", "black")    
+        
 
     // COMMON SETTINGS FOR THE GRAPH
         
     svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
+        .call(xAxis)
+     //hours label   
+    .append("text")
+        .attr("x", width-20 )
+        .attr("y", -5 )
+        .text("hours")
 
+    // Phantom power label
+    svg.append("g")
+        .append("text")
+        .attr("x", 15)
+        .attr("y", height-100)
+        .text("Phantom Power")    
+    
     svg.append("g")
         .attr("class", "y axis")
         .call(yAxis)
