@@ -3,11 +3,8 @@ var currentDay = currentDate.getDate();
 var currentMonth = currentDate.getMonth() + 1;
 var currentYear = currentDate.getFullYear();
 
-var eKW=200;
-var eTree=20;
-var eGallon=50;
-var sRange1=80;
-var sRange2=20;
+
+
 var eCost=80;
 
 /* Settings in the nav left */
@@ -91,19 +88,16 @@ $(document).ready(function(){
     /* Default values for the submitbutton */
 
     timescaleChoice = "Month";
-   
+    $('#checkBoxWeather').prop('checked', false);
     selectedPeriod=0;
     addWeatherData=$('#checkBoxWeather').prop("checked");
     beginSelectedRange=  $( ".sliderRange" ).slider( "values", 0 );
     endSelectedRange = $( ".sliderRange" ).slider( "values", 1 );
 
+
     buildSVGGraph(timescaleChoice, selectedPeriod, addWeatherData, beginSelectedRange, endSelectedRange);
-    estimatedCost(eCost);
-    estimatedKW(eKW);
-    estimatedTree(eTree);
-    estimatedGallon(eGallon);
-    summaryForTheRange1(sRange1);
-    summaryForTheRange2(sRange2);
+    
+
     
 
 
@@ -155,7 +149,11 @@ function buttonPush(cliked_id){
         
         // update current timescale
         timescaleChoice = "Day"; 
-
+        $('#weatherRow').css("opacity", 0.5);
+        $('#rangeRow').css("opacity", 1);
+        $('#periodRow').css("opacity", 1);
+        $('#checkBoxWeather').attr('disabled', true);
+        $('#checkBoxWeather').prop('checked', false);
 
     }
 
@@ -197,6 +195,11 @@ function buttonPush(cliked_id){
         });
 
         timescaleChoice = "Month";
+        $('#weatherRow').css("opacity", 1);
+        $('#rangeRow').css("opacity", 1);
+        $('#periodRow').css("opacity", 1);
+        $('#checkBoxWeather').attr('disabled', false);
+
 
     }
 
@@ -238,6 +241,11 @@ function buttonPush(cliked_id){
         });
 
         timescaleChoice = "Year";
+        $('#checkBoxWeather').attr('disabled', true);
+        $('#weatherRow').css("opacity", 0.5);
+        $('#rangeRow').css("opacity", 0.5);
+        $('#periodRow').css("opacity", 0.5);
+        
     }
 }
 
@@ -273,7 +281,7 @@ function zoomInTheGraph(d, i){
 
     $("svg").remove();
     buildSVGGraph("Day", i+1, addWeatherData, 0, 23);
-
+    $('#weatherRow').css("opacity", 0.5);
     $('#button1.btn-normal').removeClass('btn-normal').addClass('btn-inverse');
         $('#button2.btn-inverse').removeClass('btn-inverse').addClass('btn-normal');
         $('#button3.btn-inverse').removeClass('btn-inverse').addClass('btn-normal');
@@ -310,7 +318,9 @@ function zoomInTheGraph(d, i){
             forceParse: 0,
             showMeridian: 1
         });
-
+        
+        $('#checkBoxWeather').attr('disabled', true);
+        $('#checkBoxWeather').prop('checked', false);
         timescaleChoice="Day";
 }
 
@@ -322,15 +332,25 @@ function estimatedCost(value){
 }
 
 
-function estimatedKW(endVal){
+function estimatedKW(endVal, duration){
     var $counter = $('#textCircle1'),
         startVal = $counter.text(),
         currentVal,
         suffix = 'kWh',
         currentVal = startVal;
+    // due to the very hight value we don't implement a counter but display directly the value    
+    $counter.text(endVal+" "+suffix);
+    
+}
+
+function estimatedTree(endVal){
+    
+
+    var $counter = $('#textCircle2'),
+        startVal = 0,
+        currentVal = startVal;
 
     $counter.css('opacity', '.3');
-        
     var i = setInterval(function (){
         if (currentVal === endVal){
             clearInterval(i);
@@ -338,40 +358,20 @@ function estimatedKW(endVal){
         }
         else{
             currentVal++;
-            $counter.text(currentVal+" "+suffix);
+            $counter.text(currentVal);
         }
     }, 20);
 }
 
-function estimatedTree(endVal){
-    var $counter = $('#textCircle2'),
-        startVal = $counter.text(),
-        currentVal,
-        currentVal = startVal;
-
-    $counter.css('opacity', '.3');
-        
-    var i = setInterval(function (){
-        if (currentVal === endVal){
-            clearInterval(i);
-            $counter.css('opacity', '1');
-        }
-        else{
-            currentVal++;
-            $counter.text(currentVal);
-        }
-    }, 30);
-}
-
-function estimatedGallon(endVal){
+function estimatedBarrel(endVal, duration){
     var $counter = $('#textCircle3'),
-        startVal = $counter.text(),
-        currentVal,
+        startVal = 0,
         currentVal = startVal;
-
     $counter.css('opacity', '.3');
-        
-    var i = setInterval(function (){
+    
+    //For a month the animation is faster regarding the quantity of barrels
+    if (duration=="Month"){
+        var i = setInterval(function (){
         if (currentVal === endVal){
             clearInterval(i);
             $counter.css('opacity', '1');
@@ -380,14 +380,31 @@ function estimatedGallon(endVal){
             currentVal++;
             $counter.text(currentVal);
         }
-    }, 30);
+        }, 1);
+
+    }
+    if(duration=="Day"){
+        var i = setInterval(function (){
+        if (currentVal === endVal){
+            clearInterval(i);
+            $counter.css('opacity', '1');
+        }
+        else{
+            currentVal++;
+            $counter.text(currentVal);
+        }
+        }, 30);
+     }   
+
+    
 }
 
-function summaryForTheRange1(endValue){
-
+function summaryForTheRange1(endValue, duration){
+    console.log("premier graph" + endValue);
     var $percentage = $('#percentageNormal');
 
-    setTimeout(function(){
+    if (duration=="Month"){
+        setTimeout(function(){
         
         var progressBar = $('#progressBar1');
         var perc = endValue;
@@ -400,21 +417,16 @@ function summaryForTheRange1(endValue){
                 current_perc ++;
                 progressBar.css('width', (current_perc)+'%');
             }
-           $percentage.text("Normal consumption (<15 kWh) : " + (current_perc)+'%');
+           $percentage.text("Normal consumption (during the day consumption <4700 kWh) : " + (current_perc)+'%');
 
         }, 30);
 
-    },30);
-
-}
-
-function summaryForTheRange2(endValue){
-
-    var $percentage = $('#percentagePeak');
-
-    setTimeout(function(){
+        },30);
+    }
+    if (duration=="Day"){
+        setTimeout(function(){
         
-        var progressBar = $('#progressBar2');
+        var progressBar = $('#progressBar1');
         var perc = endValue;
         var current_perc = 0;
 
@@ -425,11 +437,73 @@ function summaryForTheRange2(endValue){
                 current_perc ++;
                 progressBar.css('width', (current_perc)+'%');
             }
-           $percentage.text("Peacks : " + (current_perc)+'%');
+           $percentage.text("Normal consumption (consumption <4700 kWh) : " + (current_perc)+'%');
 
         }, 30);
 
-    },30);
+        },30);
+    }
+
+}
+
+function summaryForTheRange2(endValue, duration){
+    console.log("deuxieme graph" + endValue);
+    var $percentage = $('#percentagePeak');
+
+    if (duration=="Month"){  
+        setTimeout(function(){
+            
+            var progressBar = $('#progressBar2');
+            var perc = endValue ;
+            var current_perc = 0;
+
+            var progress = setInterval(function() {
+                if (current_perc>=perc) {
+                    clearInterval(progress);
+                    
+                } else {
+                    current_perc ++;
+                    progressBar.css('width', (perc)+'%');
+                }
+                $percentage.text("Peacks (during the day consumption >4700 kWh): " + (current_perc)+'%');
+               
+
+            }, 30);
+
+        },30);
+
+    }
+    
+    if (duration=="Day"){
+
+        /* remove*/ 
+
+        setTimeout(function(){
+            
+            var progressBar = $('#progressBar2');
+            progressBar.css('width', (0)+'%'); // to avoid a bug if there is 0%
+            var perc = endValue ;
+            var current_perc = 0;
+
+
+            var progress = setInterval(function() {
+                if (current_perc>=perc) {
+                    clearInterval(progress);
+                    
+                } else {
+                    current_perc ++;
+                    progressBar.css('width', (perc)+'%');
+                }
+                $percentage.text("Peacks (consumption >4700 kWh): " + (current_perc)+'%');
+               
+
+            }, 30);
+
+        },30);
+
+    }
+
+
 
 }
 
@@ -483,7 +557,7 @@ function buildSVGGraph(typeOfGraphToBuild, periodToBuild, weatherToBuild, beginR
         }
 
         if(typeOfGraphToBuild== "Month"){
-            monthGraph(svg, x, y, xAxis, yAxis, width, height, threshold, data, beginRangeToBuild, endRangeToBuild);
+            monthGraph(svg, x, y, xAxis, yAxis, weatherToBuild, width, height, threshold, data, beginRangeToBuild, endRangeToBuild);
         }
 
         if(typeOfGraphToBuild== "Year"){
@@ -497,16 +571,16 @@ function buildSVGGraph(typeOfGraphToBuild, periodToBuild, weatherToBuild, beginR
 }
 
 
-function monthGraph(svg, x, y, xAxis, yAxis, width, height, threshold, data, begin, end){
+function monthGraph(svg, x, y, xAxis, yAxis, weatherVisible, width, height, threshold, data, begin, end){
 
     var total_data_day = [];
     var normal_data_consumption= [];
     var i = 0;
     var consumption_total_per_day =0;
+    var consumption_total_per_month =0;
+    var consumption_total_normal_per_month =0;
     var consumption_normal_per_day =0;
     var dateOfTheDay;
-
-
 
     // we select the 24*30 first hours... ie the first 31 days ie the first month!
 
@@ -518,11 +592,15 @@ function monthGraph(svg, x, y, xAxis, yAxis, width, height, threshold, data, beg
           consumption_normal_per_day = parseInt(val.value.Text, 10) + consumption_normal_per_day; // consomption which is under the threshold
         }
 
-        consumption_total_per_day= parseInt(val.value.Text, 10) + consumption_total_per_day; // total consomption
+        consumption_total_per_day= parseInt(val.value.Text, 10) + consumption_total_per_day; // total consomption for one day
+       
         dateOfTheDay = new Date(parseInt(val.timePeriod.start.Text, 10) *1000);
+        
       }
 
       else{
+        consumption_total_per_month= consumption_total_per_day + consumption_total_per_month;
+        consumption_total_normal_per_month= consumption_normal_per_day+ consumption_total_normal_per_month
         total_data_day[i] = []; 
         total_data_day[i]['value']= consumption_total_per_day;
 
@@ -540,6 +618,26 @@ function monthGraph(svg, x, y, xAxis, yAxis, width, height, threshold, data, beg
       
 
     });
+
+    // updates of the graphs
+    
+    estimatedKW(parseInt(consumption_total_per_month),"Month");
+
+    // Number of tree seedlings grown for 10 years
+    var numberOfTree= consumption_total_per_month*7.05555/10000*0.039; // conversion in kwH + conversion in tree
+    //update of the graph
+    estimatedTree(parseInt(numberOfTree));
+
+    //barrels of oil consumed
+    var numberOfBarrels= consumption_total_per_month*7.05555/10000*0.43; 
+    estimatedBarrel(parseInt(numberOfBarrels), "Month");
+
+    //percentage of normal consumption for the month
+    var percentageNormal= consumption_total_normal_per_month*100/consumption_total_per_month;
+    summaryForTheRange1(Math.round(percentageNormal), "Month")
+    summaryForTheRange2(100-Math.round(percentageNormal),"Month")
+
+    estimatedCost(eCost);
 
 
     x.domain(total_data_day.map(function(d) { 
@@ -581,6 +679,16 @@ function monthGraph(svg, x, y, xAxis, yAxis, width, height, threshold, data, beg
             $('.barNormal').css('cursor', 'pointer');
 
         })
+
+        .on("mouseenter", function(){
+           $(this).css('fill', '#ea494a');
+        })
+
+        .on("mouseleave", function(){
+           $(this).css('fill', '#ff9933');
+        })
+
+        
         .on("click", zoomInTheGraph)
 
         .attr("x", function(d) {return x(d.time.getDate()); }) 
@@ -589,6 +697,40 @@ function monthGraph(svg, x, y, xAxis, yAxis, width, height, threshold, data, beg
         .attr("y", function(d) { return y(d.value);  })
         .attr("height", function(d) {return (height - y(d.value)); })
         .attr("class", function(d) {return "barNormal";})
+       
+        // Forecasts:
+        console.log(width)
+    var lineData = [ { "x": 15,   "y": 50},  { "x": 50,  "y": 10},
+                   { "x": width/10,  "y": 100}, { "x": 0.1*width+width/10,  "y": 200},
+                   { "x": 0.2*width+width/10,  "y": 50},  { "x": 0.3*width+width/10, "y": 150},
+                   { "x": 0.4*width+width/10,  "y": 50},  { "x": 0.5*width+width/10, "y": 150},
+                   { "x": 0.6*width+width/10,  "y": 50},  { "x": 0.7*width+width/10, "y": 150},
+                   { "x": 0.8*width+width/10,  "y": 50},  { "x": 0.9*width+width/10, "y": 100},
+                   ];
+
+    var lineFunction = d3.svg.line()
+                         .x(function(d) { return d.x; })
+                         .y(function(d) { return d.y; })
+                         .interpolate("basis");
+
+    svg.append("svg:path")
+        .attr("d", lineFunction(lineData))
+        .attr("stroke", "black")
+        .attr("opacity", 0.6)
+        .attr("stroke-width", 2)
+        .attr("id", "forecastbar")
+        .attr("fill", "none");
+
+    if (weatherVisible == true){
+        d3.select("#forecastbar")
+            .attr("visibility", "visible")
+    }
+
+    if (weatherVisible == false){
+        d3.select("#forecastbar")
+            .attr("visibility", "hidden")
+    }
+
         // COMMON SETTINGS FOR THE GRAPH
         
     svg.append("g")
@@ -618,6 +760,9 @@ function dayGraph(svg, x, y, xAxis, yAxis, width, height, threshold, data, dateO
     var beginningHour = dateOfTheDay * 24 + -24 + begin; 
     var endHour = dateOfTheDay * 24 + -24 + end +1;
 
+    var consumption_total=0;
+    var consumption_peack=0;
+
     var hour_data = []
     $.each( data.slice(beginningHour, endHour), function(ind, val) {
 
@@ -625,7 +770,29 @@ function dayGraph(svg, x, y, xAxis, yAxis, width, height, threshold, data, dateO
       hour_data[ind]['value'] = parseInt(val.value.Text, 10);
       hour_data[ind]['time'] = new Date(parseInt(val.timePeriod.start.Text, 10)*1000);
 
+      if ((parseInt(val.value.Text, 10)) > threshold){
+        consumption_peack= consumption_peack+ parseInt(val.value.Text, 10);
+      }
+      consumption_total= consumption_total+ parseInt(val.value.Text, 10)
+      
     });
+    // updates of the graphs
+    
+    estimatedKW(consumption_total,"Day");
+
+    // Number of tree seedlings grown for 10 years
+    var numberOfTree= consumption_total*7.05555/10000*0.039; // conversion in kwH + conversion in tree
+    estimatedTree(parseInt(numberOfTree));
+    //barrels of oil consumed
+    var numberOfBarrels= consumption_total*7.05555/10000*0.43; 
+    estimatedBarrel(parseInt(numberOfBarrels), "Day");
+
+    //percentage of normal consumption for the day
+    var percentagePeack= consumption_peack*100/consumption_total;
+    summaryForTheRange1(100-Math.round(percentagePeack), "Day")
+    summaryForTheRange2(Math.round(percentagePeack),"Day")
+
+    estimatedCost((eCost/30).toFixed(2));
 
 
     // This if for one DAY: 
@@ -657,6 +824,8 @@ function dayGraph(svg, x, y, xAxis, yAxis, width, height, threshold, data, dateO
           }
         })
 
+
+
     // Phantom power    
 
     svg.append("svg:line")
@@ -667,7 +836,8 @@ function dayGraph(svg, x, y, xAxis, yAxis, width, height, threshold, data, dateO
         .attr("y2", height-95)
         .attr("stroke-width", 2)
         .attr("stroke", "black")    
-        
+    
+
 
     // COMMON SETTINGS FOR THE GRAPH
         

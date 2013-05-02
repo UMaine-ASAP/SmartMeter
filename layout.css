@@ -311,6 +311,7 @@ table {
 
 }
 
+
 .box-header {
 	height: 20px;
   	border: 1px solid #ddd;
@@ -458,11 +459,11 @@ table {
 /* TODO: See a better solution!!*/
 
 #textCircle1{
-	left:-53px;
+	left:-60px;
 	z-index:1;
 	position: relative;
 	color: #006699;
-	font-size:12.4px;
+	font-size:11px;
 }
 
 #textCircle2{
@@ -543,6 +544,11 @@ table {
 .barNormal{
   fill: #ff9933;
 }
+
+
+/*rect.barNormal:hover {
+  fill: #ea494a;
+}*/
 
 .barPeack{
   fill: #ea494a;
