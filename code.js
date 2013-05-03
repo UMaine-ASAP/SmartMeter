@@ -318,7 +318,7 @@ function zoomInTheGraph(d, i){
             forceParse: 0,
             showMeridian: 1
         });
-        
+
         $('#checkBoxWeather').attr('disabled', true);
         $('#checkBoxWeather').prop('checked', false);
         timescaleChoice="Day";
@@ -544,7 +544,7 @@ function buildSVGGraph(typeOfGraphToBuild, periodToBuild, weatherToBuild, beginR
 
     // The SVG graph:
 
-    $.get('http://localhost:8888/code/bootstrap/data/greenbutton.xml', function(d){ 
+    $.get('bootstrap/data/greenbutton.xml', function(d){ 
         var data = $.xmlToJSON(d)
         data = data.content.IntervalBlock.IntervalReading;
 
