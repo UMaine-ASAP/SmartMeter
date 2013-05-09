@@ -16,21 +16,22 @@ var timescaleChoice,
     endSelectedRange;
 
 
+// To launch the application we need a MAMP server + going to this URL: http://localhost:8888/code/dashboard.html
 
 $(document).ready(function(){
 
-    // The pop up for devices part
+    // The pop up //
     $.extend($.gritter.options, {
         position: 'bottom-left', 
         fade_in_speed: 1000, 
         fade_out_speed: 40,
     });
+
     setTimeout(function(){
         $.gritter.add({
             title: 'Remember!',
             text: 'On the <a href="dashboard.html" style="color:#ccc">device page</a> you can run a simulation to improve your consumption',
-            //stay display on screen    
-            sticky: true,
+            sticky: true,//stay display on screen   
             time: '30',
             class_name: 'my-sticky-class',
             fade: true,
@@ -38,8 +39,9 @@ $(document).ready(function(){
 
     }, 8000)
     
-    $( ".sliderRangeLabel" ).text("1 - 30")
 
+    // The slider 
+    $( ".sliderRangeLabel" ).text("1 - 30")
     $( ".sliderRange" ).slider({
                 range: true,
                 min: 1,
@@ -47,14 +49,11 @@ $(document).ready(function(){
                 values: [ 1, 30],
                 slide: function( event, ui ) {
                     $( ".sliderRangeLabel" ).html(ui.values[ 0 ] + " - " + ui.values[ 1 ] );
-                    //$( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
                 }
     });
 
+    // the datepicker
     $('input[id=textSelector]').val('October');
-
-
-
     $('.form_datetime').datetimepicker({
         // We have only the datas for the month of october 2011
         /*
@@ -69,14 +68,12 @@ $(document).ready(function(){
         // decade: to see all the years
         // year: to see all the months
         // month: to see all the days
-
         pickerPosition:'bottom-left',
         format: 'MM',
         todayBtn:  0,
         autoclose: 1,
         todayHighlight: 1,
         forceParse: 0,
-
         showMeridian: 1
     });
 
@@ -98,9 +95,6 @@ $(document).ready(function(){
     buildSVGGraph(timescaleChoice, selectedPeriod, addWeatherData, beginSelectedRange, endSelectedRange);
     
 
-    
-
-
 });
 
 
@@ -109,7 +103,7 @@ function buttonPush(cliked_id){
 
     // days
     if(cliked_id === "button1") {
-        $('#button1.btn-normal').removeClass('btn-normal').addClass('btn-inverse');
+        $('#button1.btn-normal').removeClass('btn-normal').addClass('btn-inverse'); // change the style of the button
         $('#button2.btn-inverse').removeClass('btn-inverse').addClass('btn-normal');
         $('#button3.btn-inverse').removeClass('btn-inverse').addClass('btn-normal');
         
@@ -149,6 +143,7 @@ function buttonPush(cliked_id){
         
         // update current timescale
         timescaleChoice = "Day"; 
+        // disabled the checkbox for the weather
         $('#weatherRow').css("opacity", 0.5);
         $('#rangeRow').css("opacity", 1);
         $('#periodRow').css("opacity", 1);
@@ -252,8 +247,6 @@ function buttonPush(cliked_id){
 function submitButtonClicked(){
 
     // We get all the parameters
-
-    
     // for the period we get the two last character and we convert them in int ... quite ugly I know. 
         
     selectedPeriod= $('input[id=textSelector]').val();
@@ -265,8 +258,8 @@ function submitButtonClicked(){
         beginSelectedRange=  $( ".sliderRange" ).slider( "values", 0 ) ;
         endSelectedRange = $( ".sliderRange" ).slider( "values", 1 ) ;
 
+        // we remove the svg graph and replace it with another with new parameter
         $("svg").remove();
-        console.log(timescaleChoice + "****" +  last2 + "****" + addWeatherData + "****" + beginSelectedRange + "****" +endSelectedRange)
         buildSVGGraph(timescaleChoice, last2, addWeatherData, beginSelectedRange, endSelectedRange);
     }
     
@@ -277,10 +270,12 @@ function submitButtonClicked(){
 }
 
 
+// when the user click on a bar
 function zoomInTheGraph(d, i){
 
     $("svg").remove();
     buildSVGGraph("Day", i+1, addWeatherData, 0, 23);
+
     $('#weatherRow').css("opacity", 0.5);
     $('#button1.btn-normal').removeClass('btn-normal').addClass('btn-inverse');
         $('#button2.btn-inverse').removeClass('btn-inverse').addClass('btn-normal');
@@ -344,7 +339,6 @@ function estimatedKW(endVal, duration){
 }
 
 function estimatedTree(endVal){
-    
 
     var $counter = $('#textCircle2'),
         startVal = 0,
@@ -399,8 +393,9 @@ function estimatedBarrel(endVal, duration){
     
 }
 
+// we udate the values of the progress bar range
+
 function summaryForTheRange1(endValue, duration){
-    console.log("premier graph" + endValue);
     var $percentage = $('#percentageNormal');
 
     if (duration=="Month"){
@@ -507,7 +502,7 @@ function summaryForTheRange2(endValue, duration){
 
 }
 
-
+// Common parameters for the graph to months and days
 function buildSVGGraph(typeOfGraphToBuild, periodToBuild, weatherToBuild, beginRangeToBuild, endRangeToBuild){
 
     
@@ -547,9 +542,7 @@ function buildSVGGraph(typeOfGraphToBuild, periodToBuild, weatherToBuild, beginR
     $.get('bootstrap/data/greenbutton.xml', function(d){ 
         var data = $.xmlToJSON(d)
         data = data.content.IntervalBlock.IntervalReading;
-
-        // So, since green button data is kinda ugly, I'm gonna parse it out here now and maybe we can do something better later
-
+        // By default the threshold value is 4700
         var threshold = 4700;
 
         if(typeOfGraphToBuild== "Day"){
@@ -570,6 +563,7 @@ function buildSVGGraph(typeOfGraphToBuild, periodToBuild, weatherToBuild, beginR
 
 }
 
+// specific parameters for the months
 
 function monthGraph(svg, x, y, xAxis, yAxis, weatherVisible, width, height, threshold, data, begin, end){
 
@@ -586,7 +580,7 @@ function monthGraph(svg, x, y, xAxis, yAxis, weatherVisible, width, height, thre
 
     $.each(data.slice(begin * 24 -24, end *24+24), function(ind, val) {
 
-      if(ind%24 != 0 || ind==0){  // for the range 0 to 23 of every day ...
+      if(ind%24 != 0 || ind==0){  // for the range hour 0 to 23 of everyday ...
 
         if (parseInt(val.value.Text, 10)<threshold){
           consumption_normal_per_day = parseInt(val.value.Text, 10) + consumption_normal_per_day; // consomption which is under the threshold
@@ -654,7 +648,7 @@ function monthGraph(svg, x, y, xAxis, yAxis, weatherVisible, width, height, thre
         .enter().append("rect")
 
         .on("mouseover", function(){
-            $('.barPeack').css('cursor', 'pointer');
+            $('.barPeack').css('cursor', 'pointer'); // the cursor is a pointer
 
         })
         .on("click", zoomInTheGraph)
@@ -698,8 +692,8 @@ function monthGraph(svg, x, y, xAxis, yAxis, weatherVisible, width, height, thre
         .attr("height", function(d) {return (height - y(d.value)); })
         .attr("class", function(d) {return "barNormal";})
        
-        // Forecasts:
-        console.log(width)
+        // Forecasts (a random curve):
+
     var lineData = [ { "x": 15,   "y": 50},  { "x": 50,  "y": 10},
                    { "x": width/10,  "y": 100}, { "x": 0.1*width+width/10,  "y": 200},
                    { "x": 0.2*width+width/10,  "y": 50},  { "x": 0.3*width+width/10, "y": 150},
@@ -871,4 +865,4 @@ function dayGraph(svg, x, y, xAxis, yAxis, width, height, threshold, data, dateO
 
 }                                          
                                         
-
+// happy end

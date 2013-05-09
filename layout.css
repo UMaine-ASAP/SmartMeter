@@ -456,8 +456,6 @@ table {
 	margin-bottom: 20px;
 }
 
-/* TODO: See a better solution!!*/
-
 #textCircle1{
 	left:-60px;
 	z-index:1;
@@ -616,7 +614,7 @@ table {
 
 /* Style related to BOOTSTRAP */
 
-.span12 {
+/*.span12 {
    background-color:#FFF;
 }
 .span9{
@@ -635,5 +633,5 @@ table {
 }
 .span1{
 	background-color: transparent;
-}
+}*/
 
