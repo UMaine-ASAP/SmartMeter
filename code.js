@@ -4,6 +4,10 @@ var currentMonth = currentDate.getMonth() + 1;
 var currentYear = currentDate.getFullYear();
 
 
+/* General principle: we load the XML green button document with all the datas. Inside the document we get all the values and parse them to get the data for each day.
+Once the document ready the elements on the page are initialized with these values and we redraw the SVG graph as soon as the user change the parameters.
+ */
+
 
 var eCost=80;
 
@@ -18,6 +22,8 @@ var timescaleChoice,
 
 // To launch the application we need a MAMP server + going to this URL: http://localhost:8888/code/dashboard.html
 
+// Initialization of the variables
+
 $(document).ready(function(){
 
     // The pop up //
@@ -26,7 +32,6 @@ $(document).ready(function(){
         fade_in_speed: 1000, 
         fade_out_speed: 40,
     });
-
     setTimeout(function(){
         $.gritter.add({
             title: 'Remember!',
@@ -52,7 +57,7 @@ $(document).ready(function(){
                 }
     });
 
-    // the datepicker
+    // The datepicker
     $('input[id=textSelector]').val('October');
     $('.form_datetime').datetimepicker({
         // We have only the datas for the month of october 2011
@@ -98,6 +103,7 @@ $(document).ready(function(){
 });
 
 
+// When the user clicks on one of the three buttons concerning the duration
 
 function buttonPush(cliked_id){
 
@@ -244,6 +250,8 @@ function buttonPush(cliked_id){
     }
 }
 
+// If the user click on the submit button
+
 function submitButtonClicked(){
 
     // We get all the parameters
@@ -270,7 +278,8 @@ function submitButtonClicked(){
 }
 
 
-// when the user click on a bar
+// When the user clicks on a specific bar of the graph
+
 function zoomInTheGraph(d, i){
 
     $("svg").remove();
@@ -320,13 +329,14 @@ function zoomInTheGraph(d, i){
 }
 
 
+// initialization of the Estimated cost field
 function estimatedCost(value){
     var $estimateCost = $('#estimatedCost');
         $estimateCost.text("$ " + value);
 
 }
 
-
+// initialization of the Total KW/H cost field
 function estimatedKW(endVal, duration){
     var $counter = $('#textCircle1'),
         startVal = $counter.text(),
@@ -338,6 +348,7 @@ function estimatedKW(endVal, duration){
     
 }
 
+// initialization of the Tree field
 function estimatedTree(endVal){
 
     var $counter = $('#textCircle2'),
@@ -357,6 +368,7 @@ function estimatedTree(endVal){
     }, 20);
 }
 
+// initialization of the Barrels field
 function estimatedBarrel(endVal, duration){
     var $counter = $('#textCircle3'),
         startVal = 0,
@@ -393,8 +405,9 @@ function estimatedBarrel(endVal, duration){
     
 }
 
-// we udate the values of the progress bar range
+// regarding the duration selected we update the values of the progress bar range
 
+// Normal consumption
 function summaryForTheRange1(endValue, duration){
     var $percentage = $('#percentageNormal');
 
@@ -441,6 +454,7 @@ function summaryForTheRange1(endValue, duration){
 
 }
 
+// Peacks consumption
 function summaryForTheRange2(endValue, duration){
     console.log("deuxieme graph" + endValue);
     var $percentage = $('#percentagePeak');
@@ -748,6 +762,8 @@ function monthGraph(svg, x, y, xAxis, yAxis, weatherVisible, width, height, thre
         .text("Killowatt Hours");
 
 } 
+
+// specific parameters for a day
 
 function dayGraph(svg, x, y, xAxis, yAxis, width, height, threshold, data, dateOfTheDay, begin, end){
     
